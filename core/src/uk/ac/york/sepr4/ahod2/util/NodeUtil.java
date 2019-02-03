@@ -39,7 +39,7 @@ public class NodeUtil {
                 //middle rows
                 if(random.nextDouble()<=battleNodeChance) {
                     //replace with battle node
-                    finalNodes.add(new BattleNode(node, gameLevel.getDifficulty()));
+                    finalNodes.add(new BattleNode(node));
                 } else {
                     finalNodes.add(node);
                 }

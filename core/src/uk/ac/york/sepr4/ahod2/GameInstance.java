@@ -1,6 +1,7 @@
 package uk.ac.york.sepr4.ahod2;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import lombok.Data;
@@ -20,6 +21,7 @@ import uk.ac.york.sepr4.ahod2.screen.sail.SailScreen;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 
 @Data
@@ -64,7 +66,15 @@ public class GameInstance {
     public void start() {
         Gdx.app.debug("GameInstance", "Starting Instance");
 
-        game.setScreen(sailScreen);
+        switchScreen(sailScreen);
+    }
+
+    public GameLevel getCurrentLevel() {
+        return getPlayer().getLevel();
+    }
+
+    public void switchScreen(Screen screen) {
+        game.setScreen(screen);
     }
 
     private void loadLevels() {
@@ -79,15 +89,8 @@ public class GameInstance {
 
     public void nodeAction(Node node) {
         //enter college/dept or get/enter encounter
-        if(node instanceof CollegeNode) {
-
-        } else if(node instanceof DepartmentNode) {
-
-        } else {
-            //normal node
-            Encounter encounter = encounterManager.generateEncounter();
-
-        }
+        node.action(this);
+        player.setLocation(Optional.of(node));
     }
 
 }

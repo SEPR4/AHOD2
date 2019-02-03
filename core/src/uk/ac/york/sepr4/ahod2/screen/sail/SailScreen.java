@@ -93,21 +93,17 @@ public class SailScreen implements Screen {
     public void nodeClick(Node node) {
         Player player = gameInstance.getPlayer();
         Optional<Node> loc = player.getLocation();
-        if(!loc.isPresent()) {
-            //must be starting
-            if(node.getRow() == 0) {
-                player.setLocation(Optional.of(node));
-                gameInstance.setGameStage(GameStage.SELECT);
-            } else {
-                Gdx.app.debug("SailScreen", "Non-starting position clicked!");
-            }
-        } else {
+        //node action if player location is unset (starting) or node clicked is above current
+        if(loc.isPresent()) {
             if(node.getRow() > loc.get().getRow()) {
                 gameInstance.nodeAction(node);
             } else {
                 Gdx.app.debug("SailScreen", "Lower or current position node clicked!");
             }
+        } else {
+            gameInstance.nodeAction(node);
         }
+
      }
 
 
@@ -126,8 +122,6 @@ public class SailScreen implements Screen {
         textureRegion.setRegion(0,0,texture.getWidth(),texture.getHeight());
         batch.draw(texture,0,0);
     }
-
-
 
 
     @Override

@@ -4,7 +4,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import lombok.Data;
+import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
+import uk.ac.york.sepr4.ahod2.object.encounter.Encounter;
+import uk.ac.york.sepr4.ahod2.screen.EncounterScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,11 @@ public class Node {
         this.id = id;
         this.row = row;
         this.col = col;
+    }
+
+    public void action(GameInstance gameInstance){
+        Encounter encounter = gameInstance.getEncounterManager().generateEncounter();
+        gameInstance.switchScreen(new EncounterScreen(gameInstance, encounter));
     }
 
     public void addConnectedNode(Node node) {

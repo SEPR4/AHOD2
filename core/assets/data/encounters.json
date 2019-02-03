@@ -24,7 +24,7 @@
     "class": "uk.ac.york.sepr4.ahod2.object.encounter.Encounter",
     "id": 1,
     "name": "Sighting!",
-    "text": "Captain, a ship has been sighted on the horizon - shall we pursue?",
+    "text": "Captain, a bountiful ship has been sighted on the horizon - shall we pursue?",
     "options" : [
       {
         "class": "uk.ac.york.sepr4.ahod2.object.encounter.EncounterOption",

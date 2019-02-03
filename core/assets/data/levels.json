@@ -4,8 +4,10 @@
     "id": 1,
     "collegeId": 1,
     "departmentIds" : [1,2],
-    "gold" : 500,
-    "supplies": 500,
+    "levelGold" : 500,
+    "levelSupplies": 500,
+    "battleGold": 50,
+    "battleSupplies": 50,
     "depth": 10,
     "difficulty": 10
   }
