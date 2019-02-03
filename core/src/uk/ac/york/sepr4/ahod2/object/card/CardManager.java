@@ -1,4 +1,4 @@
-package uk.ac.york.sepr4.ahod2.object;
+package uk.ac.york.sepr4.ahod2.object.card;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;

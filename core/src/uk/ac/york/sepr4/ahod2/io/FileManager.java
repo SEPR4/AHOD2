@@ -9,8 +9,9 @@ public class FileManager {
     public static Texture sailScreenBG = new Texture(Gdx.files.internal("images/bg.png"));
     public static Texture encounterScreenBG = new Texture(Gdx.files.internal("images/encounter.png"));
 
-    public static Texture nodeIcon = new Texture(Gdx.files.internal("images/node_icon.png"));
-    public static Texture battleNodeIcon = new Texture(Gdx.files.internal("images/battle.png"));
+    public static Texture nodeIcon = new Texture(Gdx.files.internal("images/node/default.png"));
+    public static Texture battleNodeIcon = new Texture(Gdx.files.internal("images/node/battle.png"));
+    public static Texture departmentNodeIcon = new Texture(Gdx.files.internal("images/node/department.png"));
 
 
     public static Texture hudGold = new Texture(Gdx.files.internal("images/hud/gold.png"));

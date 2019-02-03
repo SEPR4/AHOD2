@@ -1,11 +1,9 @@
 package uk.ac.york.sepr4.ahod2.util;
 
 import com.badlogic.gdx.Gdx;
-import uk.ac.york.sepr4.ahod2.node.BattleNode;
-import uk.ac.york.sepr4.ahod2.node.CollegeNode;
-import uk.ac.york.sepr4.ahod2.node.Node;
-import uk.ac.york.sepr4.ahod2.node.StartNode;
+import uk.ac.york.sepr4.ahod2.node.*;
 import uk.ac.york.sepr4.ahod2.object.GameLevel;
+import uk.ac.york.sepr4.ahod2.object.building.Department;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +25,8 @@ public class NodeUtil {
         //replace college node into final node in list
 
         List<Node> finalNodes = new ArrayList<>();
-        //replace chance of battle nodes for rest
         Random random = new Random();
+
         for(Node node: nodes) {
             //if not first or last row
             if(node.getRow() == 0){
@@ -47,6 +45,20 @@ public class NodeUtil {
                 }
             }
         }
+        //insert departments retroactively
+        for(Department department : gameLevel.getDepartments()) {
+            boolean inserted = false;
+            while(!inserted) {
+                Integer loc = random.nextInt(finalNodes.size() - 1);
+                Node node = finalNodes.get(loc);
+                if (!(node instanceof CollegeNode || node instanceof StartNode || node instanceof DepartmentNode)) {
+                    //acceptable position to set dept
+                    finalNodes.set(loc, new DepartmentNode(node, department));
+                    inserted = true;
+                }
+            }
+        }
+
         return finalNodes;
     }
 
