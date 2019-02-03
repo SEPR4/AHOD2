@@ -1,0 +1,46 @@
+[
+  {
+    "class": "uk.ac.york.sepr4.ahod2.object.encounter.Encounter",
+    "id": 1,
+    "name": "Mutiny",
+    "text": "Bad feelings aboard, what should you do?",
+    "options" : [
+      {
+        "class": "uk.ac.york.sepr4.ahod2.object.encounter.EncounterOption",
+        "text": "Make a crew member walk the plank!",
+        "gold": 0,
+        "supplies": 10
+      },
+      {
+        "class": "uk.ac.york.sepr4.ahod2.object.encounter.EncounterOption",
+        "text": "Ignore them!",
+        "gold": -5,
+        "supplies": -5
+      }
+    ],
+    "chance": 5
+  },
+  {
+    "class": "uk.ac.york.sepr4.ahod2.object.encounter.Encounter",
+    "id": 1,
+    "name": "Sighting!",
+    "text": "Captain, a ship has been sighted on the horizon - shall we pursue?",
+    "options" : [
+      {
+        "class": "uk.ac.york.sepr4.ahod2.object.encounter.EncounterOption",
+        "text": "Arrrr, let's get em!",
+        "battle": true,
+        "difficulty": 10,
+        "gold": 0,
+        "supplies": 10
+      },
+      {
+        "class": "uk.ac.york.sepr4.ahod2.object.encounter.EncounterOption",
+        "text": "Not today, we must rest!",
+        "gold": 0,
+        "supplies": -10
+      }
+    ],
+    "chance": 5
+  }
+]

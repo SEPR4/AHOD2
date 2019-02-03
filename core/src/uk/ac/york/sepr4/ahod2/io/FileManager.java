@@ -7,7 +7,11 @@ public class FileManager {
 
     public static Texture defaultShipTexture = new Texture(Gdx.files.internal("ships/default.png"));
     public static Texture sailScreenBG = new Texture(Gdx.files.internal("images/bg.png"));
+    public static Texture encounterScreenBG = new Texture(Gdx.files.internal("images/encounter.png"));
+
     public static Texture nodeIcon = new Texture(Gdx.files.internal("images/node_icon.png"));
+    public static Texture battleNodeIcon = new Texture(Gdx.files.internal("images/battle.png"));
+
 
     public static Texture hudGold = new Texture(Gdx.files.internal("images/hud/gold.png"));
     public static Texture hudSupplies = new Texture(Gdx.files.internal("images/hud/supplies.png"));

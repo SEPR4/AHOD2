@@ -1,0 +1,12 @@
+[
+  {
+    "class": "uk.ac.york.sepr4.ahod2.object.building.Department",
+    "id": 1,
+    "name": "Computer Science"
+  },
+  {
+    "class": "uk.ac.york.sepr4.ahod2.object.building.Department",
+    "id": 2,
+    "name": "Law and Management"
+  }
+]

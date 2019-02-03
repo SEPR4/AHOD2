@@ -1,0 +1,12 @@
+[
+  {
+    "class": "uk.ac.york.sepr4.ahod2.object.GameLevel",
+    "id": 1,
+    "collegeId": 1,
+    "departmentIds" : [1,2],
+    "gold" : 500,
+    "supplies": 500,
+    "depth": 10,
+    "difficulty": 10
+  }
+]

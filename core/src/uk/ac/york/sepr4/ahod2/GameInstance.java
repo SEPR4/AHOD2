@@ -1,21 +1,26 @@
 package uk.ac.york.sepr4.ahod2;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import lombok.Data;
 import uk.ac.york.sepr4.ahod2.node.CollegeNode;
 import uk.ac.york.sepr4.ahod2.node.DepartmentNode;
 import uk.ac.york.sepr4.ahod2.node.Node;
-import uk.ac.york.sepr4.ahod2.object.CardManager;
-import uk.ac.york.sepr4.ahod2.object.Encounter;
-import uk.ac.york.sepr4.ahod2.object.EncounterManager;
+import uk.ac.york.sepr4.ahod2.object.GameLevel;
+import uk.ac.york.sepr4.ahod2.object.building.College;
+import uk.ac.york.sepr4.ahod2.object.card.CardManager;
+import uk.ac.york.sepr4.ahod2.object.encounter.Encounter;
+import uk.ac.york.sepr4.ahod2.object.encounter.EncounterManager;
 import uk.ac.york.sepr4.ahod2.object.GameStage;
 import uk.ac.york.sepr4.ahod2.object.building.BuildingManager;
 import uk.ac.york.sepr4.ahod2.object.entity.Player;
 import uk.ac.york.sepr4.ahod2.screen.HUD;
 import uk.ac.york.sepr4.ahod2.screen.sail.SailScreen;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 
 @Data
 public class GameInstance {
@@ -30,7 +35,9 @@ public class GameInstance {
     private SailScreen sailScreen;
     private HUD hud;
 
-    Player player = new Player();
+    private List<GameLevel> levels = new ArrayList<>();
+
+    private Player player;
 
     private GameStage gameStage = GameStage.LOADING;
 
@@ -43,9 +50,14 @@ public class GameInstance {
         buildingManager = new BuildingManager(this);
         encounterManager = new EncounterManager();
 
+
         //Initialize Screens and views
         hud = new HUD(this);
         sailScreen = new SailScreen(this);
+
+        loadLevels();
+
+        player = new Player(levels.get(0));
 
     }
 
@@ -53,6 +65,16 @@ public class GameInstance {
         Gdx.app.debug("GameInstance", "Starting Instance");
 
         game.setScreen(sailScreen);
+    }
+
+    private void loadLevels() {
+        Json json = new Json();
+        Array<GameLevel> tempLevels = json.fromJson(Array.class, GameLevel.class, Gdx.files.internal("data/levels.json"));
+        for(GameLevel level : tempLevels) {
+            if(level.load(this)) {
+                levels.add(level);
+            }
+        }
     }
 
     public void nodeAction(Node node) {
@@ -63,7 +85,7 @@ public class GameInstance {
 
         } else {
             //normal node
-            Encounter encounter = encounterManager.generateEncounter(node);
+            Encounter encounter = encounterManager.generateEncounter();
 
         }
     }

@@ -21,7 +21,8 @@ public class SailInputProcessor implements InputProcessor {
         float cameraY = (sailScreen.getOrthographicCamera().position.y - Gdx.graphics.getHeight()/2);
         if(up) {
             //TODO: Limit doesnt work
-            if(cameraY + scrollAmount < FileManager.sailScreenBG.getHeight()) {
+            if(cameraY + scrollAmount - Gdx.graphics.getHeight() <
+                    sailScreen.getGameInstance().getPlayer().getLevel().getNodeView().getHeight() + 250f) {
                 sailScreen.getOrthographicCamera().translate(0, scrollAmount);
             }
         }

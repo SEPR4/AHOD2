@@ -10,8 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import lombok.Getter;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.node.Node;
+import uk.ac.york.sepr4.ahod2.object.GameLevel;
 import uk.ac.york.sepr4.ahod2.object.entity.Player;
 import uk.ac.york.sepr4.ahod2.util.NodeUtil;
 import java.util.ArrayList;
@@ -24,18 +26,23 @@ public class NodeView {
     private SailScreen sailScreen;
 
     private static final Texture nodeIcon = FileManager.nodeIcon;
+    @Getter
     private static final float vertSpacing = 250f;
 
-    private HashMap<Node, ImageButton> nodeButtons = new HashMap<>();
+    private HashMap<Integer, ImageButton> nodeButtons = new HashMap<>();
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
-    private final Integer depth = 5;
+    private GameLevel gameLevel;
 
-    //private List<Node> nodeMap;
+    private List<Node> nodeMap;
 
-    public NodeView(SailScreen sailScreen) {
+    @Getter
+    private float height = 0;
+
+    public NodeView(SailScreen sailScreen, GameLevel gameLevel) {
         this.sailScreen = sailScreen;
+        this.gameLevel = gameLevel;
 
         createNodeMap();
     }
@@ -49,23 +56,25 @@ public class NodeView {
 
     //adds actors to the stage - add once
     private void createNodeMap() {
-        List<Node> nodeMap = NodeUtil.generateNodeMap(5);
-        Drawable drawable = new TextureRegionDrawable(new TextureRegion(nodeIcon));
-        for(int i=0; i<depth+2; i++) {
+        nodeMap = NodeUtil.generateRandomNodeMap(gameLevel);
+        for(int i=0; i<nodeMap.size(); i++) {
             List<Node> row = getRow(nodeMap, i);
             float spacing = getNodeSpacings(row.size());
             for(Node node : row) {
-                ImageButton btn = new ImageButton(drawable);
+                ImageButton btn = new ImageButton(node.getTexture());
                 //TODO: Works but cleanup
                 Vector2 pos = sailScreen.screenToWorld(new Vector2(((node.getCol()+1)*spacing+(nodeIcon.getWidth()*node.getCol())),((node.getRow()+1)*vertSpacing)));
                 btn.setPosition(pos.x, pos.y);
+                if(pos.y > height) {
+                    height = pos.y;
+                }
                 btn.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         sailScreen.nodeClick(node);
                     }
                 });
-                nodeButtons.put(node, btn);
+                nodeButtons.put(node.getId(), btn);
             }
         }
 
@@ -80,7 +89,7 @@ public class NodeView {
         Optional<Node> node = player.getLocation();
         if(node.isPresent()) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            ImageButton imageButton = nodeButtons.get(node.get());
+            ImageButton imageButton = nodeButtons.get(node.get().getId());
             Vector2 loc = getNodeButtonCenter(imageButton);
             shapeRenderer.circle(loc.x, loc.y, imageButton.getWidth() / 2);
             shapeRenderer.end();
@@ -90,10 +99,11 @@ public class NodeView {
     //draw lines with shape renderer - must be done on render
     private void drawConnections() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        nodeButtons.keySet().forEach(node -> {
+        nodeButtons.keySet().forEach(nodeId -> {
+            Node node = nodeMap.get(nodeId);
             node.getConnected().forEach(connection -> {
-                ImageButton source = nodeButtons.get(node);
-                ImageButton target = nodeButtons.get(connection);
+                ImageButton source = nodeButtons.get(nodeId);
+                ImageButton target = nodeButtons.get(connection.getId());
                 shapeRenderer.rectLine(getNodeButtonCenter(source), getNodeButtonCenter(target), 3);
             });
         });

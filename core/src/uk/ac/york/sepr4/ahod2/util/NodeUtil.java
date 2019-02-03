@@ -1,7 +1,11 @@
 package uk.ac.york.sepr4.ahod2.util;
 
 import com.badlogic.gdx.Gdx;
+import uk.ac.york.sepr4.ahod2.node.BattleNode;
+import uk.ac.york.sepr4.ahod2.node.CollegeNode;
 import uk.ac.york.sepr4.ahod2.node.Node;
+import uk.ac.york.sepr4.ahod2.node.StartNode;
+import uk.ac.york.sepr4.ahod2.object.GameLevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +15,44 @@ public class NodeUtil {
 
     private static Integer triSplitChance = 5, splitChance = 40, singleChance = 25, mergeChance = 30;
     private static Integer maxRowWidth = 4, minRowWidth = 2;
+    private static Double battleNodeChance = 0.4;
+
+    /***
+     * Puts NodeTypes into generated NodeMap
+     * @param gameLevel
+     * @return
+     */
+    public static List<Node> generateRandomNodeMap(GameLevel gameLevel) {
+        List<Node> nodes = generateNodeMap(gameLevel.getDepth());
+        //replace college node into final node in list
+
+        List<Node> finalNodes = new ArrayList<>();
+        //replace chance of battle nodes for rest
+        Random random = new Random();
+        for(Node node: nodes) {
+            //if not first or last row
+            if(node.getRow() == 0){
+                //first row
+                finalNodes.add(new StartNode(node));
+            } else if(node.getRow() == gameLevel.getDepth()+1) {
+                //last row
+                finalNodes.add(new CollegeNode(node, gameLevel.getCollege()));
+            } else {
+                //middle rows
+                if(random.nextDouble()<=battleNodeChance) {
+                    //replace with battle node
+                    finalNodes.add(new BattleNode(node, gameLevel.getDifficulty()));
+                } else {
+                    finalNodes.add(node);
+                }
+            }
+        }
+        return finalNodes;
+    }
 
     //TODO: Add some other measures - minMergeDepth (dont merge on first or second level?)
 
-    public static List<Node> generateNodeMap(Integer depth) {
+    private static List<Node> generateNodeMap(Integer depth) {
         Random random = new Random();
         List<Node> nodes = new ArrayList();
 
@@ -71,7 +109,7 @@ public class NodeUtil {
                     });
                 }
             }
-            if (tempNodes.size() <= minRowWidth) {
+            if (tempNodes.size() < minRowWidth) {
                 //all tried to merge?
                 Node newNode =new Node(nodes.size() + tempNodes.size(), i, tempNodes.size());
                 tempNodes.add(newNode);
@@ -82,7 +120,7 @@ public class NodeUtil {
 
             //last iteration
             if(i == depth) {
-                Node finalNode = new Node(nodes.size() + tempNodes.size(), i+1, 0);
+                Node finalNode = new Node(nodes.size(), i+1, 0);
                 nodes.add(finalNode);
                 prevNodes.forEach(node1 -> node1.addConnectedNode(finalNode));
             }

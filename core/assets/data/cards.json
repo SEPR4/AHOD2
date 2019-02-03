@@ -1,6 +1,6 @@
 [
   {
-    "class": "uk.ac.york.sepr4.ahod2.object.Card",
+    "class": "uk.ac.york.sepr4.ahod2.object.card.Card",
     "id": 1,
     "_default": true,
     "power": 0,
@@ -11,7 +11,7 @@
     "heal": 0
   },
   {
-    "class": "uk.ac.york.sepr4.ahod2.object.Card",
+    "class": "uk.ac.york.sepr4.ahod2.object.card.Card",
     "id": 2,
     "_default": false,
     "power": 1,

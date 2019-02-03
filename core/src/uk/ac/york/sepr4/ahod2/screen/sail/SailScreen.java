@@ -37,7 +37,6 @@ public class SailScreen implements Screen {
 
     private SailInputProcessor sailInputProcessor;
 
-    private NodeView nodeView;
 
     private InputMultiplexer inputMultiplexer;
 
@@ -65,7 +64,7 @@ public class SailScreen implements Screen {
 
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        nodeView = new NodeView(this);
+        //nodeView = new NodeView(this);
 
         gameInstance.setGameStage(GameStage.SELECT_START);
     }
@@ -83,7 +82,7 @@ public class SailScreen implements Screen {
         drawBackground();
         batch.end();
 
-        nodeView.update();
+        gameInstance.getPlayer().getLevel().getNodeView().update();
 
         // tell our stage to do actions and draw itself
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
