@@ -12,6 +12,7 @@ public class Encounter {
     private String name, text;
     private List<EncounterOption> options;
     private double chance;
+    private String background = "default.png";
 
     public Encounter() {
         //json

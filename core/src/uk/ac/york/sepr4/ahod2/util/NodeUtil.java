@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import uk.ac.york.sepr4.ahod2.node.*;
 import uk.ac.york.sepr4.ahod2.object.GameLevel;
 import uk.ac.york.sepr4.ahod2.object.building.Department;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

@@ -63,7 +63,7 @@ public class NodeView {
             for(Node node : row) {
                 ImageButton btn = new ImageButton(node.getTexture());
                 //TODO: Works but cleanup
-                Vector2 pos = sailScreen.screenToWorld(new Vector2(((node.getCol()+1)*spacing+(nodeIcon.getWidth()*node.getCol())),((node.getRow()+1)*vertSpacing)));
+                Vector2 pos = new Vector2(((node.getCol()+1)*spacing+(nodeIcon.getWidth()*node.getCol())),((node.getRow()+1)*vertSpacing));
                 btn.setPosition(pos.x, pos.y);
                 if(pos.y > height) {
                     height = pos.y;
