@@ -11,7 +11,7 @@ public class Player {
 
     private Ship ship;
     private Optional<Node> location = Optional.empty();
-    private Integer supplies = 0, gold = 0, score = 0;
+    private Integer supplies = 10, gold = 100, score = 0;
     private GameLevel level;
 
     public Player(GameLevel gameLevel) {

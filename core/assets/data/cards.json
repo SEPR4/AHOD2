@@ -6,6 +6,7 @@
     "power": 0,
     "name": "Cannon",
     "desc": "Simple Cannon Shot!",
+    "textureStr": "cannon",
     "manaCost": 5,
     "damage": 5,
     "heal": 0
@@ -17,6 +18,7 @@
     "power": 1,
     "name": "Patch Holes",
     "desc": "Do some repairs!",
+    "textureStr": "patch",
     "damage": 0,
     "manaCost": 5,
     "heal": 5

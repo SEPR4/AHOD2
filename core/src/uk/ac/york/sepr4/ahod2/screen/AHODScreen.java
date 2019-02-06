@@ -1,4 +1,4 @@
-package uk.ac.york.sepr4.ahod2.screen.sail;
+package uk.ac.york.sepr4.ahod2.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -18,14 +18,12 @@ public abstract class AHODScreen implements Screen {
     private Texture background;
     private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
-
     public AHODScreen(Stage stage, Texture background) {
         this.stage = stage;
         this.background = background;
 
         inputMultiplexer.addProcessor(stage);
     }
-
 
     @Override
     public void render(float delta) {

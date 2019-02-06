@@ -8,6 +8,7 @@ public class FileManager {
     public static Texture defaultShipTexture = new Texture(Gdx.files.internal("ships/default.png"));
 
     public static Texture sailScreenBG = new Texture(Gdx.files.internal("images/screen/sail.png"));
+    public static Texture menuScreenBG = new Texture(Gdx.files.internal("images/screen/menu.png"));
     public static Texture battleScreenBG = new Texture(Gdx.files.internal("images/screen/battle.png"));
 
     public static Texture nodeIcon = new Texture(Gdx.files.internal("images/node/default.png"));

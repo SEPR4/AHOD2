@@ -8,12 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import lombok.Getter;
 import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
-import uk.ac.york.sepr4.ahod2.io.FontManager;
+import uk.ac.york.sepr4.ahod2.io.StyleManager;
 import uk.ac.york.sepr4.ahod2.object.entity.Player;
 
 public class HUD {
@@ -75,7 +74,7 @@ public class HUD {
         scoreLabel = new Label("Score", new Label.LabelStyle(new BitmapFont(), Color.MAGENTA));
         scoreValueLabel = new Label("0", new Label.LabelStyle(new BitmapFont(), Color.MAGENTA));
 
-        gameStageLabel = new Label("", new Label.LabelStyle(FontManager.generatePirateFont(30, Color.WHITE), Color.CORAL));
+        gameStageLabel = new Label("", new Label.LabelStyle(StyleManager.generatePirateFont(30, Color.WHITE), Color.CORAL));
 
         hudTable.add(turnLabel).expandX().padTop(5);
         hudTable.add(goldImage).expandX().padTop(5);

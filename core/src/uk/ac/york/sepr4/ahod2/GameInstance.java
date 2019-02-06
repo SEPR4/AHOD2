@@ -59,7 +59,12 @@ public class GameInstance {
 
         loadLevels();
 
-        player = new Player(levels.get(0));
+        if(levels.size() > 0) {
+            player = new Player(levels.get(0));
+        } else {
+            Gdx.app.error("GameInstance", "No levels found! Exiting!");
+            Gdx.app.exit();
+        }
 
     }
 

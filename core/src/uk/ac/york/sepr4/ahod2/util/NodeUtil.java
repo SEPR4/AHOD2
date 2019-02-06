@@ -136,7 +136,7 @@ public class NodeUtil {
                 prevNodes.forEach(node1 -> node1.addConnectedNode(finalNode));
             }
         }
-        Gdx.app.debug("NodeUtil", "Generated NodeMap with " +nodes.size());
+        Gdx.app.debug("NodeUtil", "Generated NodeMap with " +nodes.size() + " nodes!");
         return nodes;
     }
 

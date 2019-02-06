@@ -7,7 +7,7 @@ import uk.ac.york.sepr4.ahod2.screen.MenuScreen;
 
 public class AHOD2 extends Game {
 
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 
 	@Override
 	public void create() {

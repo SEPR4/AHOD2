@@ -2,7 +2,6 @@ package uk.ac.york.sepr4.ahod2.screen;
 
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,11 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import uk.ac.york.sepr4.ahod2.GameInstance;
-import uk.ac.york.sepr4.ahod2.io.FontManager;
+import uk.ac.york.sepr4.ahod2.io.StyleManager;
+import uk.ac.york.sepr4.ahod2.object.ShipFactory;
 import uk.ac.york.sepr4.ahod2.object.encounter.Encounter;
 import uk.ac.york.sepr4.ahod2.object.encounter.EncounterOption;
 import uk.ac.york.sepr4.ahod2.object.entity.Player;
-import uk.ac.york.sepr4.ahod2.screen.sail.AHODScreen;
 
 public class EncounterScreen extends AHODScreen {
 
@@ -46,13 +45,8 @@ public class EncounterScreen extends AHODScreen {
         table1.setFillParent(true);
         table1.top();
 
-        Label.LabelStyle messageStyle = new Label.LabelStyle();
-        messageStyle.font = FontManager.generatePirateFont(60, Color.BLACK);
+        Label encounterText = new Label(encounter.getText(), StyleManager.generateLabelStyle(60, Color.BLACK));
 
-        Label encounterText = new Label(encounter.getText(), messageStyle);
-
-        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.font = FontManager.generatePirateFont(30, Color.BLACK);
 
         table1.add(encounterText).expandX().padTop(Gdx.graphics.getHeight() / 4);
 
@@ -60,7 +54,8 @@ public class EncounterScreen extends AHODScreen {
         table2.setFillParent(true);
         table2.top();
         for (EncounterOption encounterOption : encounter.getOptions()) {
-            TextButton tB = new TextButton(encounterOption.getText(), buttonStyle);
+            TextButton tB = new TextButton(encounterOption.getText(),
+                    StyleManager.generateTBStyle(30, Color.BLACK, Color.GRAY));
 
             tB.addListener(new ClickListener() {
                 @Override
@@ -81,7 +76,7 @@ public class EncounterScreen extends AHODScreen {
         Gdx.app.debug("EncounterScreen", "Option clicked!");
         if (encounterOption.isBattle()) {
             BattleScreen battleScreen = new BattleScreen(gameInstance,
-                    encounterOption.getDifficulty(),
+                    ShipFactory.generateEnemyShip(encounterOption.getDifficulty()),
                     encounterOption.getGold(),
                     encounterOption.getSupplies());
             gameInstance.switchScreen(battleScreen);

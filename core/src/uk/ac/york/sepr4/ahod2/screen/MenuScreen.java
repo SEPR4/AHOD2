@@ -11,8 +11,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import uk.ac.york.sepr4.ahod2.AHOD2;
 import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
-import uk.ac.york.sepr4.ahod2.io.FontManager;
-import uk.ac.york.sepr4.ahod2.screen.sail.AHODScreen;
+import uk.ac.york.sepr4.ahod2.io.StyleManager;
 
 public class MenuScreen extends AHODScreen {
 
@@ -21,7 +20,7 @@ public class MenuScreen extends AHODScreen {
 
     //TODO: Change background
     public MenuScreen(AHOD2 game) {
-        super(new Stage(new ScreenViewport()), FileManager.battleScreenBG);
+        super(new Stage(new ScreenViewport()), FileManager.menuScreenBG);
         this.game = game;
 
         loadMenu();
@@ -45,7 +44,7 @@ public class MenuScreen extends AHODScreen {
         table.setFillParent(true);
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = FontManager.generatePirateFont(50, Color.RED);
+        style.font = StyleManager.generatePirateFont(50, Color.RED);
 
         //create buttons
         TextButton newGame = new TextButton("New Game", style);
