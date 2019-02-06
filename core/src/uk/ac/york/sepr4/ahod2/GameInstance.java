@@ -11,20 +11,18 @@ import uk.ac.york.sepr4.ahod2.node.Node;
 import uk.ac.york.sepr4.ahod2.object.GameLevel;
 import uk.ac.york.sepr4.ahod2.object.building.College;
 import uk.ac.york.sepr4.ahod2.object.card.CardManager;
-import uk.ac.york.sepr4.ahod2.object.encounter.Encounter;
 import uk.ac.york.sepr4.ahod2.object.encounter.EncounterManager;
 import uk.ac.york.sepr4.ahod2.object.GameStage;
 import uk.ac.york.sepr4.ahod2.object.building.BuildingManager;
 import uk.ac.york.sepr4.ahod2.object.entity.Player;
 import uk.ac.york.sepr4.ahod2.screen.AHODScreen;
+import uk.ac.york.sepr4.ahod2.screen.EndScreen;
 import uk.ac.york.sepr4.ahod2.screen.HUD;
 import uk.ac.york.sepr4.ahod2.screen.TransitionScreen;
 import uk.ac.york.sepr4.ahod2.screen.sail.SailScreen;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
 
 @Data
 public class GameInstance {
@@ -61,10 +59,11 @@ public class GameInstance {
 
         loadLevels();
 
-        if(levels.size() > 0) {
-            player = new Player(levels.get(0));
+        Optional<GameLevel> firstLevel = getLevelByID(1);
+        if(firstLevel.isPresent()) {
+            player = new Player(firstLevel.get());
         } else {
-            Gdx.app.error("GameInstance", "No levels found! Exiting!");
+            Gdx.app.error("GameInstance", "First Level could not be found! Exiting!");
             Gdx.app.exit();
         }
 
@@ -78,6 +77,31 @@ public class GameInstance {
 
     public GameLevel getCurrentLevel() {
         return getPlayer().getLevel();
+    }
+
+    public Optional<GameLevel> getLevelByID(Integer id) {
+        Optional<GameLevel> gameLevel = Optional.empty();
+        for(GameLevel gL : levels) {
+            if(gL.getId().equals(id)) {
+                gameLevel = Optional.of(gL);
+            }
+        }
+        return gameLevel;
+    }
+
+    public void advanceLevel() {
+        Integer currentLevelID = getCurrentLevel().getId();
+        player.addGold(getCurrentLevel().getLevelGold());
+        player.addSupplies(getCurrentLevel().getLevelSupplies());
+        
+        Optional<GameLevel> gameLevel = getLevelByID(currentLevelID+1);
+        if(gameLevel.isPresent()) {
+            player.setLevel(gameLevel.get());
+        } else {
+            //game won!
+            fadeSwitchScreen(new EndScreen(true));
+        }
+
     }
 
     public void switchScreen(Screen screen) {
