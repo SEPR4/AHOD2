@@ -2,11 +2,13 @@
   {
     "class": "uk.ac.york.sepr4.ahod2.object.building.Department",
     "id": 1,
-    "name": "Computer Science"
+    "name": "Computer Science",
+    "repairCost": 10
   },
   {
     "class": "uk.ac.york.sepr4.ahod2.object.building.Department",
     "id": 2,
-    "name": "Law and Management"
+    "name": "Law and Management",
+    "repairCost": 9
   }
 ]

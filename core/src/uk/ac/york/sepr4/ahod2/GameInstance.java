@@ -16,7 +16,9 @@ import uk.ac.york.sepr4.ahod2.object.encounter.EncounterManager;
 import uk.ac.york.sepr4.ahod2.object.GameStage;
 import uk.ac.york.sepr4.ahod2.object.building.BuildingManager;
 import uk.ac.york.sepr4.ahod2.object.entity.Player;
+import uk.ac.york.sepr4.ahod2.screen.AHODScreen;
 import uk.ac.york.sepr4.ahod2.screen.HUD;
+import uk.ac.york.sepr4.ahod2.screen.TransitionScreen;
 import uk.ac.york.sepr4.ahod2.screen.sail.SailScreen;
 
 import java.util.ArrayList;
@@ -80,6 +82,10 @@ public class GameInstance {
 
     public void switchScreen(Screen screen) {
         game.setScreen(screen);
+    }
+
+    public void fadeSwitchScreen(AHODScreen fadeIn) {
+        switchScreen(new TransitionScreen(this, (AHODScreen) game.getScreen(), fadeIn));
     }
 
     private void loadLevels() {

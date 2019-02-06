@@ -150,7 +150,7 @@ public class BattleScreen extends AHODScreen {
                 //TODO: Add fade when switching screens and HUD info for added gold/supplies
                 player.addGold(gold);
                 player.addSupplies(supplies);
-                gameInstance.switchScreen(gameInstance.getSailScreen());
+                gameInstance.fadeSwitchScreen(gameInstance.getSailScreen());
             }
         } else {
             gameInstance.switchScreen(new EndScreen(false));

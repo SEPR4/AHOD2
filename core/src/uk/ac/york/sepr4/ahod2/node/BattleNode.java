@@ -18,6 +18,6 @@ public class BattleNode extends Node {
     @Override
     public void action(GameInstance gameInstance) {
         BattleScreen battleScreen = new BattleScreen(gameInstance);
-        gameInstance.switchScreen(battleScreen);
+        gameInstance.fadeSwitchScreen(battleScreen);
     }
 }

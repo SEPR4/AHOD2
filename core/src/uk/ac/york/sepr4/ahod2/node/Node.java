@@ -27,7 +27,7 @@ public class Node {
 
     public void action(GameInstance gameInstance){
         Encounter encounter = gameInstance.getEncounterManager().generateEncounter();
-        gameInstance.switchScreen(new EncounterScreen(gameInstance, encounter));
+        gameInstance.fadeSwitchScreen(new EncounterScreen(gameInstance, encounter));
     }
 
     public void addConnectedNode(Node node) {

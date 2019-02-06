@@ -3,20 +3,25 @@ package uk.ac.york.sepr4.ahod2.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public abstract class AHODScreen implements Screen {
 
     private Stage stage;
     private Texture background;
     private InputMultiplexer inputMultiplexer = new InputMultiplexer();
+
+    private boolean fading = false;
+    private float fade = 0;
 
     public AHODScreen(Stage stage, Texture background) {
         this.stage = stage;
@@ -32,11 +37,28 @@ public abstract class AHODScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         drawBackground();
         renderInner(delta);
+        if(isFading()) {
+            applyFadeOverlay();
+        }
         stage.act(delta);
         stage.draw();
     }
 
     public abstract void renderInner(float delta);
+
+    public void applyFadeOverlay(){
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        ShapeRenderer shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(stage.getBatch().getProjectionMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(new Color(0,0,0, fade));
+        Gdx.app.debug("AHODS", "Fade: "+fade);
+        shapeRenderer.rect(0,0, stage.getWidth(), stage.getHeight());
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
+    }
 
     private void drawBackground() {
         //sets background texture

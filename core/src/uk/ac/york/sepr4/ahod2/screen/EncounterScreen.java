@@ -79,12 +79,12 @@ public class EncounterScreen extends AHODScreen {
                     ShipFactory.generateEnemyShip(encounterOption.getDifficulty()),
                     encounterOption.getGold(),
                     encounterOption.getSupplies());
-            gameInstance.switchScreen(battleScreen);
+            gameInstance.fadeSwitchScreen(battleScreen);
         } else {
             Player player = gameInstance.getPlayer();
             player.setGold(player.getGold() + encounterOption.getGold());
             player.setSupplies(player.getSupplies() + encounterOption.getSupplies());
-            gameInstance.switchScreen(gameInstance.getSailScreen());
+            gameInstance.fadeSwitchScreen(gameInstance.getSailScreen());
         }
     }
 }
