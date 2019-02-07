@@ -35,12 +35,16 @@ public class CardManager {
     private void loadCards(Array<Card> cards){
         for(Card card: cards) {
             FileHandle fileHandle = Gdx.files.internal("images/card/"+card.getTextureStr()+".png");
-            if(fileHandle.exists()) {
-                card.setTexture(new TextureRegionDrawable(new TextureRegion((new Texture(fileHandle)))));
-                this.cards.add(card);
-            } else {
+            if(!fileHandle.exists()) {
                 Gdx.app.error("CardManager", "Texture not found for card: "+card.getId());
+                continue;
             }
+            if(!card.is_default() && card.getShopCost() == null) {
+                Gdx.app.error("CardManager", "Not default but no shop cost for card: "+card.getId());
+                continue;
+            }
+            card.setTexture(new TextureRegionDrawable(new TextureRegion((new Texture(fileHandle)))));
+            this.cards.add(card);
         }
     }
 

@@ -23,7 +23,7 @@ public class BuildingManager {
         Json json = new Json();
         loadColleges(json.fromJson(Array.class, College.class, Gdx.files.internal("data/colleges.json")));
 
-        departments = json.fromJson(Array.class, Department.class, Gdx.files.internal("data/departments.json"));
+        loadDepartments(json.fromJson(Array.class, Department.class, Gdx.files.internal("data/departments.json")));
 
         Gdx.app.log("BuildingManager", "Loaded "+colleges.size+" colleges!");
     }
@@ -59,6 +59,22 @@ public class BuildingManager {
             }
         }
         this.colleges = finalColleges;
+    }
+
+    private void loadDepartments(Array<Department> departments) {
+        //TODO: check other params?
+        for(Department department: departments) {
+            for(Integer cardId : department.getStockArr()) {
+                Optional<Card> cardOptional = gameInstance.getCardManager().getCardByID(cardId);
+                if(cardOptional.isPresent()) {
+                    department.addCard(cardOptional.get());
+                } else {
+                    Gdx.app.error("BuildingManager", "Card "+cardId +" not found for Dept: "+department.getId());
+                }
+
+            }
+        }
+        this.departments = departments;
     }
 
 

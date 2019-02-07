@@ -7,7 +7,7 @@ import uk.ac.york.sepr4.ahod2.object.card.Card;
 public class College {
 
     private String name;
-    private Integer id, cardId;
+    private Integer id, cardId, bossDifficulty;
 
     //set by buildingmanager on load
     private Card card;

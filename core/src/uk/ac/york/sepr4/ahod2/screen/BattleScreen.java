@@ -144,15 +144,17 @@ public class BattleScreen extends AHODScreen {
         if(ship == enemy) {
             //player wins (reset mana and cards)
             player.getShip().battleOver();
-            if(enemy.isBoss()) {
-                gameInstance.advanceLevel();
-            }
             //TODO: Add HUD info for added gold/supplies
             player.addGold(gold);
             player.addSupplies(supplies);
-            gameInstance.fadeSwitchScreen(gameInstance.getSailScreen());
+            if(enemy.isBoss()) {
+                //screen is switched in this method
+                gameInstance.advanceLevel();
+            } else {
+                gameInstance.fadeSwitchScreen(gameInstance.getSailScreen());
+            }
         } else {
-            gameInstance.switchScreen(new EndScreen(false));
+            gameInstance.switchScreen(new EndScreen(gameInstance, false));
         }
         dispose();
     }
@@ -214,7 +216,7 @@ public class BattleScreen extends AHODScreen {
                     cardTable.add()
                             .expandX()
                             .height(Value.percentHeight(0.30f, cardTable))
-                            .width(Value.percentWidth(0.15f, cardTable))
+                            .width(Value.percentWidth(1f/handSize, cardTable))
                             .padBottom(Value.percentHeight(0.02f, cardTable)));
         }
 

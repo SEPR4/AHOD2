@@ -3,8 +3,13 @@ package uk.ac.york.sepr4.ahod2.node;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import lombok.Getter;
+import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
+import uk.ac.york.sepr4.ahod2.object.GameLevel;
+import uk.ac.york.sepr4.ahod2.object.ShipFactory;
 import uk.ac.york.sepr4.ahod2.object.building.College;
+import uk.ac.york.sepr4.ahod2.object.entity.Ship;
+import uk.ac.york.sepr4.ahod2.screen.BattleScreen;
 
 @Getter
 public class CollegeNode extends Node {
@@ -16,5 +21,16 @@ public class CollegeNode extends Node {
         setConnected(node.getConnected());
         this.college = college;
         this.setTexture(new TextureRegionDrawable(new TextureRegion(FileManager.nodeIcon)));
+    }
+
+    @Override
+    public void action(GameInstance gameInstance) {
+        GameLevel gameLevel = gameInstance.getCurrentLevel();
+        Ship ship = ShipFactory.generateEnemyShip(college.getBossDifficulty());
+        ship.setBoss(true);
+        BattleScreen battleScreen = new BattleScreen(gameInstance,
+                ship,
+                gameLevel.getLevelGold(), gameLevel.getLevelSupplies());
+        gameInstance.fadeSwitchScreen(battleScreen);
     }
 }

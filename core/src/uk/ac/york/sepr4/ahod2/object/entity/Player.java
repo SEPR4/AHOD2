@@ -16,6 +16,8 @@ public class Player {
 
     public Player(GameLevel gameLevel) {
         ship = new Ship();
+        ship.setMana(1000);
+        ship.setMaxMana(1000);
         this.level = gameLevel;
     }
 

@@ -31,6 +31,5 @@ public class ShipFactory {
         return ship;
     }
 
-   // public static Ship generateCollegeBoss(College college, Integer difficulty) { }
 
 }

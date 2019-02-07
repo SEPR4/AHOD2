@@ -33,6 +33,10 @@ public class MenuScreen extends AHODScreen {
         return gameInstance;
     }
 
+    public void newGame() {
+        this.gameInstance = null;
+    }
+
     @Override
     public void renderInner(float delta) {
 

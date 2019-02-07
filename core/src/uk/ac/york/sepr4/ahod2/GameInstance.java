@@ -91,15 +91,13 @@ public class GameInstance {
 
     public void advanceLevel() {
         Integer currentLevelID = getCurrentLevel().getId();
-        player.addGold(getCurrentLevel().getLevelGold());
-        player.addSupplies(getCurrentLevel().getLevelSupplies());
-
         Optional<GameLevel> gameLevel = getLevelByID(currentLevelID+1);
         if(gameLevel.isPresent()) {
             player.setLevel(gameLevel.get());
+            fadeSwitchScreen(sailScreen);
         } else {
             //game won!
-            fadeSwitchScreen(new EndScreen(true));
+            fadeSwitchScreen(new EndScreen(this, true));
         }
 
     }

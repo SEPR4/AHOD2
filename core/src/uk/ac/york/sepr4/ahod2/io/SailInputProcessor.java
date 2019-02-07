@@ -16,7 +16,7 @@ public class SailInputProcessor implements InputProcessor {
         this.sailScreen = sailScreen;
     }
 
-    //TODO: Dynamic heights
+    //TODO: cleanup
     public void scrollCamera() {
         float cameraY = (sailScreen.getCameraLowerBound().y);
         if(up) {
