@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import lombok.Data;
 
@@ -20,12 +22,16 @@ public abstract class AHODScreen implements Screen {
     private Texture background;
     private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
+    private ShapeRenderer shapeRenderer;
+
     private boolean fading = false;
     private float fade = 0;
 
     public AHODScreen(Stage stage, Texture background) {
         this.stage = stage;
         this.background = background;
+
+        shapeRenderer = new ShapeRenderer();
 
         inputMultiplexer.addProcessor(stage);
     }
@@ -46,15 +52,19 @@ public abstract class AHODScreen implements Screen {
 
     public abstract void renderInner(float delta);
 
+    public Vector2 getCameraLowerBound() {
+        Vector2 pos = new Vector2(stage.getCamera().position.x, stage.getCamera().position.y);
+        pos.add(-stage.getWidth()/2, -stage.getHeight()/2);
+        return pos;
+    }
+
     public void applyFadeOverlay(){
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(stage.getBatch().getProjectionMatrix());
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(new Color(0,0,0, fade));
-        Gdx.app.debug("AHODS", "Fade: "+fade);
-        shapeRenderer.rect(0,0, stage.getWidth(), stage.getHeight());
+        shapeRenderer.rect(0,getCameraLowerBound().y, stage.getWidth(), stage.getHeight());
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
@@ -85,7 +95,7 @@ public abstract class AHODScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        stage.getViewport().update(width, height, false);
     }
 
     @Override

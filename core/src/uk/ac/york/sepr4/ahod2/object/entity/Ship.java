@@ -31,7 +31,6 @@ public class Ship {
      * @return
      */
     public boolean damage(Integer damage) {
-        Gdx.app.debug("Ship","health: "+health);
         if(damage >= health){
             health = 0;
             return true;

@@ -19,6 +19,9 @@ public class Player {
         this.level = gameLevel;
     }
 
+    public void takeGold(Integer gold) {
+        this.gold-=gold;
+    }
     public void addGold(Integer gold) {
         this.gold+=gold;
     }

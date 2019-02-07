@@ -93,7 +93,7 @@ public class GameInstance {
         Integer currentLevelID = getCurrentLevel().getId();
         player.addGold(getCurrentLevel().getLevelGold());
         player.addSupplies(getCurrentLevel().getLevelSupplies());
-        
+
         Optional<GameLevel> gameLevel = getLevelByID(currentLevelID+1);
         if(gameLevel.isPresent()) {
             player.setLevel(gameLevel.get());

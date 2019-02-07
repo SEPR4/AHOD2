@@ -3,7 +3,6 @@ package uk.ac.york.sepr4.ahod2.io;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector3;
 import uk.ac.york.sepr4.ahod2.screen.sail.SailScreen;
 
 public class SailInputProcessor implements InputProcessor {
@@ -19,14 +18,9 @@ public class SailInputProcessor implements InputProcessor {
 
     //TODO: Dynamic heights
     public void scrollCamera() {
-        float cameraY = (sailScreen.getOrthographicCamera().position.y - Gdx.graphics.getHeight()/2);
+        float cameraY = (sailScreen.getCameraLowerBound().y);
         if(up) {
-            //TODO: Limit doesnt work
-            Vector3 vec = new Vector3(0,cameraY,0);
-            // Gdx.app.debug(""+(sailScreen.getOrthographicCamera().project(vec).y), ""+(sailScreen.getGameInstance().getPlayer().getLevel().getNodeView().getHeight() + 250f));
-
-
-            if(cameraY + scrollAmount - Gdx.graphics.getHeight() <
+            if(cameraY + scrollAmount + sailScreen.getStage().getHeight() <
                     sailScreen.getGameInstance().getPlayer().getLevel().getNodeView().getHeight() + 250f) {
                 sailScreen.getOrthographicCamera().translate(0, scrollAmount);
             }
