@@ -16,5 +16,15 @@
     "stockArr" : [
       2
     ]
+  },
+  {
+    "class": "uk.ac.york.sepr4.ahod2.object.building.Department",
+    "id": 3,
+    "name": "Film and Theatre",
+    "repairCost": 8,
+    "stockArr" : [
+      2
+    ]
   }
+
 ]
