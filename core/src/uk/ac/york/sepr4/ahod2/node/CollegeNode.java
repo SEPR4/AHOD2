@@ -30,7 +30,7 @@ public class CollegeNode extends Node {
         ship.setBoss(true);
         BattleScreen battleScreen = new BattleScreen(gameInstance,
                 ship,
-                gameLevel.getLevelGold(), gameLevel.getLevelSupplies());
+                gameLevel.getLevelGold());
         gameInstance.fadeSwitchScreen(battleScreen);
     }
 }

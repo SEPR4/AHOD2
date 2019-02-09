@@ -1,7 +1,7 @@
 package uk.ac.york.sepr4.ahod2.object;
 
 /***
- * Used to display messages on HUD
+ * Used to display messages on StatsHUD
  */
 public enum GameStage {
     SELECT_START {

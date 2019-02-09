@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class Card {
 
-    private Integer id, manaCost, shopCost, damage, heal, power;
+    private Integer id, manaCost, shopCost, damage, damageSelf, damageTime, heal, power;
     private String name, desc, textureStr;
     private boolean _default;
 

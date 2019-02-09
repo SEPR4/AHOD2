@@ -4,34 +4,34 @@
     "id": 1,
     "name": "Alcuin",
     "cardId": 1,
-    "bossDifficulty": 15
+    "bossDifficulty": 2
   },
   {
     "class": "uk.ac.york.sepr4.ahod2.object.building.College",
-    "id": 1,
+    "id": 2,
     "name": "Halifax",
     "cardId": 2,
-    "bossDifficulty": 20
+    "bossDifficulty": 4
   },
   {
     "class": "uk.ac.york.sepr4.ahod2.object.building.College",
     "id": 3,
     "name": "Vanburugh",
-    "cardId": 1,
-    "bossDifficulty": 25
+    "cardId": 3,
+    "bossDifficulty": 6
   },
   {
     "class": "uk.ac.york.sepr4.ahod2.object.building.College",
     "id": 4,
     "name": "James",
-    "cardId": 1,
-    "bossDifficulty": 30
+    "cardId": 4,
+    "bossDifficulty": 8
   },
   {
     "class": "uk.ac.york.sepr4.ahod2.object.building.College",
     "id": 5,
     "name": "Derwent",
-    "cardId": 1,
-    "bossDifficulty": 35
+    "cardId": 5,
+    "bossDifficulty": 10
   }
 ]

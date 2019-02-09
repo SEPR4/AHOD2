@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -37,6 +38,7 @@ public class NodeView {
 
     private List<Node> nodeMap;
 
+
     @Getter
     private float height = 0;
 
@@ -50,6 +52,11 @@ public class NodeView {
     public void update() {
         Gdx.gl.glLineWidth(2);
         shapeRenderer.setProjectionMatrix(sailScreen.getBatch().getProjectionMatrix());
+        nodeButtons.values().forEach(btn -> {
+            if(! sailScreen.getStage().getActors().contains(btn, false)){
+                sailScreen.getStage().addActor(btn);
+            }
+        });
         drawConnections();
         drawPlayerLocation();
     }
@@ -78,9 +85,7 @@ public class NodeView {
             }
         }
 
-        nodeButtons.values().forEach(btn -> {
-            sailScreen.getStage().addActor(btn);
-        });
+
     }
 
     private void drawPlayerLocation() {

@@ -10,15 +10,12 @@ import java.util.Random;
 
 public class ShipFactory {
 
-    //difficulty 0-100
+    //difficulty 1-10
     public static Ship generateEnemyShip(Integer difficulty) {
         Random random = new Random();
         Ship ship = new Ship();
 
-        ship.setMaxHealth(10+random.nextInt(difficulty));
-        ship.setHealth(ship.getMaxHealth());
-
-        Integer noCards = random.nextInt(difficulty/10);
+        Integer noCards = random.nextInt(difficulty);
         while(noCards > 0) {
             Optional<Card> optional = GameInstance.INSTANCE.getCardManager().randomCard(difficulty);
             if(optional.isPresent()) {

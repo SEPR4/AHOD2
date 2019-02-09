@@ -35,7 +35,8 @@ public class SailScreen extends AHODScreen {
 
     @Override
     public void renderInner(float delta) {
-        gameInstance.getHud().update();
+        gameInstance.getStatsHud().update();
+        gameInstance.getMessageHUD().update(delta);
         sailInputProcessor.scrollCamera();
         gameInstance.getPlayer().getLevel().getNodeView().update();
     }

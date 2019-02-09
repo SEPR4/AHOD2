@@ -5,11 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import lombok.Data;
-import uk.ac.york.sepr4.ahod2.node.CollegeNode;
-import uk.ac.york.sepr4.ahod2.node.DepartmentNode;
 import uk.ac.york.sepr4.ahod2.node.Node;
 import uk.ac.york.sepr4.ahod2.object.GameLevel;
-import uk.ac.york.sepr4.ahod2.object.building.College;
 import uk.ac.york.sepr4.ahod2.object.card.CardManager;
 import uk.ac.york.sepr4.ahod2.object.encounter.EncounterManager;
 import uk.ac.york.sepr4.ahod2.object.GameStage;
@@ -17,7 +14,8 @@ import uk.ac.york.sepr4.ahod2.object.building.BuildingManager;
 import uk.ac.york.sepr4.ahod2.object.entity.Player;
 import uk.ac.york.sepr4.ahod2.screen.AHODScreen;
 import uk.ac.york.sepr4.ahod2.screen.EndScreen;
-import uk.ac.york.sepr4.ahod2.screen.HUD;
+import uk.ac.york.sepr4.ahod2.screen.hud.MessageHUD;
+import uk.ac.york.sepr4.ahod2.screen.hud.StatsHUD;
 import uk.ac.york.sepr4.ahod2.screen.TransitionScreen;
 import uk.ac.york.sepr4.ahod2.screen.sail.SailScreen;
 import java.util.ArrayList;
@@ -35,7 +33,8 @@ public class GameInstance {
     private EncounterManager encounterManager;
 
     private SailScreen sailScreen;
-    private HUD hud;
+    private StatsHUD statsHud;
+    private MessageHUD messageHUD;
 
     private List<GameLevel> levels = new ArrayList<>();
 
@@ -54,7 +53,8 @@ public class GameInstance {
 
 
         //Initialize Screens and views
-        hud = new HUD(this);
+        statsHud = new StatsHUD(this);
+        messageHUD = new MessageHUD(this);
         sailScreen = new SailScreen(this);
 
         loadLevels();
@@ -94,6 +94,8 @@ public class GameInstance {
         Optional<GameLevel> gameLevel = getLevelByID(currentLevelID+1);
         if(gameLevel.isPresent()) {
             player.setLevel(gameLevel.get());
+            //clear last levels nodes
+            sailScreen.getStage().clear();
             fadeSwitchScreen(sailScreen);
         } else {
             //game won!
