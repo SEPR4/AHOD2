@@ -1,4 +1,4 @@
-package ahod2.object.encounter;
+package uk.ac.york.sepr4.ahod2.object.encounter;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;

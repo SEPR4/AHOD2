@@ -1,4 +1,4 @@
-package ahod2.object.card;
+package uk.ac.york.sepr4.ahod2.object.card;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import lombok.Data;

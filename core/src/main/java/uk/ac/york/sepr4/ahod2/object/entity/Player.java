@@ -1,8 +1,8 @@
-package ahod2.object.entity;
+package uk.ac.york.sepr4.ahod2.object.entity;
 
 import lombok.Data;
-import ahod2.node.Node;
-import ahod2.object.GameLevel;
+import uk.ac.york.sepr4.ahod2.node.Node;
+import uk.ac.york.sepr4.ahod2.object.GameLevel;
 
 import java.util.Optional;
 

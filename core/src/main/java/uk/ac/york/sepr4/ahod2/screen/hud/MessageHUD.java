@@ -1,4 +1,4 @@
-package ahod2.screen.hud;
+package uk.ac.york.sepr4.ahod2.screen.hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -10,9 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import lombok.Getter;
-import ahod2.GameInstance;
-import ahod2.io.FileManager;
-import ahod2.io.StyleManager;
+import uk.ac.york.sepr4.ahod2.GameInstance;
+import uk.ac.york.sepr4.ahod2.io.FileManager;
+import uk.ac.york.sepr4.ahod2.io.StyleManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;

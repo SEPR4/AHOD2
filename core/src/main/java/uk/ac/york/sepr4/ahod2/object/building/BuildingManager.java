@@ -1,11 +1,11 @@
-package ahod2.object.building;
+package uk.ac.york.sepr4.ahod2.object.building;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import lombok.Data;
-import ahod2.GameInstance;
-import ahod2.object.card.Card;
+import uk.ac.york.sepr4.ahod2.GameInstance;
+import uk.ac.york.sepr4.ahod2.object.card.Card;
 
 import java.util.Optional;
 

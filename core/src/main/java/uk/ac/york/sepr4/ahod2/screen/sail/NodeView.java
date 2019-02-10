@@ -1,4 +1,4 @@
-package ahod2.screen.sail;
+package uk.ac.york.sepr4.ahod2.screen.sail;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,11 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import lombok.Getter;
-import ahod2.io.FileManager;
-import ahod2.node.Node;
-import ahod2.object.GameLevel;
-import ahod2.object.entity.Player;
-import ahod2.util.NodeUtil;
+import uk.ac.york.sepr4.ahod2.io.FileManager;
+import uk.ac.york.sepr4.ahod2.node.Node;
+import uk.ac.york.sepr4.ahod2.object.GameLevel;
+import uk.ac.york.sepr4.ahod2.object.entity.Player;
+import uk.ac.york.sepr4.ahod2.util.NodeUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

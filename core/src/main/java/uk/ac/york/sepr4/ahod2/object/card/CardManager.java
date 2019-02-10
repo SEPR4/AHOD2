@@ -1,4 +1,4 @@
-package ahod2.object.card;
+package uk.ac.york.sepr4.ahod2.object.card;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
-import ahod2.object.entity.Ship;
+import uk.ac.york.sepr4.ahod2.object.entity.Ship;
 
 import java.util.ArrayList;
 import java.util.List;

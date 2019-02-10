@@ -1,7 +1,7 @@
-package ahod2.object.building;
+package uk.ac.york.sepr4.ahod2.object.building;
 
 import lombok.Data;
-import ahod2.object.card.Card;
+import uk.ac.york.sepr4.ahod2.object.card.Card;
 
 @Data
 public class College {
