@@ -4,10 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import lombok.Getter;
 import uk.ac.york.sepr4.ahod2.GameInstance;
@@ -84,9 +85,30 @@ public class MessageHUD {
         messageTable.bottom();
 
 
-        gameStageLabel = new Label("", new Label.LabelStyle(StyleManager.generatePirateFont(30, Color.WHITE), Color.CORAL));
+        gameStageLabel = new Label("", new Label.LabelStyle(StyleManager.generatePirateFont(40, Color.WHITE), Color.CORAL));
+        ImageButton imageButton = new ImageButton(new TextureRegionDrawable(FileManager.hudShipView));
 
-        messageTable.add(gameStageLabel).expandX().padBottom(5);
+        imageButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent ev, float x, float y) {
+                gameInstance.fadeSwitchScreen(gameInstance.getShipViewScreen());
+            }
+        });
+
+        messageTable.add(gameStageLabel)
+                .expandX()
+                .padBottom(Value.percentWidth(0.02f, messageTable))
+                .padLeft(Value.percentWidth(0.02f, messageTable))
+                .left();
+
+        messageTable.add(imageButton)
+                .expandX()
+                .padBottom(Value.percentWidth(0.02f, messageTable))
+                .padRight(Value.percentWidth(0.02f, messageTable))
+                .right()
+                .bottom()
+                .width(Value.percentWidth(0.04f, messageTable))
+                .height(Value.percentWidth(0.04f, messageTable));
 
         hudStage.addActor(messageTable);
 

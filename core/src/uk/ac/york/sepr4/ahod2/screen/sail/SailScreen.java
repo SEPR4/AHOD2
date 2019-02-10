@@ -29,6 +29,7 @@ public class SailScreen extends AHODScreen {
 
         sailInputProcessor = new SailInputProcessor(this);
         getInputMultiplexer().addProcessor(sailInputProcessor);
+        getInputMultiplexer().addProcessor(gameInstance.getMessageHUD().getHudStage());
 
         gameInstance.setGameStage(GameStage.SELECT_START);
     }

@@ -17,7 +17,7 @@ public class FileManager {
 
 
     public static Texture hudGold = new Texture(Gdx.files.internal("images/hud/gold.png"));
-    public static Texture hudSupplies = new Texture(Gdx.files.internal("images/hud/supplies.png"));
+    public static Texture hudShipView = new Texture(Gdx.files.internal("images/hud/shipview.png"));
 
 
 

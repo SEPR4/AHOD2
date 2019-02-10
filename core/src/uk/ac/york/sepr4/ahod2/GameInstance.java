@@ -14,6 +14,7 @@ import uk.ac.york.sepr4.ahod2.object.building.BuildingManager;
 import uk.ac.york.sepr4.ahod2.object.entity.Player;
 import uk.ac.york.sepr4.ahod2.screen.AHODScreen;
 import uk.ac.york.sepr4.ahod2.screen.EndScreen;
+import uk.ac.york.sepr4.ahod2.screen.ShipViewScreen;
 import uk.ac.york.sepr4.ahod2.screen.hud.MessageHUD;
 import uk.ac.york.sepr4.ahod2.screen.hud.StatsHUD;
 import uk.ac.york.sepr4.ahod2.screen.TransitionScreen;
@@ -33,6 +34,7 @@ public class GameInstance {
     private EncounterManager encounterManager;
 
     private SailScreen sailScreen;
+    private ShipViewScreen shipViewScreen;
     private StatsHUD statsHud;
     private MessageHUD messageHUD;
 
@@ -56,6 +58,7 @@ public class GameInstance {
         statsHud = new StatsHUD(this);
         messageHUD = new MessageHUD(this);
         sailScreen = new SailScreen(this);
+        shipViewScreen = new ShipViewScreen(this);
 
         loadLevels();
 

@@ -11,26 +11,22 @@ import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.io.StyleManager;
 
-public class MinigameScreen extends AHODScreen {
+public class ShipViewScreen extends AHODScreen {
 
     private GameInstance gameInstance;
-    private DepartmentScreen departmentScreen;
 
     private Table table = new Table();
 
-    public MinigameScreen(GameInstance gameInstance, DepartmentScreen departmentScreen) {
+    public ShipViewScreen(GameInstance gameInstance) {
         super(new Stage(new ScreenViewport()), FileManager.menuScreenBG);
+
         this.gameInstance = gameInstance;
-        this.departmentScreen = departmentScreen;
 
         createTable();
     }
 
-    private void update() {
-
-    }
-
     private void createTable() {
+
         table.top();
         table.setFillParent(true);
 
@@ -38,7 +34,7 @@ public class MinigameScreen extends AHODScreen {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent ev, float x, float y) {
-                gameInstance.fadeSwitchScreen(departmentScreen);
+                gameInstance.fadeSwitchScreen(gameInstance.getSailScreen());
             }
         });
 
@@ -46,6 +42,10 @@ public class MinigameScreen extends AHODScreen {
 
 
         getStage().addActor(table);
+    }
+
+    private void update() {
+
     }
 
     @Override
