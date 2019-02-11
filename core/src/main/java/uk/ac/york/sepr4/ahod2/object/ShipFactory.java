@@ -18,11 +18,11 @@ public class ShipFactory {
         Random random = new Random();
         Ship ship = new Ship();
 
-        Integer health = ship.getMaxHealth() + random.nextInt(healthInterval+1);
+        Integer health = ship.getMaxHealth() + difficulty*random.nextInt(healthInterval+1);
         ship.setMaxHealth(health);
         ship.setHealth(health);
 
-        Integer mana = ship.getMaxMana() + random.nextInt(manaInterval+1);
+        Integer mana = ship.getMaxMana() + difficulty*random.nextInt(manaInterval+1);
         ship.setMaxMana(mana);
         ship.setMana(mana);
 

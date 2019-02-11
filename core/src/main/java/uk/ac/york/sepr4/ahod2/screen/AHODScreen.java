@@ -130,6 +130,5 @@ public abstract class AHODScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        shapeRenderer.dispose();
     }
 }
