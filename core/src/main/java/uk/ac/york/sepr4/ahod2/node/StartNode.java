@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
-import uk.ac.york.sepr4.ahod2.object.GameStage;
 
 import java.util.Optional;
 
@@ -21,7 +20,7 @@ public class StartNode extends Node {
         Optional<Node> loc = gameInstance.getPlayer().getLocation();
         if(!loc.isPresent()) {
             gameInstance.getPlayer().setLocation(Optional.of(this));
-            gameInstance.setGameStage(GameStage.SELECT);
+            gameInstance.getMessageHUD().addStatusMessage("Select Next Node!");
         }
     }
 }

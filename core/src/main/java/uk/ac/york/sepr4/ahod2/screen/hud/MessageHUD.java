@@ -13,6 +13,7 @@ import lombok.Getter;
 import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.io.StyleManager;
+import uk.ac.york.sepr4.ahod2.screen.AHODScreen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,11 +26,14 @@ public class MessageHUD {
 
     private GameInstance gameInstance;
 
-    private Label gameStageLabel;
+    private Label messageLabel;
 
     private HashMap<Label, Float> tempMessages = new HashMap<>();
 
-    private final Float tempMessageTime = 4f;
+    private String lastMessage = "", currentMessage = "";
+    private float lastMessageTime = 0, currentMessageTime = 0;
+
+    private final Float resourceMessageTime = 4f;
 
     public MessageHUD(GameInstance gameInstance) {
         this.gameInstance = gameInstance;
@@ -48,20 +52,44 @@ public class MessageHUD {
         tempMessages.put(label, 0f);
     }
 
+    public void addStatusMessage(String message, float time) {
+            if(currentMessageTime > 0) {
+                //last message temp
+                lastMessage = currentMessage;
+                lastMessageTime = currentMessageTime;
+            }
+            currentMessage = message;
+            currentMessageTime = time;
+    }
+
+    public void addStatusMessage(String message) {
+        addStatusMessage(message, 0);
+    }
+
     public void update(float delta) {
-        gameStageLabel.setText(gameInstance.getGameStage().getStageText().toUpperCase());
+        if(currentMessageTime != 0) {
+            //not a perm message
+            currentMessageTime -= delta;
+            if (currentMessageTime <= 0) {
+                currentMessage = lastMessage;
+                currentMessageTime = lastMessageTime;
+                lastMessageTime = 0f;
+                lastMessage = "";
+            }
+        }
+        messageLabel.setText(currentMessage.toUpperCase());
 
         List<Label> toRemove = new ArrayList<>();
         for(Label label : tempMessages.keySet()) {
             Float time = (tempMessages.get(label));
-            if(time + delta > tempMessageTime) {
+            if(time + delta > resourceMessageTime) {
                 toRemove.add(label);
             } else {
                 tempMessages.replace(label, time+delta);
                 if(!hudStage.getActors().contains(label, false)){
                     hudStage.addActor(label);
                 }
-                label.setPosition(5, 5 + (Gdx.graphics.getHeight()/2)*(time/tempMessageTime));
+                label.setPosition(5, 5 + (Gdx.graphics.getHeight()/2)*(time/resourceMessageTime));
 
             }
         }
@@ -83,17 +111,21 @@ public class MessageHUD {
         messageTable.bottom();
 
 
-        gameStageLabel = new Label("", new Label.LabelStyle(StyleManager.generatePirateFont(40, Color.WHITE), Color.CORAL));
+        messageLabel = new Label("", StyleManager.generateLabelStyle(30, Color.WHITE));
         ImageButton imageButton = new ImageButton(new TextureRegionDrawable(FileManager.hudShipView));
 
         imageButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent ev, float x, float y) {
+                if(gameInstance.getGame().getScreen() instanceof AHODScreen) {
+                    gameInstance.getShipViewScreen().setPreviousScreen((AHODScreen) gameInstance.getGame().getScreen());
+
+                }
                 gameInstance.fadeSwitchScreen(gameInstance.getShipViewScreen());
             }
         });
 
-        messageTable.add(gameStageLabel)
+        messageTable.add(messageLabel)
                 .expandX()
                 .padBottom(Value.percentWidth(0.02f, messageTable))
                 .padLeft(Value.percentWidth(0.02f, messageTable))

@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import lombok.Data;
+import uk.ac.york.sepr4.ahod2.GameInstance;
 
 @Data
 public abstract class AHODScreen implements Screen {
@@ -22,6 +23,10 @@ public abstract class AHODScreen implements Screen {
     private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
     private ShapeRenderer shapeRenderer;
+
+    private boolean enableMessageHUD = false;
+
+    private GameInstance gameInstance;
 
     private boolean fading = false;
     private float fade = 0;
@@ -33,6 +38,13 @@ public abstract class AHODScreen implements Screen {
         shapeRenderer = new ShapeRenderer();
 
         inputMultiplexer.addProcessor(stage);
+
+    }
+
+    public void setHUD(GameInstance gameInstance) {
+        this.gameInstance = gameInstance;
+        enableMessageHUD = true;
+        inputMultiplexer.addProcessor(GameInstance.INSTANCE.getMessageHUD().getHudStage());
     }
 
     @Override
@@ -42,6 +54,9 @@ public abstract class AHODScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         drawBackground();
         renderInner(delta);
+        if(enableMessageHUD) {
+            gameInstance.getMessageHUD().update(delta);
+        }
         if(isFading()) {
             applyFadeOverlay();
         }
@@ -115,5 +130,6 @@ public abstract class AHODScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        shapeRenderer.dispose();
     }
 }

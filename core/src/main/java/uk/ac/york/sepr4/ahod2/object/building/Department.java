@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class Department {
 
-    private Integer id, repairCost;
+    private Integer id, repairCost, minigamePower;
     private String name;
     private List<Integer> stockArr;
 

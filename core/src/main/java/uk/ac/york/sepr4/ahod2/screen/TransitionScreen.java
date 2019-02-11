@@ -9,13 +9,14 @@ public class TransitionScreen implements Screen {
     private AHODScreen fadeIn, fadeOut;
     private GameInstance gameInstance;
 
-    private boolean fading = true;
+    private boolean fading = true, dispose;
     private float fadeTime = 0.4f, fadeTimer;
 
-    public TransitionScreen(GameInstance gameInstance, AHODScreen fadeOut, AHODScreen fadeIn) {
+    public TransitionScreen(GameInstance gameInstance, AHODScreen fadeOut, AHODScreen fadeIn, boolean dispose) {
         this.gameInstance = gameInstance;
         this.fadeIn = fadeIn;
         this.fadeOut = fadeOut;
+        this.dispose = dispose;
 
         fadeIn.setFading(true);
         fadeIn.setFade(0);
@@ -46,6 +47,9 @@ public class TransitionScreen implements Screen {
                 fadeOut.setFading(false);
                 fadeIn.setFading(false);
                 gameInstance.switchScreen(fadeIn);
+                if(dispose) {
+                    fadeOut.dispose();
+                }
                 return;
             }
         }
@@ -79,5 +83,6 @@ public class TransitionScreen implements Screen {
 
     @Override
     public void dispose() {
+
     }
 }

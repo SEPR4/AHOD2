@@ -2,6 +2,8 @@ package uk.ac.york.sepr4.ahod2.io;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class FileManager {
 
@@ -15,10 +17,11 @@ public class FileManager {
     public static Texture battleNodeIcon = new Texture(Gdx.files.internal("images/node/battle.png"));
     public static Texture departmentNodeIcon = new Texture(Gdx.files.internal("images/node/department.png"));
 
-
     public static Texture hudGold = new Texture(Gdx.files.internal("images/hud/gold.png"));
     public static Texture hudShipView = new Texture(Gdx.files.internal("images/hud/shipview.png"));
 
+    public static Drawable minigameDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("images/card/reload.png")));
+    public static Drawable minigameBackDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("images/card/back.png")));
 
 
 }

@@ -61,9 +61,13 @@ public class CardManager {
 
     public Optional<Card> randomCard(Integer power) {
         Random random = new Random();
-        Card card = cards.get(random.nextInt(cards.size()-1));
-        if(!card.is_default()&& card.getPower() <= power) {
-            return Optional.of(card);
+        Integer attempts = 50;
+        while(attempts>0) {
+            Card card = cards.get(random.nextInt(cards.size()-1));
+            if (!card.is_default() && card.getPower() <= power) {
+                return Optional.of(card);
+            }
+            attempts--;
         }
         return Optional.empty();
     }

@@ -8,7 +8,6 @@ import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.object.encounter.Encounter;
 import uk.ac.york.sepr4.ahod2.screen.EncounterScreen;
-
 import java.util.ArrayList;
 import java.util.List;
 

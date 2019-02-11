@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import lombok.Getter;
 import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.io.StyleManager;
@@ -22,6 +23,7 @@ import java.util.List;
 public class DepartmentScreen extends AHODScreen {
 
     private GameInstance gameInstance;
+    @Getter
     private Department department;
 
     private MinigameScreen minigameScreen;
@@ -43,6 +45,8 @@ public class DepartmentScreen extends AHODScreen {
 
         setupTopTable();
         setupStoreTable();
+        setHUD(gameInstance);
+
     }
 
     private void setupTopTable() {
@@ -106,6 +110,10 @@ public class DepartmentScreen extends AHODScreen {
         player.takeGold(getRepairCost());
         player.getShip().setHealth(player.getShip().getMaxHealth());
         return true;
+    }
+
+    public void resetMinigame() {
+        this.minigameScreen = new MinigameScreen(gameInstance, this);
     }
 
     private void switchMinigame() {

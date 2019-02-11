@@ -9,7 +9,6 @@ import uk.ac.york.sepr4.ahod2.node.Node;
 import uk.ac.york.sepr4.ahod2.object.GameLevel;
 import uk.ac.york.sepr4.ahod2.object.card.CardManager;
 import uk.ac.york.sepr4.ahod2.object.encounter.EncounterManager;
-import uk.ac.york.sepr4.ahod2.object.GameStage;
 import uk.ac.york.sepr4.ahod2.object.building.BuildingManager;
 import uk.ac.york.sepr4.ahod2.object.entity.Player;
 import uk.ac.york.sepr4.ahod2.screen.AHODScreen;
@@ -42,8 +41,6 @@ public class GameInstance {
     private List<GameLevel> levels = new ArrayList<>();
 
     private Player player;
-
-    private GameStage gameStage = GameStage.LOADING;
 
     public GameInstance(AHOD2 ahod2) {
         game = ahod2;
@@ -112,8 +109,12 @@ public class GameInstance {
         game.setScreen(screen);
     }
 
+    public void fadeSwitchScreen(AHODScreen fadeIn, boolean dispose) {
+        switchScreen(new TransitionScreen(this, (AHODScreen) game.getScreen(), fadeIn, dispose));
+    }
+
     public void fadeSwitchScreen(AHODScreen fadeIn) {
-        switchScreen(new TransitionScreen(this, (AHODScreen) game.getScreen(), fadeIn));
+        fadeSwitchScreen(fadeIn, false);
     }
 
     private void loadLevels() {

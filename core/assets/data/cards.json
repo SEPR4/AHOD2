@@ -17,7 +17,7 @@
   {
     "class": "uk.ac.york.sepr4.ahod2.object.card.Card",
     "id": 2,
-    "_default": true,
+    "_default": false,
     "power": 1,
     "name": "Round Shot++",
     "desc": "Simple Cannon Shot!++",
@@ -47,7 +47,7 @@
   {
     "class": "uk.ac.york.sepr4.ahod2.object.card.Card",
     "id": 4,
-    "_default": true,
+    "_default": false,
     "power": 1,
     "name": "Patch Holes++",
     "desc": "Do some repairs!++",

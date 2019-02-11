@@ -64,7 +64,7 @@ public class NodeUtil {
 
     //TODO: Add some other measures - minMergeDepth (dont merge on first or second level?)
 
-    private static List<Node> generateNodeMap(Integer depth) {
+    public static List<Node> generateNodeMap(Integer depth) {
         Random random = new Random();
         List<Node> nodes = new ArrayList();
 
