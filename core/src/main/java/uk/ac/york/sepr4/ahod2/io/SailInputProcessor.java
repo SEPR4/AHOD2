@@ -1,5 +1,6 @@
 package uk.ac.york.sepr4.ahod2.io;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import uk.ac.york.sepr4.ahod2.screen.sail.SailScreen;
@@ -15,17 +16,17 @@ public class SailInputProcessor implements InputProcessor {
         this.sailScreen = sailScreen;
     }
 
-    //TODO: cleanup
     public void scrollCamera() {
-        float cameraY = (sailScreen.getCameraLowerBound().y);
+        float cameraYBottom = (sailScreen.getOrthographicCamera().position.y - Gdx.graphics.getHeight()/2);
+        float cameraYTop = (sailScreen.getOrthographicCamera().position.y + Gdx.graphics.getHeight()/2);
+
         if(up) {
-            if(cameraY + scrollAmount + sailScreen.getStage().getHeight() <
-                    sailScreen.getGameInstance().getPlayer().getLevel().getNodeView().getHeight() + 250f) {
+            if(cameraYTop + scrollAmount < sailScreen.getStage().getViewport().getWorldHeight()) {
                 sailScreen.getOrthographicCamera().translate(0, scrollAmount);
             }
         }
         if(down) {
-            if(cameraY - scrollAmount > 0) {
+            if(cameraYBottom - scrollAmount > 0) {
                 sailScreen.getOrthographicCamera().translate(0, -scrollAmount);
             }
         }

@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,7 +23,7 @@ public abstract class AHODScreen implements Screen {
 
     private ShapeRenderer shapeRenderer;
 
-    private boolean enableMessageHUD = false;
+    private boolean enableMessageHUD = false, enableStatsHUD = false;
 
     private GameInstance gameInstance;
 
@@ -41,10 +40,15 @@ public abstract class AHODScreen implements Screen {
 
     }
 
-    public void setHUD(GameInstance gameInstance) {
+    public void setMessageHUD(GameInstance gameInstance) {
         this.gameInstance = gameInstance;
         enableMessageHUD = true;
         inputMultiplexer.addProcessor(GameInstance.INSTANCE.getMessageHUD().getHudStage());
+    }
+
+    public void setStatsHUD(GameInstance gameInstance) {
+        this.gameInstance = gameInstance;
+        enableStatsHUD = true;
     }
 
     @Override
@@ -53,15 +57,18 @@ public abstract class AHODScreen implements Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         drawBackground();
-        if(enableMessageHUD) {
-            gameInstance.getMessageHUD().update(delta);
-        }
         renderInner(delta);
         if(isFading()) {
             applyFadeOverlay();
         }
         stage.act(delta);
         stage.draw();
+        if(enableMessageHUD) {
+            gameInstance.getMessageHUD().update(delta);
+        }
+        if(enableStatsHUD) {
+            gameInstance.getStatsHud().update();
+        }
     }
 
     public abstract void renderInner(float delta);
@@ -88,9 +95,9 @@ public abstract class AHODScreen implements Screen {
         //sets background texture
         getBatch().begin();
         Texture texture = background;
-        TextureRegion textureRegion = new TextureRegion(texture);
-        textureRegion.setRegion(0,0,texture.getWidth(),texture.getHeight());
-        getBatch().draw(texture,0,0);
+        texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+
+        getBatch().draw(texture,0,0,stage.getWidth(),stage.getHeight());
         getBatch().end();
     }
 
@@ -109,7 +116,7 @@ public abstract class AHODScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, false);
+        //resizing causes errors with sailscreen
     }
 
     @Override

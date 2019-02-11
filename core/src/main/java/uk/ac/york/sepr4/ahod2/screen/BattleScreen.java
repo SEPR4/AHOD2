@@ -35,6 +35,8 @@ public class BattleScreen extends AHODScreen {
     private List<Cell> buttonCells = new ArrayList<>();
     private Table table, cardTable;
 
+    private BattleTurn turn;
+
     private static final Integer handSize = 4;
 
     /***
@@ -62,8 +64,10 @@ public class BattleScreen extends AHODScreen {
         player = gameInstance.getPlayer();
         cardManager = gameInstance.getCardManager();
 
-        drawHands(Arrays.asList(enemy, player.getShip()));
         loadBattleElements();
+        loadCardElements();
+
+        turn = BattleTurn.PLAYER;
     }
 
     @Override
@@ -71,39 +75,6 @@ public class BattleScreen extends AHODScreen {
         updateBattleElements();
     }
 
-    private void drawHands(List<Ship> ships) {
-        for (Ship ship : ships) {
-            while (drawCheck(ship)) {
-                drawCard(ship);
-            }
-        }
-    }
-
-    private void drawCard(Ship ship) {
-        if(drawCheck(ship)) {
-            Random random = new Random();
-            List<Card> fullDeck = cardManager.getFullDeck(ship);
-            fullDeck.removeAll(ship.getDiscarded());
-            //draw until all cards used or have 5
-            if (fullDeck.size() == 1) {
-                ship.addCardToHand(fullDeck.get(0));
-            } else {
-                Card card = fullDeck.get(random.nextInt(fullDeck.size()));
-                if (!ship.getHand().contains(card)) {
-                    ship.addCardToHand(card);
-                }
-            }
-            enemyTurn();
-        }
-    }
-
-    private boolean drawCheck(Ship ship) {
-        List<Card> fullDeck = cardManager.getFullDeck(ship);
-        if(fullDeck.size() == ship.getDiscarded().size()) {
-            ship.setDiscarded(new ArrayList<>());
-        }
-        return ship.getHand().size() <= handSize && ship.getHand().size() < fullDeck.size();
-    }
 
     private void enemyTurn() {
         //do enemy move
@@ -182,6 +153,26 @@ public class BattleScreen extends AHODScreen {
         dispose();
     }
 
+    private void loadCardElements() {
+        //bottom 1/3 (deck display, hold 4 cards at once)
+        cardTable = new Table();
+        cardTable.setFillParent(true);
+        cardTable.bottom();
+        cardTable.debug();
+
+        for(int i=0;i<handSize;i++) {
+            buttonCells.add(
+                    cardTable.add()
+                            .expandX()
+                            .height(Value.percentHeight(0.27f, cardTable))
+                            .width(Value.percentWidth(1f/(handSize), cardTable))
+                            .padBottom(Value.percentHeight(0.02f, cardTable)));
+        }
+
+        getStage().addActor(table);
+        getStage().addActor(cardTable);
+    }
+
     private void loadBattleElements() {
 
         //create ship images and set scaling (so should scale if screen size changes)
@@ -194,13 +185,19 @@ public class BattleScreen extends AHODScreen {
         enemyShipImage = new Image(txR);
         enemyShipImage.setScaling(Scaling.fillY);
 
+        //health labels
         Label.LabelStyle style = StyleManager.generateLabelStyle(30, Color.RED);
         playerHealthLabel = new Label(player.getShip().getHealth() + "/" + player.getShip().getMaxHealth(), style);
         enemyHealthLabel = new Label(enemy.getHealth() + "/" + enemy.getMaxHealth(), style);
 
-        Label.LabelStyle style2 = StyleManager.generateLabelStyle(30, Color.GREEN);
+        //mana labels
+        Label.LabelStyle style2 = StyleManager.generateLabelStyle(30, Color.PURPLE);
         playerManaLabel = new Label(player.getShip().getMana() + "/" + player.getShip().getMaxMana(), style2);
         enemyManaLabel = new Label(enemy.getMana() + "/" + enemy.getMaxMana(), style2);
+
+        //buttons
+        TextButton drawButton = new TextButton("Draw Card", StyleManager.generateTBStyle(30, Color.CORAL, Color.GRAY));
+        TextButton endTurnButton = new TextButton("End Turn", StyleManager.generateTBStyle(30, Color.ORANGE, Color.GRAY));
 
         table = new Table();
         table.setFillParent(true);
@@ -209,55 +206,37 @@ public class BattleScreen extends AHODScreen {
 
         //top 2/3 (ship + stat display)
         table.add(playerShipImage).expandX()
-                .height(Value.percentHeight(0.46f, table))
+                .height(Value.percentHeight(0.52f, table))
                 .width(Value.percentWidth(0.5f, table))
-                .padTop(Value.percentHeight(0.05f, table));
+                .padTop(Value.percentHeight(0.02f, table));
         table.add(enemyShipImage).expandX()
-                .height(Value.percentHeight(0.46f, table))
+                .height(Value.percentHeight(0.52f, table))
                 .width(Value.percentWidth(0.5f, table))
-                .padTop(Value.percentHeight(0.05f, table));
+                .padTop(Value.percentHeight(0.02f, table));
         table.row();
-        table.add(playerHealthLabel).expandX().height(Value.percentHeight(0.05f, table));
-        table.add(enemyHealthLabel).expandX().height(Value.percentHeight(0.05f, table));
+
+        table.add(playerHealthLabel).expandX()
+                .height(Value.percentHeight(0.05f, table));
+        table.add(enemyHealthLabel).expandX()
+                .height(Value.percentHeight(0.05f, table));
         table.row();
+
         table.add(playerManaLabel).expandX()
                 .height(Value.percentHeight(0.05f, table))
-                .padBottom(Value.percentHeight(0.05f, table));
+                .padBottom(Value.percentHeight(0.02f, table));
         table.add(enemyManaLabel).expandX()
                 .height(Value.percentHeight(0.05f, table))
-                .padBottom(Value.percentHeight(0.05f, table));
+                .padBottom(Value.percentHeight(0.02f, table));
+        table.row();
 
+        //start of bottom 1/3
+        table.add(drawButton).expandX()
+                .height(Value.percentHeight(0.04f, table))
+                .padBottom(Value.percentHeight(0.02f, table));
+        table.add(endTurnButton).expandX()
+                .height(Value.percentHeight(0.04f, table))
+                .padBottom(Value.percentHeight(0.02f, table));
 
-        //bottom 1/3 (deck display, hold 4 cards at once)
-        cardTable = new Table();
-        cardTable.setFillParent(true);
-        cardTable.bottom();
-        cardTable.debug();
-
-        TextButton drawButton = new TextButton("Draw Card", StyleManager.generateTBStyle(30, Color.CORAL, Color.GRAY));
-        drawButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent ev, float x, float y) {
-                drawCard(player.getShip());
-            }
-        });
-
-        cardTable.add(drawButton).expandX()
-                .height(Value.percentHeight(0.30f, cardTable))
-                .width(Value.percentWidth(1f/(handSize+1), cardTable))
-                .padBottom(Value.percentHeight(0.02f, cardTable));
-
-        for(int i=0;i<handSize;i++) {
-            buttonCells.add(
-                    cardTable.add()
-                            .expandX()
-                            .height(Value.percentHeight(0.30f, cardTable))
-                            .width(Value.percentWidth(1f/(handSize+1), cardTable))
-                            .padBottom(Value.percentHeight(0.02f, cardTable)));
-        }
-
-        getStage().addActor(table);
-        getStage().addActor(cardTable);
     }
 
     private ImageButton getIBForCard(Ship ship, Card card) {
@@ -278,36 +257,15 @@ public class BattleScreen extends AHODScreen {
         playerManaLabel.setText(player.getShip().getMana() + "/" + player.getShip().getMaxMana());
         enemyManaLabel.setText(enemy.getMana() + "/" + enemy.getMaxMana());
 
-        for (Card card : player.getShip().getDiscarded()) {
-            if (cardButtons.containsKey(card)) {
-                cardTable.removeActor(cardButtons.get(card));
-                cardButtons.remove(card);
-            }
-        }
-
-        for (Card card : player.getShip().getHand()) {
-            if (!cardButtons.containsKey(card)) {
-                cardButtons.put(card, getIBForCard(player.getShip(), card));
-            }
-        }
-
-        for (ImageButton iB : cardButtons.values()) {
-            boolean placed = false;
-            for (Cell cell : buttonCells) {
-                if (cell.getActor() == iB) {
-                    placed = true;
-                }
-            }
-            if (!placed) {
-                for(Cell cell:buttonCells) {
-                    if(!cell.hasActor()) {
-                        cell.setActor(iB);
-                        break;
-                    }
-                }
-            }
-        }
 
     }
 
+}
+
+enum BattleMove {
+    DRAW, WAIT, CARD
+}
+
+enum BattleTurn {
+    PLAYER, ENEMY, ANIMATION
 }

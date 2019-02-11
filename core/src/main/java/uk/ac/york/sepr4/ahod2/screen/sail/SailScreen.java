@@ -30,13 +30,15 @@ public class SailScreen extends AHODScreen {
 
         gameInstance.getMessageHUD().addStatusMessage("Select Starting Node!");
 
-        setHUD(gameInstance);
+        setStatsHUD(gameInstance);
+        setMessageHUD(gameInstance);
     }
 
     @Override
     public void renderInner(float delta) {
-        gameInstance.getStatsHud().update();
         sailInputProcessor.scrollCamera();
+        //set world height to nodeview height (scrolling and background tiling)
+        getStage().getViewport().setWorldHeight(gameInstance.getPlayer().getLevel().getNodeView().getHeight());
         gameInstance.getPlayer().getLevel().getNodeView().update();
     }
 

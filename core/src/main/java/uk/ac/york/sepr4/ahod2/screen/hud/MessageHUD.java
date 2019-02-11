@@ -114,7 +114,7 @@ public class MessageHUD {
         messageTable.bottom();
 
 
-        messageLabel = new Label("", StyleManager.generateLabelStyle(30, Color.WHITE));
+        messageLabel = new Label("", StyleManager.generateLabelStyle(30, Color.FOREST));
         ImageButton imageButton = new ImageButton(new TextureRegionDrawable(FileManager.hudShipView));
 
         imageButton.addListener(new ClickListener() {

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import lombok.Getter;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
@@ -25,7 +26,7 @@ public class NodeView {
 
     private static final Texture nodeIcon = FileManager.nodeIcon;
     @Getter
-    private static final float vertSpacing = 250f;
+    private static final float vertSpacing = 200f, nodeSize = 150f;
 
     private HashMap<Integer, ImageButton> nodeButtons = new HashMap<>();
 
@@ -47,7 +48,7 @@ public class NodeView {
     }
 
     public void update() {
-        Gdx.gl.glLineWidth(2);
+        Gdx.gl.glLineWidth(3);
         shapeRenderer.setProjectionMatrix(sailScreen.getBatch().getProjectionMatrix());
         nodeButtons.values().forEach(btn -> {
             if(! sailScreen.getStage().getActors().contains(btn, false)){
@@ -66,11 +67,12 @@ public class NodeView {
             float spacing = getNodeSpacings(row.size());
             for(Node node : row) {
                 ImageButton btn = new ImageButton(node.getTexture());
+                btn.setSize(nodeSize, nodeSize);
                 //TODO: Works but cleanup
-                Vector2 pos = new Vector2(((node.getCol()+1)*spacing+(nodeIcon.getWidth()*node.getCol())),((node.getRow()+1)*vertSpacing));
+                Vector2 pos = new Vector2(((node.getCol()+1)*spacing+(nodeSize*node.getCol())),((node.getRow()+1)*vertSpacing));
                 btn.setPosition(pos.x, pos.y);
-                if(pos.y > height) {
-                    height = pos.y;
+                if(pos.y +vertSpacing > height) {
+                    height = pos.y+vertSpacing;
                 }
                 btn.addListener(new ClickListener() {
                     @Override
@@ -133,7 +135,7 @@ public class NodeView {
 
     private float getNodeSpacings(Integer no) {
         float w = Gdx.graphics.getWidth();
-        return (w-(no*nodeIcon.getWidth()))/(no+1);
+        return (w-(no*nodeSize))/(no+1);
     }
 
 }

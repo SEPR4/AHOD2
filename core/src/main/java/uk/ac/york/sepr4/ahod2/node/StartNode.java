@@ -12,7 +12,7 @@ public class StartNode extends Node {
     public StartNode(Node node) {
         super(node.getId(), node.getRow(), node.getCol());
         setConnected(node.getConnected());
-        this.setTexture(new TextureRegionDrawable(new TextureRegion(FileManager.nodeIcon)));
+        this.setTexture(new TextureRegionDrawable(new TextureRegion(FileManager.startNodeIcon)));
     }
 
     @Override

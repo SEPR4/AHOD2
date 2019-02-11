@@ -44,7 +44,7 @@ public class DepartmentScreen extends AHODScreen {
 
         setupTopTable();
         setupStoreTable();
-        setHUD(gameInstance);
+        setMessageHUD(gameInstance);
 
     }
 

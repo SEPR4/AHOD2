@@ -1,5 +1,6 @@
 package uk.ac.york.sepr4.ahod2.node;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -17,7 +18,7 @@ public class Node {
 
     private Integer id, row, col;
     private List<Node> connected = new ArrayList<>();
-    private Drawable texture = new TextureRegionDrawable(new TextureRegion(FileManager.nodeIcon));
+    private Drawable texture = new TextureRegionDrawable(new TextureRegion(FileManager.randEncounterIcon));
 
     public Node(Integer id, Integer row, Integer col) {
         this.id = id;

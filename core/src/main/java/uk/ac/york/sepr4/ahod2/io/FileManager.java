@@ -14,6 +14,8 @@ public class FileManager {
     public static Texture battleScreenBG = new Texture(Gdx.files.internal("images/screen/battle.png"));
 
     public static Texture nodeIcon = new Texture(Gdx.files.internal("images/node/default.png"));
+    public static Texture startNodeIcon = new Texture(Gdx.files.internal("images/node/start.png"));
+    public static Texture randEncounterIcon = new Texture(Gdx.files.internal("images/node/encounter.png"));
     public static Texture battleNodeIcon = new Texture(Gdx.files.internal("images/node/battle.png"));
     public static Texture departmentNodeIcon = new Texture(Gdx.files.internal("images/node/department.png"));
 

@@ -42,7 +42,7 @@ public class MinigameScreen extends AHODScreen {
         minigamePower = departmentScreen.getDepartment().getMinigamePower();
 
         createIntroTable();
-        setHUD(gameInstance);
+        setMessageHUD(gameInstance);
     }
 
     private void update() {

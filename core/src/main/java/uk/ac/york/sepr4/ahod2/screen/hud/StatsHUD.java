@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import lombok.Getter;
 import uk.ac.york.sepr4.ahod2.GameInstance;
-import uk.ac.york.sepr4.ahod2.io.FileManager;
+import uk.ac.york.sepr4.ahod2.io.StyleManager;
 import uk.ac.york.sepr4.ahod2.object.entity.Player;
 
 public class StatsHUD {
@@ -23,8 +23,7 @@ public class StatsHUD {
 
     private Table hudTable;
 
-    private Label turnLabel, scoreLabel,
-            turnValueLabel, goldValueLabel, scoreValueLabel;
+    private Label healthValueLabel, goldValueLabel, scoreValueLabel;
 
     public StatsHUD(GameInstance gameInstance) {
         this.gameInstance = gameInstance;
@@ -41,6 +40,7 @@ public class StatsHUD {
     public void update() {
         Player player = gameInstance.getPlayer();
         goldValueLabel.setText(player.getGold());
+        healthValueLabel.setText(player.getShip().getHealth()+"/"+player.getShip().getMaxHealth());
         scoreValueLabel.setText(player.getScore());
 
         hudStage.act();
@@ -54,22 +54,22 @@ public class StatsHUD {
         hudTable.setFillParent(true);
 
         //all labels follow this basic layout
-        turnLabel = new Label("Turn", new Label.LabelStyle(new BitmapFont(), Color.RED));
-        turnValueLabel = new Label("0", new Label.LabelStyle(new BitmapFont(), Color.RED));
+        Label healthLabel = new Label("Health", StyleManager.generateLabelStyle(25, Color.RED));
+        healthValueLabel = new Label("10/10", StyleManager.generateLabelStyle(25, Color.RED));
 
-        Image goldImage = new Image(FileManager.hudGold);
-        goldValueLabel = new Label("0", new Label.LabelStyle(new BitmapFont(), Color.GOLD));
+        Label goldLabel = new Label("Turn", StyleManager.generateLabelStyle(25, Color.GOLD));
+        goldValueLabel = new Label("0", StyleManager.generateLabelStyle(25, Color.GOLD));
 
-        scoreLabel = new Label("Score", new Label.LabelStyle(new BitmapFont(), Color.MAGENTA));
-        scoreValueLabel = new Label("0", new Label.LabelStyle(new BitmapFont(), Color.MAGENTA));
+        Label scoreLabel = new Label("Score", StyleManager.generateLabelStyle(25, Color.MAGENTA));
+        scoreValueLabel = new Label("0", StyleManager.generateLabelStyle(25, Color.MAGENTA));
 
 
-        hudTable.add(turnLabel).expandX().padTop(5);
-        hudTable.add(goldImage).expandX().padTop(5);
+        hudTable.add(goldLabel).expandX().padTop(5);
+        hudTable.add(healthLabel).expandX().padTop(5);
         hudTable.add(scoreLabel).expandX().padTop(5);
         hudTable.row();
-        hudTable.add(turnValueLabel).expandX();
         hudTable.add(goldValueLabel).expandX();
+        hudTable.add(healthValueLabel).expandX();
         hudTable.add(scoreValueLabel).expandX();
         hudTable.row();
 
