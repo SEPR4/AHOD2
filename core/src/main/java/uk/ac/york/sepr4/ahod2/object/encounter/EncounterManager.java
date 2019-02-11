@@ -3,6 +3,7 @@ package uk.ac.york.sepr4.ahod2.object.encounter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+
 import java.util.NavigableMap;
 import java.util.Random;
 import java.util.TreeMap;

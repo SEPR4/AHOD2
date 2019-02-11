@@ -49,6 +49,7 @@ public class ShipViewScreen extends AHODScreen {
         });
 
         table.add(manaValueLabel);
+        table.row();
         table.add(exitButton);
 
 

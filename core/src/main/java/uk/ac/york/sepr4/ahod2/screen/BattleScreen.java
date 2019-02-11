@@ -18,8 +18,8 @@ import uk.ac.york.sepr4.ahod2.object.card.CardManager;
 import uk.ac.york.sepr4.ahod2.object.entity.Player;
 import uk.ac.york.sepr4.ahod2.object.entity.Ship;
 
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class BattleScreen extends AHODScreen {
 
