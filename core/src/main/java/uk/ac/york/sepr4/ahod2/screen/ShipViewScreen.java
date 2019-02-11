@@ -38,7 +38,7 @@ public class ShipViewScreen extends AHODScreen {
         table.top();
         table.setFillParent(true);
 
-        manaValueLabel = new Label("Mana: ", StyleManager.generateLabelStyle(15, Color.CYAN));
+        manaValueLabel = new Label("Mana: ", StyleManager.generateLabelStyle(30, Color.CYAN));
 
         TextButton exitButton = new TextButton("Exit", StyleManager.generateTBStyle(30, Color.RED, Color.GRAY));
         exitButton.addListener(new ClickListener() {
