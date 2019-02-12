@@ -9,11 +9,11 @@ public class FileManager {
 
     public static Texture defaultShipTexture = new Texture(Gdx.files.internal("ships/default.png"));
 
-    public static Texture sailScreenBG = new Texture(Gdx.files.internal("images/screen/sail.png"));
+    public static Texture sailScreenBG = new Texture(Gdx.files.internal("images/screen/sail4.png"));
     public static Texture menuScreenBG = new Texture(Gdx.files.internal("images/screen/menu.png"));
     public static Texture battleScreenBG = new Texture(Gdx.files.internal("images/screen/battle.png"));
 
-    public static Texture compass = new Texture(Gdx.files.internal("images/screen/Compass.png"));
+//    public static Texture compass1 = new Texture(Gdx.files.internal("images/screen/Compass.png"));
 
     public static Texture wave(int i){
         return new Texture(Gdx.files.internal("images/screen/waves" + i + ".png"));

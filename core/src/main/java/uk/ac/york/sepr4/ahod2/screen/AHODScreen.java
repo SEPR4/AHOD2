@@ -27,9 +27,6 @@ public abstract class AHODScreen implements Screen {
 
     private ShapeRenderer shapeRenderer;
 
-    private int waveXcoords[];
-    private int waveYcoords[];
-
     private boolean backgroundAffects;
 
 
@@ -44,33 +41,6 @@ public abstract class AHODScreen implements Screen {
         this.stage = stage;
         this.background = background;
         this.backgroundAffects = backgroundAffects;
-
-
-        int newX = 0;
-        int newY = 0;
-
-        if (backgroundAffects) {
-            this.waveXcoords = new int[100];
-            this.waveYcoords = new int[100];
-            for (int i = 0; i < 100; i++) {
-//                boolean collided = true;
-//                while (collided) {
-//                    int counter = 0;
-                    newX = 0 + (int) (Math.random() * ((stage.getWidth() - 0) + 1));
-                    newY = 0 + (int) (Math.random() * ((stage.getHeight() - 0) + 1));
-//                    for (int j = 0; j < i; j++) {
-//                        if (new Rectangle(newX, newY, 100, 100).contains(new Rectangle(this.waveXcoords[j], this.waveYcoords[j], 100, 100))) {
-//                            counter++;
-//                        }
-//                    }
-//                    if (counter == 0) {
-//                        collided = false;
-//                    }
-//                }
-                this.waveXcoords[i] = newX;
-                this.waveYcoords[i] = newY;
-            }
-        }
 
         shapeRenderer = new ShapeRenderer();
 
@@ -139,26 +109,11 @@ public abstract class AHODScreen implements Screen {
         getBatch().end();
 
         if (backgroundAffects) {
-            getBatch().begin();
-            Texture compass = FileManager.compass;
-            compass.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-            getBatch().draw(compass, 6 * stage.getWidth() / 8, stage.getHeight() / 16, 300, 300);
-            getBatch().end();
-
-            for (int i = 1; i < this.waveXcoords.length + 1; i++) {
-                Gdx.app.log("", this.waveXcoords.length+"");
-                getBatch().begin();
-                Texture wave = FileManager.wave((i % 2) + 1);
-                wave.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-                getBatch().draw(wave, this.waveXcoords[i - 1], this.waveYcoords[i - 1], FileManager.wave((i % 2) + 1).getWidth() / 3, FileManager.wave((i % 2) + 1).getHeight() / 3);
-                getBatch().end();
-
-                getBatch().begin();
-                Texture wave2 = FileManager.wave((i % 2) + 1);
-                wave2.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-                getBatch().draw(wave2, this.waveXcoords[i - 1], this.waveYcoords[i - 1] + stage.getHeight() / 2, FileManager.wave((i % 2) + 1).getWidth() / 3, FileManager.wave((i % 2) + 1).getHeight() / 3);
-                getBatch().end();
-            }
+//            getBatch().begin();
+//            Texture compass = FileManager.compass1;
+//            compass.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+//            getBatch().draw(compass, 6 * stage.getWidth() / 8, stage.getHeight() / 16, 300, 300);
+//            getBatch().end();
         }
     }
 
