@@ -33,8 +33,8 @@ public class MessageHUD {
 
     private HashMap<Label, Float> tempMessages = new HashMap<>();
 
-    private String lastMessage = "", currentMessage = "";
-    private float lastMessageTime = 0, currentMessageTime = 0;
+    private String currentMessage = "";
+    private float currentMessageTime = 0;
 
     private final Float resourceMessageTime = 4f;
 
@@ -56,28 +56,18 @@ public class MessageHUD {
     }
 
     public void addStatusMessage(String message, float time) {
-            if(currentMessageTime > 0) {
-                //last message temp
-                lastMessage = currentMessage;
-                lastMessageTime = currentMessageTime;
-            }
             currentMessage = message;
             currentMessageTime = time;
     }
 
-    public void addStatusMessage(String message) {
-        addStatusMessage(message, 0);
-    }
 
     public void update(float delta) {
         if(currentMessageTime != 0) {
             //not a perm message
             currentMessageTime -= delta;
             if (currentMessageTime <= 0) {
-                currentMessage = lastMessage;
-                currentMessageTime = lastMessageTime;
-                lastMessageTime = 0f;
-                lastMessage = "";
+                currentMessage = "";
+                currentMessageTime = 0;
             }
         }
         messageLabel.setText(currentMessage.toUpperCase());
@@ -114,7 +104,7 @@ public class MessageHUD {
         messageTable.bottom();
 
 
-        messageLabel = new Label("", StyleManager.generateLabelStyle(30, Color.FOREST));
+        messageLabel = new Label("", StyleManager.generateLabelStyle(30, Color.PINK));
         ImageButton imageButton = new ImageButton(new TextureRegionDrawable(FileManager.hudShipView));
 
         imageButton.addListener(new ClickListener() {

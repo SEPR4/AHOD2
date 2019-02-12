@@ -59,6 +59,20 @@ public class CardManager {
         return deck;
     }
 
+    public boolean drawRandomCard(Ship ship) {
+        List<Card> fullDeck = getFullDeck(ship);
+        if(fullDeck.size() == ship.getHand().size()) {
+            return false;
+        }
+        if(fullDeck.size() == ship.getDiscarded().size()) {
+            ship.setDiscarded(new ArrayList<>());
+        }
+        Random random = new Random();
+        fullDeck.removeAll(ship.getDiscarded());
+        ship.addCardToHand(fullDeck.get(random.nextInt(fullDeck.size())));
+        return true;
+    }
+
     public Optional<Card> randomCard(Integer power) {
         Random random = new Random();
         Integer attempts = 50;

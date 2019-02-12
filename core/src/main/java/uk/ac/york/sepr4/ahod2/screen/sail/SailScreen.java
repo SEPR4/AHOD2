@@ -28,7 +28,7 @@ public class SailScreen extends AHODScreen {
         sailInputProcessor = new SailInputProcessor(this);
         getInputMultiplexer().addProcessor(sailInputProcessor);
 
-        gameInstance.getMessageHUD().addStatusMessage("Select Starting Node!");
+        gameInstance.getMessageHUD().addStatusMessage("Select Starting Node!", 10f);
 
         setStatsHUD(gameInstance);
         setMessageHUD(gameInstance);

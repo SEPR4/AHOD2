@@ -20,7 +20,7 @@ public class StartNode extends Node {
         Optional<Node> loc = gameInstance.getPlayer().getLocation();
         if(!loc.isPresent()) {
             gameInstance.getPlayer().setLocation(Optional.of(this));
-            gameInstance.getMessageHUD().addStatusMessage("Select Next Node!");
+            gameInstance.getMessageHUD().addStatusMessage("Select Next Node!", 5f);
         }
     }
 }

@@ -17,7 +17,7 @@ public class Ship {
     private Texture image = FileManager.defaultShipTexture;
     private List<Card> deck = new ArrayList<>(), hand = new ArrayList<>(), discarded = new ArrayList<>();
 
-    private List<Integer> delayedDamage = new ArrayList<>();
+    private List<Integer> delayedDamage = new ArrayList<>(), delayedHeal = new ArrayList<>();
 
     public Ship() {
         image.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -32,7 +32,7 @@ public class Ship {
      * @param damage
      * @return
      */
-    public boolean damage(Integer damage) {
+    private boolean damage(Integer damage) {
         if(damage >= health){
             health = 0;
             return true;
@@ -43,7 +43,7 @@ public class Ship {
 
     }
 
-    public void heal(Integer val) {
+    private void heal(Integer val) {
         if(health+val >= maxHealth) {
             health = maxHealth;
         } else {
@@ -71,7 +71,25 @@ public class Ship {
         return false;
     }
 
-    public void addDelayedDamage(Integer val, Integer turn) {
+
+    public void applyDelayedHeal() {
+        for(Integer healVal : delayedHeal) {
+            heal(healVal);
+        }
+        if(delayedHeal.size()>0) {
+            delayedHeal.remove(0);
+        }
+    }
+
+    public void addHeal(Integer val, Integer turn) {
+        if(delayedHeal.get(turn) != null) {
+            delayedHeal.add(val, delayedHeal.get(turn) + val);
+        } else {
+            delayedHeal.add(turn, val);
+        }
+    }
+
+    public void addDamage(Integer val, Integer turn) {
         if(delayedDamage.get(turn) != null) {
             delayedDamage.add(val, delayedDamage.get(turn) + val);
         } else {

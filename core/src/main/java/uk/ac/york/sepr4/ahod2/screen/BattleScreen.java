@@ -3,6 +3,7 @@ package uk.ac.york.sepr4.ahod2.screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -14,9 +15,10 @@ import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.io.StyleManager;
 import uk.ac.york.sepr4.ahod2.object.ShipFactory;
 import uk.ac.york.sepr4.ahod2.object.card.Card;
-import uk.ac.york.sepr4.ahod2.object.card.CardManager;
 import uk.ac.york.sepr4.ahod2.object.entity.Player;
 import uk.ac.york.sepr4.ahod2.object.entity.Ship;
+import uk.ac.york.sepr4.ahod2.util.BattleAI;
+
 import java.util.List;
 import java.util.*;
 
@@ -27,15 +29,14 @@ public class BattleScreen extends AHODScreen {
     private Ship enemy;
 
     private Player player;
-    private CardManager cardManager;
 
     private Image playerShipImage, enemyShipImage;
     private Label playerHealthLabel, enemyHealthLabel, playerManaLabel, enemyManaLabel;
-    private HashMap<Card, ImageButton> cardButtons = new HashMap<>();
     private List<Cell> buttonCells = new ArrayList<>();
     private Table table, cardTable;
 
     private BattleTurn turn;
+    private boolean animating = false;
 
     private static final Integer handSize = 4;
 
@@ -62,78 +63,100 @@ public class BattleScreen extends AHODScreen {
         this.gold = gold;
 
         player = gameInstance.getPlayer();
-        cardManager = gameInstance.getCardManager();
 
         loadBattleElements();
         loadCardElements();
 
         turn = BattleTurn.PLAYER;
+
+        setMessageHUD(gameInstance);
+
     }
 
     @Override
     public void renderInner(float delta) {
         updateBattleElements();
-    }
 
+        if(animating) {
+            //do animations
 
-    private void enemyTurn() {
-        //do enemy move
+            //switch turns
+            if(turn == BattleTurn.PLAYER) {
+                player.getShip().applyDelayedHeal();
+                if(player.getShip().applyDelayedDamage()) {
+                    hasDied(player.getShip());
+                }
 
-        applyDelayedDamage();
-        incMana();
-    }
+                player.getShip().incMana(1);
+                turn = BattleTurn.ENEMY;
+            } else if(turn == BattleTurn.ENEMY) {
+                enemy.applyDelayedHeal();
+                if(enemy.applyDelayedDamage()) {
+                    //sink animation
+                    hasDied(enemy);
+                } else {
+                    //damage animation
+                }
 
-    private void applyDelayedDamage() {
-        for(Ship ship:Arrays.asList(enemy, player.getShip())) {
-            if(ship.applyDelayedDamage()) {
-                hasDied(ship);
+                enemy.incMana(1);
+                turn = BattleTurn.PLAYER;
+            }
+
+            animating = false;
+        } else {
+            if(turn == BattleTurn.ENEMY) {
+                //do enemy turn
+                BattleAI.chooseMove(this);
             }
         }
     }
 
-    private void incMana() {
-        for(Ship ship:Arrays.asList(enemy, player.getShip())) {
-            ship.incMana(1);
-        }
-    }
 
-    private boolean clickCard(Ship ship, Card card) {
-        if (ship.getMana() < card.getManaCost()) {
+    private boolean playerTurnCheck() {
+        if(turn == BattleTurn.PLAYER && !animating) {
+            return true;
+        } else {
+            gameInstance.getMessageHUD().addStatusMessage("Not your turn!", 2f);
             return false;
         }
-        ship.deductMana(card.getManaCost());
-
-        Ship source, target;
-        if (ship == enemy) {
-            source = enemy;
-            target = player.getShip();
-        } else {
-            source = player.getShip();
-            target = enemy;
-        }
-        if(source.damage(card.getDamageSelf())) {
-            hasDied(source);
-        }
-
-        if (target.damage(card.getDamage())) {
-            //dead
-            hasDied(target);
-        }
-
-        if(card.getDamageTime() > 0) {
-            for(int i=0; i<card.getDamageTime()-2;i++){
-                //queue damage for n-1 more turns
-                source.addDelayedDamage(card.getDamageSelf(), i);
-                target.addDelayedDamage(card.getDamage(), i);
-            }
-        }
-
-        source.heal(card.getHeal());
-
-        ship.useCard(card);
-        enemyTurn();
-        return true;
     }
+
+
+    private void useCard(Ship source, Ship target, Card card) {
+        if(source.getMana() < card.getManaCost()) {
+            //not enough mana to cast
+            gameInstance.getMessageHUD().addStatusMessage("Not enough mana!", 3f);
+        }
+        source.useCard(card);
+        source.deductMana(card.getManaCost());
+        if(card.getDamageTime() > 0) {
+            for(int i=0;i<card.getDamageTime();i++) {
+                source.addDamage(card.getDamageSelf(), i);
+                target.addDamage(card.getDamage(), i);
+            }
+        } else {
+            source.addDamage(card.getDamageSelf(), 0);
+            target.addDamage(card.getDamage(), 0);
+        }
+        //could add delayed healing
+        source.addHeal(card.getHeal(), 0);
+
+        animating = true;
+    }
+
+    private void endTurn() {
+        //skip turn
+
+        animating = true;
+    }
+
+
+    private void drawCard(Ship source) {
+        if(gameInstance.getCardManager().drawRandomCard(source)) {
+            animating = true;
+        }
+    }
+
 
     private void hasDied(Ship ship) {
         if(ship == enemy) {
@@ -197,7 +220,23 @@ public class BattleScreen extends AHODScreen {
 
         //buttons
         TextButton drawButton = new TextButton("Draw Card", StyleManager.generateTBStyle(30, Color.CORAL, Color.GRAY));
+        drawButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent ev, float x, float y) {
+                if(playerTurnCheck()) {
+                    drawCard(player.getShip());
+                }
+            }
+        });
         TextButton endTurnButton = new TextButton("End Turn", StyleManager.generateTBStyle(30, Color.ORANGE, Color.GRAY));
+        endTurnButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent ev, float x, float y) {
+                if(playerTurnCheck()) {
+                    endTurn();
+                }
+            }
+        });
 
         table = new Table();
         table.setFillParent(true);
@@ -239,12 +278,15 @@ public class BattleScreen extends AHODScreen {
 
     }
 
-    private ImageButton getIBForCard(Ship ship, Card card) {
+    private ImageButton getIBForCard(Card card) {
         ImageButton iB = new ImageButton(card.getTexture());
+        iB.setName(""+card.getId());
         iB.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent ev, float x, float y) {
-                clickCard(ship,card);
+                if(playerTurnCheck()) {
+                    useCard(player.getShip(), enemy, card);
+                }
             }
         });
         return iB;
@@ -258,6 +300,28 @@ public class BattleScreen extends AHODScreen {
         enemyManaLabel.setText(enemy.getMana() + "/" + enemy.getMaxMana());
 
 
+        //Removes discarded cards
+        List<Cell> emptyCells = new ArrayList<>();
+        for(Cell cells : buttonCells) {
+            if(!(cells.getActor() instanceof ImageButton)) {
+                emptyCells.add(cells);
+            }
+        }
+
+        //adds drawn cards
+        for(Card cards : player.getShip().getHand()) {
+            boolean isPlaced = false;
+            for(Cell cells : buttonCells) {
+                Actor act = cells.getActor();
+                if(act != null && act.getName() != null && act.getName().equalsIgnoreCase(""+cards.getId())) {
+                    isPlaced = true;
+                }
+            }
+            if(!isPlaced) {
+                emptyCells.get(0).setActor(getIBForCard(cards));
+                emptyCells.remove(0);
+            }
+        }
     }
 
 }
@@ -267,5 +331,5 @@ enum BattleMove {
 }
 
 enum BattleTurn {
-    PLAYER, ENEMY, ANIMATION
+    PLAYER, ENEMY
 }
