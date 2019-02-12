@@ -13,14 +13,5 @@ public class NodeUtilTest {
     @Test
     public void generateNodeMapTest() {
 
-        Integer targetDepth = 10, actualDepth = 0;
-        List<Node> nodeList = NodeUtil.generateNodeMap(10);
-
-        for(Node node: nodeList) {
-            if(node.getRow()> actualDepth) {
-                actualDepth = node.getRow();
-            }
-        }
-        Assert.assertEquals(targetDepth, actualDepth);
     }
 }
