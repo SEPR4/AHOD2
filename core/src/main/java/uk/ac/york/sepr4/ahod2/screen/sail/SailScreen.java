@@ -2,6 +2,7 @@ package uk.ac.york.sepr4.ahod2.screen.sail;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import lombok.Getter;
@@ -22,7 +23,8 @@ public class SailScreen extends AHODScreen {
 
     public SailScreen(GameInstance gameInstance) {
         super(new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
-                new OrthographicCamera())), FileManager.sailScreenBG);
+                new OrthographicCamera())), FileManager.sailScreenBG, true);
+
         this.gameInstance = gameInstance;
 
         sailInputProcessor = new SailInputProcessor(this);

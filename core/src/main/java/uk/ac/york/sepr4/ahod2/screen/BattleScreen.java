@@ -57,7 +57,7 @@ public class BattleScreen extends AHODScreen {
      * @param gold
      */
     public BattleScreen(GameInstance gameInstance, Ship enemy, Integer gold) {
-        super(new Stage(new ScreenViewport(), new SpriteBatch()), FileManager.battleScreenBG);
+        super(new Stage(new ScreenViewport(), new SpriteBatch()), FileManager.battleScreenBG, false);
         this.gameInstance = gameInstance;
         this.enemy = enemy;
         this.gold = gold;

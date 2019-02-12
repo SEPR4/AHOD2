@@ -17,7 +17,7 @@ public class EndScreen extends AHODScreen {
     private boolean win;
 
     public EndScreen(GameInstance gameInstance, boolean win) {
-        super(new Stage(new ScreenViewport()), FileManager.menuScreenBG);
+        super(new Stage(new ScreenViewport()), FileManager.menuScreenBG, false);
 
         this.gameInstance = gameInstance;
         this.win = win;
