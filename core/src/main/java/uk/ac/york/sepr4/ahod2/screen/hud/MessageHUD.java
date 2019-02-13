@@ -97,12 +97,12 @@ public class MessageHUD {
         hudStage.draw();
     }
 
-    private void createTable() {
 
-        Table messageTable = new Table();
-        messageTable.setFillParent(true);
-        messageTable.bottom();
+        private void createTable() {
 
+            Table messageTable = new Table();
+            messageTable.setFillParent(true);
+            messageTable.bottom();
 
         messageLabel = new Label("", StyleManager.generateLabelStyle(30, Color.PINK));
         ImageButton imageButton = new ImageButton(new TextureRegionDrawable(FileManager.hudShipView));

@@ -3,6 +3,7 @@ package uk.ac.york.sepr4.ahod2.screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -70,7 +71,8 @@ public class BattleScreen extends AHODScreen {
         turn = BattleTurn.PLAYER;
 
         setMessageHUD(gameInstance);
-
+        setAnimationsHUD(gameInstance);
+        gameInstance.getAnimationsHUD().addDamageAnimation(new Vector2(1000, 100), 10, 5f);
     }
 
     @Override

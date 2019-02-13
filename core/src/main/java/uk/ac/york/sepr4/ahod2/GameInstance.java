@@ -17,6 +17,7 @@ import uk.ac.york.sepr4.ahod2.screen.ShipViewScreen;
 import uk.ac.york.sepr4.ahod2.screen.TransitionScreen;
 import uk.ac.york.sepr4.ahod2.screen.hud.MessageHUD;
 import uk.ac.york.sepr4.ahod2.screen.hud.StatsHUD;
+import uk.ac.york.sepr4.ahod2.screen.hud.animationsHUD;
 import uk.ac.york.sepr4.ahod2.screen.sail.SailScreen;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class GameInstance {
     private ShipViewScreen shipViewScreen;
     private StatsHUD statsHud;
     private MessageHUD messageHUD;
+    private animationsHUD animationsHUD;
 
     private List<GameLevel> levels = new ArrayList<>();
 
@@ -55,6 +57,7 @@ public class GameInstance {
         //Initialize Screens and views
         statsHud = new StatsHUD(this);
         messageHUD = new MessageHUD(this);
+        animationsHUD = new animationsHUD(this);
         sailScreen = new SailScreen(this);
         shipViewScreen = new ShipViewScreen(this);
 

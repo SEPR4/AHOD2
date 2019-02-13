@@ -29,8 +29,7 @@ public abstract class AHODScreen implements Screen {
 
     private boolean backgroundAffects;
 
-
-    private boolean enableMessageHUD = false, enableStatsHUD = false;
+    private boolean enableMessageHUD = false, enableStatsHUD = false, enableAnimationsHUD = false;
 
     private GameInstance gameInstance;
 
@@ -59,6 +58,11 @@ public abstract class AHODScreen implements Screen {
         enableStatsHUD = true;
     }
 
+    public void setAnimationsHUD(GameInstance gameInstance){
+        this.gameInstance = gameInstance;
+        enableAnimationsHUD = true;
+    }
+
     @Override
     public void render(float delta) {
         // clear the screen ready for next set of images to be drawn
@@ -76,6 +80,9 @@ public abstract class AHODScreen implements Screen {
         }
         if (enableStatsHUD) {
             gameInstance.getStatsHud().update();
+        }
+        if (enableAnimationsHUD){
+            gameInstance.getAnimationsHUD().update(delta);
         }
     }
 
@@ -107,14 +114,6 @@ public abstract class AHODScreen implements Screen {
 
         getBatch().draw(texture, 0, 0, stage.getWidth(), stage.getHeight());
         getBatch().end();
-
-        if (backgroundAffects) {
-//            getBatch().begin();
-//            Texture compass = FileManager.compass1;
-//            compass.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-//            getBatch().draw(compass, 6 * stage.getWidth() / 8, stage.getHeight() / 16, 300, 300);
-//            getBatch().end();
-        }
     }
 
     public OrthographicCamera getOrthographicCamera() {
