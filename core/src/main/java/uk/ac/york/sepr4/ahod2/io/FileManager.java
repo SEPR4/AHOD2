@@ -13,8 +13,6 @@ public class FileManager {
     public static Texture menuScreenBG = new Texture(Gdx.files.internal("images/screen/menu.png"));
     public static Texture battleScreenBG = new Texture(Gdx.files.internal("images/screen/battle.png"));
 
-//    public static Texture compass1 = new Texture(Gdx.files.internal("images/screen/Compass.png"));
-
     public static Texture wave(int i){
         return new Texture(Gdx.files.internal("images/screen/waves" + i + ".png"));
     }
@@ -25,7 +23,6 @@ public class FileManager {
     public static Texture battleNodeIcon = new Texture(Gdx.files.internal("images/node/battle.png"));
     public static Texture departmentNodeIcon = new Texture(Gdx.files.internal("images/node/department.png"));
 
-    public static Texture hudGold = new Texture(Gdx.files.internal("images/hud/gold.png"));
     public static Texture hudShipView = new Texture(Gdx.files.internal("images/hud/shipview.png"));
 
     public static Drawable minigameDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("images/card/reload.png")));

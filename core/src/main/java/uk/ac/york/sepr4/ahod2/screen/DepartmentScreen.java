@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import lombok.Getter;
 import uk.ac.york.sepr4.ahod2.GameInstance;
@@ -150,7 +151,7 @@ public class DepartmentScreen extends AHODScreen {
         storeTable.row();
 
         for(Card card : department.getStock()) {
-            ImageButton iB = new ImageButton(card.getTexture());
+            ImageButton iB = new ImageButton(new TextureRegionDrawable(card.getTexture()));
             iB.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent ev, float x, float y) {

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class animationsHUD {
+public class AnimationHUD {
     @Getter
     private Stage animationsStage;
     private GameInstance gameInstance;
@@ -31,7 +31,7 @@ public class animationsHUD {
     private Array<Integer> damageValues;
     private Array<Float> damagetime;
 
-    public animationsHUD(GameInstance gameInstance) {
+    public AnimationHUD(GameInstance gameInstance) {
         this.gameInstance = gameInstance;
 
         // Local widths and heights.

@@ -9,10 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import uk.ac.york.sepr4.ahod2.object.entity.Ship;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 public class CardManager {
 
@@ -43,7 +40,7 @@ public class CardManager {
                 Gdx.app.error("CardManager", "Not default but no shop cost for card: "+card.getId());
                 continue;
             }
-            card.setTexture(new TextureRegionDrawable(new TextureRegion((new Texture(fileHandle)))));
+            card.setTexture(new Texture(fileHandle));
             this.cards.add(card);
         }
     }
@@ -61,12 +58,13 @@ public class CardManager {
 
     public boolean drawRandomCard(Ship ship) {
         List<Card> fullDeck = getFullDeck(ship);
-        if(fullDeck.size() == ship.getHand().size()) {
-            return false;
-        }
         if(fullDeck.size() == ship.getDiscarded().size()) {
             ship.setDiscarded(new ArrayList<>());
         }
+        if(fullDeck.size() == ship.getHand().size() + ship.getDiscarded().size()) {
+            return false;
+        }
+
         Random random = new Random();
         fullDeck.removeAll(ship.getDiscarded());
         ship.addCardToHand(fullDeck.get(random.nextInt(fullDeck.size())));
@@ -96,3 +94,4 @@ public class CardManager {
     }
 
 }
+

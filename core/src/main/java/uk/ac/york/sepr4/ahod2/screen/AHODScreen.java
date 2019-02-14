@@ -13,10 +13,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import lombok.Data;
 import uk.ac.york.sepr4.ahod2.GameInstance;
-import uk.ac.york.sepr4.ahod2.io.FileManager;
-import com.badlogic.gdx.math.Rectangle;
-
-import java.lang.reflect.Array;
 
 @Data
 public abstract class AHODScreen implements Screen {
@@ -82,7 +78,7 @@ public abstract class AHODScreen implements Screen {
             gameInstance.getStatsHud().update();
         }
         if (enableAnimationsHUD){
-            gameInstance.getAnimationsHUD().update(delta);
+            gameInstance.getAnimationHUD().update(delta);
         }
     }
 

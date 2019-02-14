@@ -2,6 +2,7 @@ package uk.ac.york.sepr4.ahod2.object.entity;
 
 import com.badlogic.gdx.graphics.Texture;
 import lombok.Data;
+import lombok.Getter;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.object.card.Card;
 
@@ -14,16 +15,23 @@ public class Ship {
     private String name;
     private boolean boss;
     private Integer health, maxHealth = 10, mana, maxMana = 10;
-    private Texture image = FileManager.defaultShipTexture;
+    private Texture image;
     private List<Card> deck = new ArrayList<>(), hand = new ArrayList<>(), discarded = new ArrayList<>();
 
+    @Getter
     private List<Integer> delayedDamage = new ArrayList<>(), delayedHeal = new ArrayList<>();
 
     public Ship() {
-        image.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
         this.mana = maxMana;
         this.health = maxHealth;
+
+        try {
+            Class.forName("uk.ac.york.sepr4.ahod2.io.FileManager");
+            image = FileManager.defaultShipTexture;
+            image.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        } catch (Exception ex) {
+            //either not found or initializer exception (no gdx - for tests)
+        } catch (Error error) {}
     }
 
 
@@ -60,12 +68,10 @@ public class Ship {
     }
 
     public boolean applyDelayedDamage() {
-        for(Integer dmgVal : delayedDamage) {
-            if(damage(dmgVal)) {
-                 return true;
-            }
-        }
         if(delayedDamage.size()>0) {
+            if(damage(delayedDamage.get(0))) {
+                return true;
+            }
             delayedDamage.remove(0);
         }
         return false;
@@ -73,25 +79,23 @@ public class Ship {
 
 
     public void applyDelayedHeal() {
-        for(Integer healVal : delayedHeal) {
-            heal(healVal);
-        }
         if(delayedHeal.size()>0) {
+            heal(delayedHeal.get(0));
             delayedHeal.remove(0);
         }
     }
 
     public void addHeal(Integer val, Integer turn) {
-        if(delayedHeal.get(turn) != null) {
-            delayedHeal.add(val, delayedHeal.get(turn) + val);
+        if(delayedHeal.size() > turn) {
+            delayedHeal.set(turn, delayedHeal.get(turn) + val);
         } else {
             delayedHeal.add(turn, val);
         }
     }
 
     public void addDamage(Integer val, Integer turn) {
-        if(delayedDamage.get(turn) != null) {
-            delayedDamage.add(val, delayedDamage.get(turn) + val);
+        if(delayedDamage.size() > turn) {
+            delayedDamage.set(turn, delayedDamage.get(turn) + val);
         } else {
             delayedDamage.add(turn, val);
         }

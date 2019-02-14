@@ -1,6 +1,8 @@
 package uk.ac.york.sepr4.ahod2.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -9,8 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import lombok.Getter;
 import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.io.StyleManager;
@@ -27,18 +33,21 @@ public class BattleScreen extends AHODScreen {
 
     private GameInstance gameInstance;
     private Integer gold;
+    @Getter
     private Ship enemy;
 
+    @Getter
     private Player player;
 
     private Image playerShipImage, enemyShipImage;
     private Label playerHealthLabel, enemyHealthLabel, playerManaLabel, enemyManaLabel;
-    private List<Cell> buttonCells = new ArrayList<>();
-    private Table table, cardTable;
+
+    private Table table;
 
     private BattleTurn turn;
     private boolean animating = false;
 
+    @Getter
     private static final Integer handSize = 4;
 
     /***
@@ -66,13 +75,12 @@ public class BattleScreen extends AHODScreen {
         player = gameInstance.getPlayer();
 
         loadBattleElements();
-        loadCardElements();
 
         turn = BattleTurn.PLAYER;
 
         setMessageHUD(gameInstance);
         setAnimationsHUD(gameInstance);
-        gameInstance.getAnimationsHUD().addDamageAnimation(new Vector2(1000, 100), 10, 5f);
+        gameInstance.getAnimationHUD().addDamageAnimation(new Vector2(1000, 100), 10, 5f);
     }
 
     @Override
@@ -84,21 +92,24 @@ public class BattleScreen extends AHODScreen {
 
             //switch turns
             if(turn == BattleTurn.PLAYER) {
-                player.getShip().applyDelayedHeal();
-                if(player.getShip().applyDelayedDamage()) {
-                    hasDied(player.getShip());
+                Gdx.app.debug("BattleScreen", "Applying Enemy Damage!");
+                enemy.applyDelayedHeal();
+                if(enemy.applyDelayedDamage()) {
+                    //sink Animation
+                    hasDied(enemy);
+                } else {
+                    //damage Animation
                 }
 
                 player.getShip().incMana(1);
                 turn = BattleTurn.ENEMY;
             } else if(turn == BattleTurn.ENEMY) {
-                enemy.applyDelayedHeal();
-                if(enemy.applyDelayedDamage()) {
-                    //sink animation
-                    hasDied(enemy);
-                } else {
-                    //damage animation
+                Gdx.app.debug("BattleScreen", "Applying Player Damage!");
+                player.getShip().applyDelayedHeal();
+                if(player.getShip().applyDelayedDamage()) {
+                    hasDied(player.getShip());
                 }
+
 
                 enemy.incMana(1);
                 turn = BattleTurn.PLAYER;
@@ -124,39 +135,49 @@ public class BattleScreen extends AHODScreen {
     }
 
 
-    private void useCard(Ship source, Ship target, Card card) {
+    public void useCard(Ship source, Ship target, Card card) {
         if(source.getMana() < card.getManaCost()) {
             //not enough mana to cast
             gameInstance.getMessageHUD().addStatusMessage("Not enough mana!", 3f);
         }
+
         source.useCard(card);
         source.deductMana(card.getManaCost());
-        if(card.getDamageTime() > 0) {
-            for(int i=0;i<card.getDamageTime();i++) {
-                source.addDamage(card.getDamageSelf(), i);
-                target.addDamage(card.getDamage(), i);
-            }
-        } else {
-            source.addDamage(card.getDamageSelf(), 0);
-            target.addDamage(card.getDamage(), 0);
+        for(int i=0;i<=card.getMoveTime();i++) {
+            source.addDamage(card.getDamageSelf(), i);
+            target.addDamage(card.getDamage(), i);
+            source.addHeal(card.getHeal(), i);
         }
         //could add delayed healing
-        source.addHeal(card.getHeal(), 0);
+        Gdx.app.debug("BattleScreen","Using card: "+card.getName());
 
         animating = true;
     }
 
-    private void endTurn() {
+    public void endTurn() {
         //skip turn
-
+        Gdx.app.debug("BattleScreen","Ending turn!");
         animating = true;
     }
 
 
-    private void drawCard(Ship source) {
-        if(gameInstance.getCardManager().drawRandomCard(source)) {
-            animating = true;
+    public boolean drawCard(Ship source) {
+        if(source.getHand().size() < handSize) {
+            if (gameInstance.getCardManager().drawRandomCard(source)) {
+                Gdx.app.debug("BattleScreen","Drawing Card!");
+                animating = true;
+                return true;
+            } else {
+                if(turn == BattleTurn.PLAYER) {
+                    gameInstance.getMessageHUD().addStatusMessage("Can't draw card!", 3f);
+                }
+            }
+        } else {
+            if(turn == BattleTurn.PLAYER) {
+                gameInstance.getMessageHUD().addStatusMessage("Max hand size!", 3f);
+            }
         }
+        return false;
     }
 
 
@@ -176,26 +197,6 @@ public class BattleScreen extends AHODScreen {
             gameInstance.switchScreen(new EndScreen(gameInstance, false));
         }
         dispose();
-    }
-
-    private void loadCardElements() {
-        //bottom 1/3 (deck display, hold 4 cards at once)
-        cardTable = new Table();
-        cardTable.setFillParent(true);
-        cardTable.bottom();
-        cardTable.debug();
-
-        for(int i=0;i<handSize;i++) {
-            buttonCells.add(
-                    cardTable.add()
-                            .expandX()
-                            .height(Value.percentHeight(0.27f, cardTable))
-                            .width(Value.percentWidth(1f/(handSize), cardTable))
-                            .padBottom(Value.percentHeight(0.02f, cardTable)));
-        }
-
-        getStage().addActor(table);
-        getStage().addActor(cardTable);
     }
 
     private void loadBattleElements() {
@@ -247,11 +248,11 @@ public class BattleScreen extends AHODScreen {
 
         //top 2/3 (ship + stat display)
         table.add(playerShipImage).expandX()
-                .height(Value.percentHeight(0.52f, table))
+                .height(Value.percentHeight(0.45f, table))
                 .width(Value.percentWidth(0.5f, table))
                 .padTop(Value.percentHeight(0.02f, table));
         table.add(enemyShipImage).expandX()
-                .height(Value.percentHeight(0.52f, table))
+                .height(Value.percentHeight(0.45f, table))
                 .width(Value.percentWidth(0.5f, table))
                 .padTop(Value.percentHeight(0.02f, table));
         table.row();
@@ -278,10 +279,16 @@ public class BattleScreen extends AHODScreen {
                 .height(Value.percentHeight(0.04f, table))
                 .padBottom(Value.percentHeight(0.02f, table));
 
+        getStage().addActor(table);
     }
 
-    private ImageButton getIBForCard(Card card) {
-        ImageButton iB = new ImageButton(card.getTexture());
+    private ImageButton getIBForCard(Card card, Integer index) {
+        Integer currentHandSize = player.getShip().getHand().size();
+        Texture tex = card.getTexture();
+        float height = table.getHeight()/2; //1/3 of screen
+        float width = tex.getWidth()*(height/(tex.getHeight()));
+        ImageButton iB = new ImageButton(new TextureRegionDrawable(tex));
+        iB.setSize(width, height);
         iB.setName(""+card.getId());
         iB.addListener(new ClickListener() {
             @Override
@@ -291,6 +298,11 @@ public class BattleScreen extends AHODScreen {
                 }
             }
         });
+        float w = Gdx.graphics.getWidth();
+
+        float pos = (w-(currentHandSize*width))/(currentHandSize+1);
+        iB.setPosition((index+1)*pos+(index*width), -10-height/8);
+
         return iB;
     }
 
@@ -301,35 +313,22 @@ public class BattleScreen extends AHODScreen {
         playerManaLabel.setText(player.getShip().getMana() + "/" + player.getShip().getMaxMana());
         enemyManaLabel.setText(enemy.getMana() + "/" + enemy.getMaxMana());
 
-
-        //Removes discarded cards
-        List<Cell> emptyCells = new ArrayList<>();
-        for(Cell cells : buttonCells) {
-            if(!(cells.getActor() instanceof ImageButton)) {
-                emptyCells.add(cells);
+        Array<Actor> toRemove = new Array<>();
+        for(Actor actor : getStage().getActors()) {
+            if(actor instanceof ImageButton) {
+                toRemove.add(actor);
             }
         }
+        getStage().getActors().removeAll(toRemove, false);
 
-        //adds drawn cards
-        for(Card cards : player.getShip().getHand()) {
-            boolean isPlaced = false;
-            for(Cell cells : buttonCells) {
-                Actor act = cells.getActor();
-                if(act != null && act.getName() != null && act.getName().equalsIgnoreCase(""+cards.getId())) {
-                    isPlaced = true;
-                }
-            }
-            if(!isPlaced) {
-                emptyCells.get(0).setActor(getIBForCard(cards));
-                emptyCells.remove(0);
-            }
+        Integer index = 0;
+        for(Card card:player.getShip().getHand()) {
+            getStage().addActor(getIBForCard(card, index));
+            index++;
         }
+
     }
 
-}
-
-enum BattleMove {
-    DRAW, WAIT, CARD
 }
 
 enum BattleTurn {

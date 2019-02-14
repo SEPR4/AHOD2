@@ -18,12 +18,19 @@ public class Node {
 
     private Integer id, row, col;
     private List<Node> connected = new ArrayList<>();
-    private Drawable texture = new TextureRegionDrawable(new TextureRegion(FileManager.randEncounterIcon));
+    private Drawable texture;
 
     public Node(Integer id, Integer row, Integer col) {
         this.id = id;
         this.row = row;
         this.col = col;
+
+        try {
+            Class.forName("uk.ac.york.sepr4.ahod2.io.FileManager");
+            texture = new TextureRegionDrawable(new TextureRegion(FileManager.randEncounterIcon));
+        } catch (Exception ex) {
+            //either not found or initializer exception (no gdx - for tests)
+        } catch (Error error) {}
     }
 
     public void action(GameInstance gameInstance){
