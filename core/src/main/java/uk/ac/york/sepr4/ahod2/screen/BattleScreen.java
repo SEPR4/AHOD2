@@ -80,7 +80,9 @@ public class BattleScreen extends AHODScreen {
 
         setMessageHUD(gameInstance);
         setAnimationsHUD(gameInstance);
-        gameInstance.getAnimationHUD().addDamageAnimation(new Vector2(1000, 100), 10, 5f);
+        for (int i = 0; i<3; i++) {
+            gameInstance.getAnimationHUD().addDamageAnimation(new Vector2(1000, 100), 10, 5f);
+        }
     }
 
     @Override
