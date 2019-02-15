@@ -57,7 +57,7 @@ public class StatsHUD {
         Label healthLabel = new Label("Health", StyleManager.generateLabelStyle(25, Color.RED));
         healthValueLabel = new Label("10/10", StyleManager.generateLabelStyle(25, Color.RED));
 
-        Label goldLabel = new Label("Turn", StyleManager.generateLabelStyle(25, Color.GOLD));
+        Label goldLabel = new Label("Gold", StyleManager.generateLabelStyle(25, Color.GOLD));
         goldValueLabel = new Label("0", StyleManager.generateLabelStyle(25, Color.GOLD));
 
         Label scoreLabel = new Label("Score", StyleManager.generateLabelStyle(25, Color.MAGENTA));

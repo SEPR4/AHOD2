@@ -52,7 +52,7 @@ public class BattleScreen extends AHODScreen {
     private Integer turnNo = 1;
 
     @Getter
-    private static final Integer handSize = 4;
+    private static final Integer handSize = 5;
 
     /***
      * Used by generic battle encounters
@@ -86,6 +86,10 @@ public class BattleScreen extends AHODScreen {
 
         setMessageHUD(gameInstance);
         setAnimationsHUD(gameInstance);
+
+        enemy.battleStart(gameInstance.getCardManager().getDefaultCards());
+        player.getShip().battleStart(gameInstance.getCardManager().getDefaultCards());
+
         for (int i = 0; i<3; i++) {
             gameInstance.getAnimationHUD().addDamageAnimation(new Vector2(1000, 100), 10, 5f);
         }
@@ -109,9 +113,7 @@ public class BattleScreen extends AHODScreen {
                     //damage Animation
                 }
 
-                //set to turn number (max at 10)
-                player.getShip().setMaxMana(turnNo);
-                player.getShip().setMana(player.getShip().getMaxMana());
+
                 turn = BattleTurn.ENEMY;
             } else if(turn == BattleTurn.ENEMY) {
                 //Gdx.app.debug("BattleScreen", "Applying Player Damage!");
@@ -120,11 +122,14 @@ public class BattleScreen extends AHODScreen {
                     hasDied(player.getShip());
                 }
 
-
+                turnNo++;
+                //set to turn number (max at 10)
+                player.getShip().setMaxMana(turnNo);
+                player.getShip().setMana(player.getShip().getMaxMana());
                 enemy.setMaxMana(turnNo);
                 enemy.setMana(enemy.getMaxMana());
+
                 turn = BattleTurn.PLAYER;
-                turnNo++;
                 Gdx.app.debug("BattleScreen", "Player Move!");
             }
             animating = false;

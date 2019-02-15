@@ -52,8 +52,7 @@ public class CardSelectionScreen extends AHODScreen {
                 }
             });
             selectionTable.add(imageButton).expandX().expandY()
-                    .align(Align.center)
-                    .width(Value.percentWidth(1/selection.size()));
+                    .align(Align.center);
         }
 
 

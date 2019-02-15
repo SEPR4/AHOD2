@@ -3,8 +3,6 @@ package uk.ac.york.sepr4.ahod2.object.card;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import lombok.Getter;
@@ -26,6 +24,10 @@ public class CardManager {
 
         for(Card card: cards) {
             if(card.is_default()) {
+                defaultCards.add(card);
+                defaultCards.add(card);
+                defaultCards.add(card);
+                defaultCards.add(card);
                 defaultCards.add(card);
             }
         }

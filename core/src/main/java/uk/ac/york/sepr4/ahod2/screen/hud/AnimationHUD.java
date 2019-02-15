@@ -49,23 +49,23 @@ public class AnimationHUD {
     public void update(float delta) {
         List<Animation> animationsCopy = new ArrayList<Animation>();
 
-        Gdx.app.log("sizeOfAnimations1", this.animations.size()+"");
+        //Gdx.app.log("sizeOfAnimations1", this.animations.size()+"");
         for(int i = 0; i<this.animations.size(); i++){
             this.animations.get(i).setTime(this.animations.get(i).getTime() - delta);
             if (this.animations.get(i).getTime() >= 0){
                 animationsCopy.add(this.animations.get(i));
             }
         }
-        Gdx.app.log("sizeOfAnimationsCopy1", animationsCopy.size()+"");
+        //Gdx.app.log("sizeOfAnimationsCopy1", animationsCopy.size()+"");
 
         this.animations = new ArrayList<Animation>();
-        //animationsStage.getActors().removeAll(animationsStage.getActors(), false);
+        animationsStage.getActors().clear();
 
         if(animationsCopy.size() != 0) {
             for (int i = 0; i < animationsCopy.size(); i++) {
-                Gdx.app.log("sizeOfAnimations2", this.animations.size()+"");
-                Gdx.app.log("sizeOfAnimationsCopy2", animationsCopy.size()+"");
-                Gdx.app.log("I", i+"");
+                //Gdx.app.log("sizeOfAnimations2", this.animations.size()+"");
+                //Gdx.app.log("sizeOfAnimationsCopy2", animationsCopy.size()+"");
+                //Gdx.app.log("I", i+"");
                 if (animationsCopy.get(i).getAnimationType() == Type.DAMAGE){
                     Label label = new Label(animationsCopy.get(i).getText(), StyleManager.generateLabelStyle(30, Color.RED));
                     if(!animationsStage.getActors().contains(label, false)){

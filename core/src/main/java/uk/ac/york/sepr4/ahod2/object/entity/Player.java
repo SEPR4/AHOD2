@@ -16,9 +16,9 @@ public class Player {
 
     public Player(GameLevel gameLevel) {
         ship = new Ship();
-        ship.setMana(1000);
-        ship.setMaxMana(1000);
         this.level = gameLevel;
+        ship.setMaxHealth(10);
+        ship.setHealth(10);
     }
 
     public Integer getScore(){

@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class ShipFactory {
 
-    private static final Integer healthInterval = 5;
+    private static final Integer healthInterval = 3;
 
     //difficulty 1-10
     public static Ship generateEnemyShip(Integer difficulty) {

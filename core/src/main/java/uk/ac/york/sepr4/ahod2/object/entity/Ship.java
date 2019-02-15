@@ -13,7 +13,7 @@ public class Ship {
 
     private String name;
     private boolean boss;
-    private Integer health, maxHealth = 10, mana = 1,maxMana = 1;
+    private Integer health, maxHealth = 4, mana = 1,maxMana = 1;
     private Texture image;
     private List<Card> hand = new ArrayList<>(), deck = new ArrayList<>();
 

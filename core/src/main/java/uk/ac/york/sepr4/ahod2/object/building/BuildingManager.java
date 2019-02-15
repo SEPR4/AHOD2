@@ -62,18 +62,6 @@ public class BuildingManager {
     }
 
     private void loadDepartments(Array<Department> departments) {
-        //TODO: check other params?
-        for(Department department: departments) {
-            for(Integer cardId : department.getStockArr()) {
-                Optional<Card> cardOptional = gameInstance.getCardManager().getCardByID(cardId);
-                if(cardOptional.isPresent()) {
-                    department.addCard(cardOptional.get());
-                } else {
-                    Gdx.app.error("BuildingManager", "Card "+cardId +" not found for Dept: "+department.getId());
-                }
-
-            }
-        }
         this.departments = departments;
     }
 

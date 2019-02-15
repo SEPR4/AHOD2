@@ -1,12 +1,10 @@
 package uk.ac.york.sepr4.ahod2.screen;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import lombok.Getter;
 import uk.ac.york.sepr4.ahod2.GameInstance;
@@ -15,25 +13,20 @@ import uk.ac.york.sepr4.ahod2.io.StyleManager;
 import uk.ac.york.sepr4.ahod2.object.building.Department;
 import uk.ac.york.sepr4.ahod2.object.card.Card;
 import uk.ac.york.sepr4.ahod2.object.entity.Player;
-import uk.ac.york.sepr4.ahod2.object.entity.Ship;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
+import java.util.Random;
 
 public class DepartmentScreen extends AHODScreen {
 
     private GameInstance gameInstance;
     @Getter
     private Department department;
-
     private MinigameScreen minigameScreen;
+    private Table topTable = new Table();
+    private TextButton repairButton, upgradeButton;
 
-    private Table topTable = new Table(), storeTable = new Table();
-
-    private TextButton repairButton;
-    private Label currentCardCost;
-
-    private HashMap<Card, ImageButton> cardButtons = new HashMap<>();
+    private Integer addedHealth = 0;
+    private boolean purchasedUpgrade = false;
 
     public DepartmentScreen(GameInstance gameInstance, Department department) {
         super(new Stage(new ScreenViewport()), FileManager.menuScreenBG);
@@ -43,10 +36,19 @@ public class DepartmentScreen extends AHODScreen {
 
         this.minigameScreen = new MinigameScreen(gameInstance, this);
 
-        setupTopTable();
-        setupStoreTable();
-        setMessageHUD(gameInstance);
+        generateRandomUpgrade();
 
+        setupTopTable();
+        setMessageHUD(gameInstance);
+    }
+
+    private void generateRandomUpgrade() {
+        Random random = new Random();
+        addedHealth = 5*(random.nextInt(department.getMinigamePower())+1);
+    }
+
+    private Integer getUpgradeCost() {
+        return department.getMinigamePower()*50;
     }
 
     private void setupTopTable() {
@@ -62,6 +64,15 @@ public class DepartmentScreen extends AHODScreen {
                 repair();
             }
         });
+        upgradeButton = new TextButton("Click to upgrade!\n (+" +addedHealth +" health)\nCost: "+getUpgradeCost(),
+                StyleManager.generateTBStyle(30, Color.PURPLE, Color.GRAY));
+        upgradeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent ev, float x, float y) {
+                purchaseUpgrade();
+            }
+        });
+
         TextButton gambleButton = new TextButton("Visit Tavern (Minigame)",
                 StyleManager.generateTBStyle(30, Color.GOLD, Color.GRAY));
         gambleButton.addListener(new ClickListener() {
@@ -89,6 +100,11 @@ public class DepartmentScreen extends AHODScreen {
                 .padTop(Value.percentHeight(0.02f, topTable))
                 .height(Value.percentHeight(0.1f, topTable));
         topTable.row();
+        topTable.add(upgradeButton)
+                .expandX()
+                .padTop(Value.percentHeight(0.02f, topTable))
+                .height(Value.percentHeight(0.1f, topTable));
+        topTable.row();
         topTable.add(gambleButton)
                 .expandX()
                 .padTop(Value.percentHeight(0.02f, topTable))
@@ -102,14 +118,29 @@ public class DepartmentScreen extends AHODScreen {
         getStage().addActor(topTable);
     }
 
-    private boolean repair() {
+    private void repair() {
         Player player = gameInstance.getPlayer();
-        if(getRepairCost() < player.getGold()) {
-            return false;
+        if(getRepairCost() <= player.getGold()) {
+            player.takeGold(getRepairCost());
+            player.getShip().setHealth(player.getShip().getMaxHealth());
+        } else {
+            gameInstance.getMessageHUD().addStatusMessage("Not enough gold!", 3f);
         }
-        player.takeGold(getRepairCost());
-        player.getShip().setHealth(player.getShip().getMaxHealth());
-        return true;
+    }
+
+    private void purchaseUpgrade() {
+        Player player = gameInstance.getPlayer();
+        if(!purchasedUpgrade) {
+            if (player.getGold() >= getUpgradeCost()) {
+                purchasedUpgrade = true;
+                player.takeGold(getUpgradeCost());
+                player.getShip().setMaxHealth(player.getShip().getMaxHealth() + addedHealth);
+            } else {
+                gameInstance.getMessageHUD().addStatusMessage("Not enough gold!", 3f);
+            }
+        } else {
+            gameInstance.getMessageHUD().addStatusMessage("Already purchased!", 3f);
+        }
     }
 
     public void resetMinigame() {
@@ -124,70 +155,16 @@ public class DepartmentScreen extends AHODScreen {
         gameInstance.fadeSwitchScreen(gameInstance.getSailScreen());
     }
 
-    private boolean buyCard(Card card) {
-        Player player = gameInstance.getPlayer();
-        if(card.getShopCost() > player.getGold()) {
-            return false;
-        }
-        player.takeGold(card.getShopCost());
-        player.getShip().addCard(card);
-        return true;
-    }
-
     private Integer getRepairCost() {
         Player player = gameInstance.getPlayer();
         Integer toHeal = (player.getShip().getMaxHealth()-player.getShip().getHealth());
         return toHeal*department.getRepairCost();
     }
 
-    private void setupStoreTable() {
-        storeTable.setFillParent(true);
-        storeTable.bottom();
-
-        currentCardCost = new Label("Cost: ", StyleManager.generateLabelStyle(30, Color.GOLD));
-        storeTable.add(currentCardCost)
-                .expandX()
-                .padBottom(Value.percentHeight(0.02f, storeTable));
-        storeTable.row();
-
-        for(Card card : department.getStock()) {
-            ImageButton iB = new ImageButton(new TextureRegionDrawable(card.getTexture()));
-            iB.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent ev, float x, float y) {
-                    buyCard(card);
-                }
-                @Override
-                public void enter(InputEvent ev, float x, float y, int pointer, Actor fromActor) {
-                    currentCardCost.setText("Cost: "+card.getShopCost());
-                }
-                @Override
-                public void exit(InputEvent ev, float x, float y, int pointer, Actor toActor) {
-                    currentCardCost.setText("");
-                }
-            });
-            cardButtons.put(card, iB);
-            storeTable.add(iB)
-                    .expandX()
-                    .height(Value.percentHeight(0.30f, storeTable))
-                    .padBottom(Value.percentHeight(0.02f, storeTable));
-        }
-
-        getStage().addActor(storeTable);
-    }
-
     private void updateTables() {
         repairButton.setText("Click to repair!\nCost: "+getRepairCost());
 
-        Ship player = gameInstance.getPlayer().getShip();
-        List<Card> toRemove = new ArrayList<>();
-        for(Card card: cardButtons.keySet()) {
-            if(player.getDeck().contains(card)) {
-                storeTable.removeActor(cardButtons.get(card));
-                toRemove.add(card);
-            }
-        }
-        toRemove.forEach(card -> cardButtons.remove(card));
+
     }
 
     @Override
