@@ -86,11 +86,9 @@ public class BattleScreen extends AHODScreen {
 
         setMessageHUD(gameInstance);
         setAnimationsHUD(gameInstance);
-        gameInstance.getAnimationHUD().addDamageAnimation(new Vector2(1000, 100), 10, 5f);
-
-        //shuffle and set playdecks
-        player.getShip().battleStart(gameInstance.getCardManager().getDefaultCards());
-        enemy.battleStart(gameInstance.getCardManager().getDefaultCards());
+        for (int i = 0; i<3; i++) {
+            gameInstance.getAnimationHUD().addDamageAnimation(new Vector2(1000, 100), 10, 5f);
+        }
     }
 
     @Override

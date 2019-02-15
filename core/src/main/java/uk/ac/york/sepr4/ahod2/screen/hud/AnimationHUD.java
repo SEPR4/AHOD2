@@ -27,9 +27,7 @@ public class AnimationHUD {
     @Getter
     private Stage animationsStage;
     private GameInstance gameInstance;
-    private Array<Vector2> damageAnimationsPoints;
-    private Array<Integer> damageValues;
-    private Array<Float> damagetime;
+    private List<Animation> animations = new ArrayList<Animation>();
 
     public AnimationHUD(GameInstance gameInstance) {
         this.gameInstance = gameInstance;
@@ -39,47 +37,44 @@ public class AnimationHUD {
         float h = Gdx.graphics.getHeight();
 
         animationsStage = new Stage(new FitViewport(w, h, new OrthographicCamera()));
-
-        this.damageAnimationsPoints = new Array<Vector2>();
-        this.damageValues = new Array<Integer>();
-        this.damagetime = new Array<Float>();
     }
 
     public void addDamageAnimation(Vector2 coords, Integer value, Float time){
-        this.damageAnimationsPoints.add(coords);
-        this.damageValues.add(value);
-        this.damagetime.add(time);
+        this.animations.add(new Animation(Type.DAMAGE, coords, ""+value, time));
+    }
+    public void addHealAnimation(Vector2 coords, Integer value, Float time){
+        this.animations.add(new Animation(Type.HEAL, coords, ""+value, time));
     }
 
     public void update(float delta) {
-        Array<Vector2> damageAnimationsPointsCopy = new Array<Vector2>();
-        Array<Integer> damageValuesCopy = new Array<Integer>();
-        Array<Float> damagetimeCopy = new Array<Float>();
+        List<Animation> animationsCopy = new ArrayList<Animation>();
 
-        for(int i = 0; i<damageAnimationsPoints.size; i++){
-            this.damagetime.set(i, this.damagetime.get(i) - delta);
-            if(this.damagetime.get(i) >= 0){
-                damageAnimationsPointsCopy.add(this.damageAnimationsPoints.get(i));
-                damageValuesCopy.add(this.damageValues.get(i));
-                damagetimeCopy.add(this.damagetime.get(i));
+        Gdx.app.log("sizeOfAnimations1", this.animations.size()+"");
+        for(int i = 0; i<this.animations.size(); i++){
+            this.animations.get(i).setTime(this.animations.get(i).getTime() - delta);
+            if (this.animations.get(i).getTime() >= 0){
+                animationsCopy.add(this.animations.get(i));
             }
         }
+        Gdx.app.log("sizeOfAnimationsCopy1", animationsCopy.size()+"");
 
-        this.damageAnimationsPoints = new Array<Vector2>();
-        this.damageValues = new Array<Integer>();
-        this.damagetime = new Array<Float>();
-        animationsStage.getActors().removeAll(animationsStage.getActors(), false);
+        this.animations = new ArrayList<Animation>();
+        //animationsStage.getActors().removeAll(animationsStage.getActors(), false);
 
-        if(damageAnimationsPointsCopy.size != 0) {
-            for (int i = 0; i < damageAnimationsPointsCopy.size; i++) {
-                Label label = new Label(""+damageValuesCopy.get(i)+"", StyleManager.generateLabelStyle(30, Color.RED));
-                if(!animationsStage.getActors().contains(label, false)){
-                    animationsStage.addActor(label);
+        if(animationsCopy.size() != 0) {
+            for (int i = 0; i < animationsCopy.size(); i++) {
+                Gdx.app.log("sizeOfAnimations2", this.animations.size()+"");
+                Gdx.app.log("sizeOfAnimationsCopy2", animationsCopy.size()+"");
+                Gdx.app.log("I", i+"");
+                if (animationsCopy.get(i).getAnimationType() == Type.DAMAGE){
+                    Label label = new Label(animationsCopy.get(i).getText(), StyleManager.generateLabelStyle(30, Color.RED));
+                    if(!animationsStage.getActors().contains(label, false)){
+                        animationsStage.addActor(label);
+                    }
+                    label.setPosition(animationsCopy.get(i).getCurrentPoint().x, animationsCopy.get(i).getCurrentPoint().y);
+                    animationsCopy.get(i).setCurrentPoint(animationsCopy.get(i).getCurrentPoint().add(new Vector2(0, 5)));
+                    this.animations.add(animationsCopy.get(i));
                 }
-                label.setPosition(damageAnimationsPointsCopy.get(i).x, damageAnimationsPointsCopy.get(i).y);
-                this.damageAnimationsPoints.add(damageAnimationsPointsCopy.get(i).add(new Vector2(0, 5)));
-                this.damageValues.add(damageValuesCopy.get(i));
-                this.damagetime.add(damagetimeCopy.get(i));
             }
         }
 
