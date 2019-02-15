@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import lombok.Getter;
 import uk.ac.york.sepr4.ahod2.object.entity.Ship;
 
 import java.util.*;
@@ -14,7 +15,10 @@ import java.util.*;
 public class CardManager {
 
     private List<Card> cards = new ArrayList<>();
+    @Getter
     private List<Card> defaultCards = new ArrayList<>();
+
+    private static final Integer maxSelectionSize = 4;
 
     public CardManager() {
         Json json = new Json();
@@ -57,19 +61,20 @@ public class CardManager {
     }
 
     public boolean drawRandomCard(Ship ship) {
-        List<Card> fullDeck = getFullDeck(ship);
-        if(fullDeck.size() == ship.getDiscarded().size()) {
-            ship.setDiscarded(new ArrayList<>());
-        }
-        if(fullDeck.size() == ship.getHand().size() + ship.getDiscarded().size()) {
-            return false;
+        if(ship.getPlayDeck().size() == 0) {
+            if(ship.getHand().size() == 0) {
+                ship.shuffleReset(defaultCards);
+            } else {
+                return false;
+            }
         }
 
-        Random random = new Random();
-        fullDeck.removeAll(ship.getDiscarded());
-        ship.addCardToHand(fullDeck.get(random.nextInt(fullDeck.size())));
+        Card card = ship.getPlayDeck().poll();
+        Gdx.app.debug("Card Manager", "Randomly Drawing:" +card.getName());
+        ship.addCardToHand(card);
         return true;
     }
+
 
     public Optional<Card> randomCard(Integer power) {
         Random random = new Random();
@@ -77,6 +82,7 @@ public class CardManager {
         while(attempts>0) {
             Card card = cards.get(random.nextInt(cards.size()-1));
             if (!card.is_default() && card.getPower() <= power) {
+                Gdx.app.debug("Card Manager", "Randomly Selected:" +card.getName());
                 return Optional.of(card);
             }
             attempts--;
@@ -91,6 +97,20 @@ public class CardManager {
             }
         }
         return Optional.empty();
+    }
+
+    public List<Card> getRandomSelection(Integer power) {
+        Random random = new Random();
+        List<Card> selectionCards = new ArrayList<>();
+        //min of 1, max 4
+        Integer selectionSize = random.nextInt(maxSelectionSize)+1;
+        while(selectionCards.size() < selectionSize) {
+            Optional<Card> optionalCard = randomCard(power);
+            if(optionalCard.isPresent()) {
+                selectionCards.add(optionalCard.get());
+            }
+        }
+        return selectionCards;
     }
 
 }

@@ -20,7 +20,7 @@ public class MenuScreen extends AHODScreen {
 
     //TODO: Change background
     public MenuScreen(AHOD2 game) {
-        super(new Stage(new ScreenViewport()), FileManager.menuScreenBG, false);
+        super(new Stage(new ScreenViewport()), FileManager.menuScreenBG);
         this.game = game;
 
         loadMenu();

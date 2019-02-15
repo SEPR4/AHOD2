@@ -6,23 +6,23 @@ import lombok.Getter;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.object.card.Card;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Data
 public class Ship {
 
     private String name;
     private boolean boss;
-    private Integer health, maxHealth = 10, mana, maxMana = 10;
+    private Integer health, maxHealth = 10, mana = 1,maxMana = 1;
     private Texture image;
-    private List<Card> deck = new ArrayList<>(), hand = new ArrayList<>(), discarded = new ArrayList<>();
+    private List<Card> hand = new ArrayList<>(), deck = new ArrayList<>();
+
+    private Deque<Card> playDeck = new ArrayDeque<>();
 
     @Getter
     private List<Integer> delayedDamage = new ArrayList<>(), delayedHeal = new ArrayList<>();
 
     public Ship() {
-        this.mana = maxMana;
         this.health = maxHealth;
 
         try {
@@ -60,11 +60,32 @@ public class Ship {
 
     }
 
-    public void battleOver() {
+    public void battleStart(List<Card> defaultCards) {
+        resetBattleParams();
+        shuffleReset(defaultCards);
+    }
+
+    public void shuffleReset(List<Card> defaultCards) {
+        Collections.shuffle(defaultCards);
+        Collections.shuffle(deck);
+        defaultCards.forEach(card -> playDeck.add(card));
+        deck.forEach(card -> playDeck.add(card));
+    }
+
+    public void setMaxMana(Integer lMana) {
+        if(lMana > 10) {
+            maxMana = 10;
+        } else {
+            maxMana = lMana;
+        }
+    }
+
+    public void resetBattleParams() {
         hand = new ArrayList<>();
-        discarded = new ArrayList<>();
+        playDeck = new ArrayDeque<>();
         delayedDamage = new ArrayList<>();
-        mana = maxMana;
+        maxMana = 1;
+        mana = 1;
     }
 
     public boolean applyDelayedDamage() {
@@ -115,7 +136,6 @@ public class Ship {
 
     public void useCard(Card card) {
         hand.remove(card);
-        discarded.add(card);
     }
 
     public void addCardToHand(Card card) {

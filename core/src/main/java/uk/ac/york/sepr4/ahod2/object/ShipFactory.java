@@ -11,7 +11,6 @@ import java.util.Random;
 public class ShipFactory {
 
     private static final Integer healthInterval = 5;
-    private static final Integer manaInterval = 2;
 
     //difficulty 1-10
     public static Ship generateEnemyShip(Integer difficulty) {
@@ -21,10 +20,6 @@ public class ShipFactory {
         Integer health = ship.getMaxHealth() + difficulty*random.nextInt(healthInterval+1);
         ship.setMaxHealth(health);
         ship.setHealth(health);
-
-        Integer mana = ship.getMaxMana() + difficulty*random.nextInt(manaInterval+1);
-        ship.setMaxMana(mana);
-        ship.setMana(mana);
 
         Integer noCards = random.nextInt(difficulty);
         while(noCards > 0) {

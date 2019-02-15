@@ -33,6 +33,7 @@ public class BattleScreen extends AHODScreen {
 
     private GameInstance gameInstance;
     private Integer gold;
+    private Integer difficulty;
     @Getter
     private Ship enemy;
 
@@ -41,11 +42,14 @@ public class BattleScreen extends AHODScreen {
 
     private Image playerShipImage, enemyShipImage;
     private Label playerHealthLabel, enemyHealthLabel, playerManaLabel, enemyManaLabel;
+    private TextButton drawButton;
 
     private Table table;
 
     private BattleTurn turn;
     private boolean animating = false;
+
+    private Integer turnNo = 1;
 
     @Getter
     private static final Integer handSize = 4;
@@ -57,6 +61,7 @@ public class BattleScreen extends AHODScreen {
     public BattleScreen(GameInstance gameInstance) {
         this(gameInstance,
                 ShipFactory.generateEnemyShip(gameInstance.getCurrentLevel().getDifficulty()),
+                gameInstance.getCurrentLevel().getDifficulty(),
                 gameInstance.getCurrentLevel().getBattleGold());
     }
 
@@ -66,10 +71,11 @@ public class BattleScreen extends AHODScreen {
      * @param enemy
      * @param gold
      */
-    public BattleScreen(GameInstance gameInstance, Ship enemy, Integer gold) {
-        super(new Stage(new ScreenViewport(), new SpriteBatch()), FileManager.battleScreenBG, false);
+    public BattleScreen(GameInstance gameInstance, Ship enemy, Integer difficulty, Integer gold) {
+        super(new Stage(new ScreenViewport(), new SpriteBatch()), FileManager.battleScreenBG);
         this.gameInstance = gameInstance;
         this.enemy = enemy;
+        this.difficulty = difficulty;
         this.gold = gold;
 
         player = gameInstance.getPlayer();
@@ -81,6 +87,10 @@ public class BattleScreen extends AHODScreen {
         setMessageHUD(gameInstance);
         setAnimationsHUD(gameInstance);
         gameInstance.getAnimationHUD().addDamageAnimation(new Vector2(1000, 100), 10, 5f);
+
+        //shuffle and set playdecks
+        player.getShip().battleStart(gameInstance.getCardManager().getDefaultCards());
+        enemy.battleStart(gameInstance.getCardManager().getDefaultCards());
     }
 
     @Override
@@ -92,7 +102,7 @@ public class BattleScreen extends AHODScreen {
 
             //switch turns
             if(turn == BattleTurn.PLAYER) {
-                Gdx.app.debug("BattleScreen", "Applying Enemy Damage!");
+                //Gdx.app.debug("BattleScreen", "Applying Enemy Damage!");
                 enemy.applyDelayedHeal();
                 if(enemy.applyDelayedDamage()) {
                     //sink Animation
@@ -101,20 +111,24 @@ public class BattleScreen extends AHODScreen {
                     //damage Animation
                 }
 
-                player.getShip().incMana(1);
+                //set to turn number (max at 10)
+                player.getShip().setMaxMana(turnNo);
+                player.getShip().setMana(player.getShip().getMaxMana());
                 turn = BattleTurn.ENEMY;
             } else if(turn == BattleTurn.ENEMY) {
-                Gdx.app.debug("BattleScreen", "Applying Player Damage!");
+                //Gdx.app.debug("BattleScreen", "Applying Player Damage!");
                 player.getShip().applyDelayedHeal();
                 if(player.getShip().applyDelayedDamage()) {
                     hasDied(player.getShip());
                 }
 
 
-                enemy.incMana(1);
+                enemy.setMaxMana(turnNo);
+                enemy.setMana(enemy.getMaxMana());
                 turn = BattleTurn.PLAYER;
+                turnNo++;
+                Gdx.app.debug("BattleScreen", "Player Move!");
             }
-
             animating = false;
         } else {
             if(turn == BattleTurn.ENEMY) {
@@ -139,6 +153,7 @@ public class BattleScreen extends AHODScreen {
         if(source.getMana() < card.getManaCost()) {
             //not enough mana to cast
             gameInstance.getMessageHUD().addStatusMessage("Not enough mana!", 3f);
+            return;
         }
 
         source.useCard(card);
@@ -151,7 +166,6 @@ public class BattleScreen extends AHODScreen {
         //could add delayed healing
         Gdx.app.debug("BattleScreen","Using card: "+card.getName());
 
-        animating = true;
     }
 
     public void endTurn() {
@@ -160,21 +174,37 @@ public class BattleScreen extends AHODScreen {
         animating = true;
     }
 
+    private Integer getCardDrawCost() {
+        if(turnNo > 10) {
+            return 5;
+        } else if(turnNo == 1) {
+            return 1;
+        }else {
+            return (int)Math.floor((double)turnNo/2);
+        }
+    }
+
 
     public boolean drawCard(Ship source) {
-        if(source.getHand().size() < handSize) {
-            if (gameInstance.getCardManager().drawRandomCard(source)) {
-                Gdx.app.debug("BattleScreen","Drawing Card!");
-                animating = true;
-                return true;
+        if(source.getMana() >=getCardDrawCost()) {
+            if (source.getHand().size() < handSize) {
+                if (gameInstance.getCardManager().drawRandomCard(source)) {
+                    Gdx.app.debug("BattleScreen", "Drawing Card!");
+                    source.deductMana(getCardDrawCost());
+                    return true;
+                } else {
+                    if (turn == BattleTurn.PLAYER) {
+                        gameInstance.getMessageHUD().addStatusMessage("Can't draw card!", 3f);
+                    }
+                }
             } else {
-                if(turn == BattleTurn.PLAYER) {
-                    gameInstance.getMessageHUD().addStatusMessage("Can't draw card!", 3f);
+                if (turn == BattleTurn.PLAYER) {
+                    gameInstance.getMessageHUD().addStatusMessage("Max hand size!", 3f);
                 }
             }
         } else {
-            if(turn == BattleTurn.PLAYER) {
-                gameInstance.getMessageHUD().addStatusMessage("Max hand size!", 3f);
+            if (turn == BattleTurn.PLAYER) {
+                gameInstance.getMessageHUD().addStatusMessage("Not enough mana!", 3f);
             }
         }
         return false;
@@ -184,19 +214,17 @@ public class BattleScreen extends AHODScreen {
     private void hasDied(Ship ship) {
         if(ship == enemy) {
             //player wins (reset mana and cards)
-            player.getShip().battleOver();
             player.addGold(gold);
             gameInstance.getMessageHUD().addGoldMessage(gold);
             if(enemy.isBoss()) {
                 //screen is switched in this method
                 gameInstance.advanceLevel();
             } else {
-                gameInstance.fadeSwitchScreen(gameInstance.getSailScreen());
+                gameInstance.fadeSwitchScreen(new CardSelectionScreen(gameInstance, gameInstance.getCardManager().getRandomSelection(difficulty)), true);
             }
         } else {
-            gameInstance.switchScreen(new EndScreen(gameInstance, false));
+            gameInstance.fadeSwitchScreen(new EndScreen(gameInstance, false), true);
         }
-        dispose();
     }
 
     private void loadBattleElements() {
@@ -222,10 +250,12 @@ public class BattleScreen extends AHODScreen {
         enemyManaLabel = new Label(enemy.getMana() + "/" + enemy.getMaxMana(), style2);
 
         //buttons
-        TextButton drawButton = new TextButton("Draw Card", StyleManager.generateTBStyle(30, Color.CORAL, Color.GRAY));
+        drawButton = new TextButton("Draw Card", StyleManager.generateTBStyle(30, Color.CORAL, Color.GRAY));
         drawButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent ev, float x, float y) {
+                Gdx.app.debug("BattleScreen","Pressed draw card button!");
+
                 if(playerTurnCheck()) {
                     drawCard(player.getShip());
                 }
@@ -248,11 +278,11 @@ public class BattleScreen extends AHODScreen {
 
         //top 2/3 (ship + stat display)
         table.add(playerShipImage).expandX()
-                .height(Value.percentHeight(0.45f, table))
+                .height(Value.percentHeight(0.40f, table))
                 .width(Value.percentWidth(0.5f, table))
                 .padTop(Value.percentHeight(0.02f, table));
         table.add(enemyShipImage).expandX()
-                .height(Value.percentHeight(0.45f, table))
+                .height(Value.percentHeight(0.40f, table))
                 .width(Value.percentWidth(0.5f, table))
                 .padTop(Value.percentHeight(0.02f, table));
         table.row();
@@ -307,6 +337,8 @@ public class BattleScreen extends AHODScreen {
     }
 
     private void updateBattleElements() {
+        drawButton.setText("Draw Card ("+getCardDrawCost()+")");
+
         playerHealthLabel.setText(player.getShip().getHealth() + "/" + player.getShip().getMaxHealth());
         enemyHealthLabel.setText(enemy.getHealth() + "/" + enemy.getMaxHealth());
 

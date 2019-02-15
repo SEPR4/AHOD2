@@ -25,7 +25,7 @@ public class SailScreen extends AHODScreen {
 
     public SailScreen(GameInstance gameInstance) {
         super(new Stage(new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
-                new OrthographicCamera())), FileManager.sailScreenBG, true);
+                new OrthographicCamera())), FileManager.sailScreenBG);
 
         this.gameInstance = gameInstance;
 

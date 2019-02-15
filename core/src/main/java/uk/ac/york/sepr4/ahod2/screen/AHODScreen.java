@@ -23,8 +23,6 @@ public abstract class AHODScreen implements Screen {
 
     private ShapeRenderer shapeRenderer;
 
-    private boolean backgroundAffects;
-
     private boolean enableMessageHUD = false, enableStatsHUD = false, enableAnimationsHUD = false;
 
     private GameInstance gameInstance;
@@ -32,10 +30,9 @@ public abstract class AHODScreen implements Screen {
     private boolean fading = false;
     private float fade = 0;
 
-    public AHODScreen(Stage stage, Texture background, boolean backgroundAffects) {
+    public AHODScreen(Stage stage, Texture background) {
         this.stage = stage;
         this.background = background;
-        this.backgroundAffects = backgroundAffects;
 
         shapeRenderer = new ShapeRenderer();
 

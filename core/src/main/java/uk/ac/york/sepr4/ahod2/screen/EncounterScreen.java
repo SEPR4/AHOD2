@@ -26,7 +26,7 @@ public class EncounterScreen extends AHODScreen {
 
     public EncounterScreen(GameInstance gameInstance, Encounter encounter) {
         super(new Stage(new ScreenViewport(), new SpriteBatch()),
-                new Texture(Gdx.files.internal("images/screen/encounter/" + encounter.getBackground())), false);
+                new Texture(Gdx.files.internal("images/screen/encounter/" + encounter.getBackground())));
         this.gameInstance = gameInstance;
         this.encounter = encounter;
 
@@ -77,6 +77,7 @@ public class EncounterScreen extends AHODScreen {
         if (encounterOption.isBattle()) {
             BattleScreen battleScreen = new BattleScreen(gameInstance,
                     ShipFactory.generateEnemyShip(encounterOption.getDifficulty()),
+                    encounterOption.getDifficulty(),
                     encounterOption.getGold());
             gameInstance.fadeSwitchScreen(battleScreen);
         } else {

@@ -26,7 +26,7 @@ public class ShipViewScreen extends AHODScreen {
     private Label manaValueLabel;
 
     public ShipViewScreen(GameInstance gameInstance) {
-        super(new Stage(new ScreenViewport()), FileManager.menuScreenBG, false);
+        super(new Stage(new ScreenViewport()), FileManager.menuScreenBG);
 
         this.gameInstance = gameInstance;
 

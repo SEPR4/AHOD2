@@ -36,7 +36,7 @@ public class DepartmentScreen extends AHODScreen {
     private HashMap<Card, ImageButton> cardButtons = new HashMap<>();
 
     public DepartmentScreen(GameInstance gameInstance, Department department) {
-        super(new Stage(new ScreenViewport()), FileManager.menuScreenBG, false);
+        super(new Stage(new ScreenViewport()), FileManager.menuScreenBG);
 
         this.gameInstance = gameInstance;
         this.department = department;
