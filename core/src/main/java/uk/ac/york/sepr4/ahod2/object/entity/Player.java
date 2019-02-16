@@ -1,5 +1,6 @@
 package uk.ac.york.sepr4.ahod2.object.entity;
 
+import com.badlogic.gdx.math.Vector2;
 import lombok.Data;
 import uk.ac.york.sepr4.ahod2.node.Node;
 import uk.ac.york.sepr4.ahod2.object.GameLevel;

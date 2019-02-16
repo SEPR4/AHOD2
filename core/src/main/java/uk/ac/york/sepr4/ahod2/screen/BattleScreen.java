@@ -36,9 +36,11 @@ public class BattleScreen extends AHODScreen {
     private Integer difficulty;
     @Getter
     private Ship enemy;
+    private Vector2 enemycords = new Vector2(9*getStage().getWidth()/12, 9*getStage().getHeight()/16);
 
     @Getter
     private Player player;
+    private Vector2 playercords = new Vector2(3*getStage().getWidth()/12, 9*getStage().getHeight()/16);
 
     private Image playerShipImage, enemyShipImage;
     private Label playerHealthLabel, enemyHealthLabel, playerManaLabel, enemyManaLabel;
@@ -89,10 +91,6 @@ public class BattleScreen extends AHODScreen {
 
         enemy.battleStart(gameInstance.getCardManager().getDefaultCards());
         player.getShip().battleStart(gameInstance.getCardManager().getDefaultCards());
-
-        for (int i = 0; i<3; i++) {
-            gameInstance.getAnimationHUD().addDamageAnimation(new Vector2(1000, 100), 10, 5f);
-        }
     }
 
     @Override
@@ -105,8 +103,8 @@ public class BattleScreen extends AHODScreen {
             //switch turns
             if(turn == BattleTurn.PLAYER) {
                 //Gdx.app.debug("BattleScreen", "Applying Enemy Damage!");
-                enemy.applyDelayedHeal();
-                if(enemy.applyDelayedDamage()) {
+                enemy.applyDelayedHeal(gameInstance, enemycords);
+                if(enemy.applyDelayedDamage(gameInstance, enemycords)) {
                     //sink Animation
                     hasDied(enemy);
                 } else {
@@ -117,8 +115,8 @@ public class BattleScreen extends AHODScreen {
                 turn = BattleTurn.ENEMY;
             } else if(turn == BattleTurn.ENEMY) {
                 //Gdx.app.debug("BattleScreen", "Applying Player Damage!");
-                player.getShip().applyDelayedHeal();
-                if(player.getShip().applyDelayedDamage()) {
+                player.getShip().applyDelayedHeal(gameInstance, playercords);
+                if(player.getShip().applyDelayedDamage(gameInstance, playercords)) {
                     hasDied(player.getShip());
                 }
 

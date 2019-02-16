@@ -1,8 +1,12 @@
 package uk.ac.york.sepr4.ahod2.object.entity;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector;
+import com.badlogic.gdx.math.Vector2;
 import lombok.Data;
 import lombok.Getter;
+import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.object.card.Card;
 
@@ -40,7 +44,8 @@ public class Ship {
      * @param damage
      * @return
      */
-    private boolean damage(Integer damage) {
+    private boolean damage(Integer damage, GameInstance gameInstance, Vector2 poi) {
+        gameInstance.getAnimationHUD().addDamageAnimation(poi, damage, 2f);
         if(damage >= health){
             health = 0;
             return true;
@@ -51,11 +56,12 @@ public class Ship {
 
     }
 
-    private void heal(Integer val) {
+    private void heal(Integer val, GameInstance gameInstance, Vector2 poi) {
         if(health+val >= maxHealth) {
             health = maxHealth;
         } else {
             health+=val;
+            gameInstance.getAnimationHUD().addHealAnimation(poi, val, 2f);
         }
 
     }
@@ -88,9 +94,9 @@ public class Ship {
         mana = 1;
     }
 
-    public boolean applyDelayedDamage() {
+    public boolean applyDelayedDamage(GameInstance gameInstance, Vector2 poi) {
         if(delayedDamage.size()>0) {
-            if(damage(delayedDamage.get(0))) {
+            if(damage(delayedDamage.get(0), gameInstance, poi)) {
                 return true;
             }
             delayedDamage.remove(0);
@@ -99,9 +105,9 @@ public class Ship {
     }
 
 
-    public void applyDelayedHeal() {
+    public void applyDelayedHeal(GameInstance gameInstance, Vector2 poi) {
         if(delayedHeal.size()>0) {
-            heal(delayedHeal.get(0));
+            heal(delayedHeal.get(0), gameInstance, poi);
             delayedHeal.remove(0);
         }
     }
