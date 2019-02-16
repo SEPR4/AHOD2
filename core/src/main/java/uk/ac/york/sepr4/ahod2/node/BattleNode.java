@@ -8,6 +8,10 @@ import uk.ac.york.sepr4.ahod2.screen.BattleScreen;
 
 public class BattleNode extends Node {
 
+    /***
+     * Node type which creates a battle depending on level difficulty.
+     * @param node
+     */
     public BattleNode(Node node) {
         super(node.getId(), node.getRow(), node.getCol());
         setConnected(node.getConnected());
@@ -15,6 +19,10 @@ public class BattleNode extends Node {
 
     }
 
+    /***
+     * Switch current screen to new instance of BattleScreen.
+     * @param gameInstance
+     */
     @Override
     public void action(GameInstance gameInstance) {
         BattleScreen battleScreen = new BattleScreen(gameInstance);

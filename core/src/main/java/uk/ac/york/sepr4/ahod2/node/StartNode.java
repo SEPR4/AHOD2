@@ -9,12 +9,20 @@ import java.util.Optional;
 
 public class StartNode extends Node {
 
+    /***
+     * Node type which set's players initial location for current level.
+     * @param node
+     */
     public StartNode(Node node) {
         super(node.getId(), node.getRow(), node.getCol());
         setConnected(node.getConnected());
         this.setTexture(new TextureRegionDrawable(new TextureRegion(FileManager.startNodeIcon)));
     }
 
+    /***
+     * Set player's location to this node.
+     * @param gameInstance
+     */
     @Override
     public void action(GameInstance gameInstance) {
         Optional<Node> loc = gameInstance.getPlayer().getLocation();

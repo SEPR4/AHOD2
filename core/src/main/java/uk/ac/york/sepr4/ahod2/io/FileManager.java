@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+/***
+ * Class responsible for holding static assets (images, sprites, etc).
+ */
 public class FileManager {
 
     public static Texture defaultShipTexture = new Texture(Gdx.files.internal("ships/default.png"));
@@ -12,10 +15,6 @@ public class FileManager {
     public static Texture sailScreenBG = new Texture(Gdx.files.internal("images/screen/sail4.png"));
     public static Texture menuScreenBG = new Texture(Gdx.files.internal("images/screen/menu.png"));
     public static Texture battleScreenBG = new Texture(Gdx.files.internal("images/screen/battle.png"));
-
-    public static Texture wave(int i){
-        return new Texture(Gdx.files.internal("images/screen/waves" + i + ".png"));
-    }
 
     public static Texture nodeIcon = new Texture(Gdx.files.internal("images/node/default.png"));
     public static Texture startNodeIcon = new Texture(Gdx.files.internal("images/node/start.png"));

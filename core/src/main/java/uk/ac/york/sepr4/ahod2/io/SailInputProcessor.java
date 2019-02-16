@@ -5,6 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import uk.ac.york.sepr4.ahod2.screen.sail.SailScreen;
 
+/***
+ * Class responsible for handling user input on SailScreen.
+ */
 public class SailInputProcessor implements InputProcessor {
 
     private SailScreen sailScreen;
@@ -16,7 +19,11 @@ public class SailInputProcessor implements InputProcessor {
         this.sailScreen = sailScreen;
     }
 
+    /***
+     * Called during SailScreen render to pan camera up and down the level's map.
+     */
     public void scrollCamera() {
+        //set map top and bottom relative to camera's position and screen height.
         float cameraYBottom = (sailScreen.getOrthographicCamera().position.y - Gdx.graphics.getHeight()/2);
         float cameraYTop = (sailScreen.getOrthographicCamera().position.y + Gdx.graphics.getHeight()/2);
 

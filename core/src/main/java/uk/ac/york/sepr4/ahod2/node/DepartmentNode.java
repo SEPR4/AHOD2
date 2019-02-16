@@ -13,6 +13,11 @@ public class DepartmentNode extends Node {
 
     private Department department;
 
+    /***
+     * Node type that creates department screen for specified department.
+     * @param node
+     * @param department specified department
+     */
     public DepartmentNode(Node node, Department department) {
         super(node.getId(), node.getRow(), node.getCol());
         this.department = department;
@@ -21,6 +26,10 @@ public class DepartmentNode extends Node {
         this.setTexture(new TextureRegionDrawable(new TextureRegion(FileManager.departmentNodeIcon)));
     }
 
+    /***
+     * Switch current screen to department screen.
+     * @param gameInstance
+     */
     @Override
     public void action(GameInstance gameInstance) {
         DepartmentScreen departmentScreen = new DepartmentScreen(gameInstance, department);
