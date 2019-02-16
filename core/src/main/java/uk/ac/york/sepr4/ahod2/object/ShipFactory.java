@@ -8,11 +8,19 @@ import uk.ac.york.sepr4.ahod2.object.entity.Ship;
 import java.util.Optional;
 import java.util.Random;
 
+/***
+ * Utility class used to randomly generate enemy ships.
+ */
 public class ShipFactory {
 
     private static final Integer healthInterval = 3;
 
     //difficulty 1-10
+    /***
+     * Generate enemy ship with specified difficulty used to scale health and cards chosen.
+     * @param difficulty
+     * @return instance of random enemy ship
+     */
     public static Ship generateEnemyShip(Integer difficulty) {
         Random random = new Random();
         Ship ship = new Ship();
@@ -33,6 +41,5 @@ public class ShipFactory {
         }
         return ship;
     }
-
 
 }

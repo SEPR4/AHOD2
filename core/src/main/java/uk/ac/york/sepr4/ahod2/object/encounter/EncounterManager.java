@@ -8,6 +8,10 @@ import java.util.NavigableMap;
 import java.util.Random;
 import java.util.TreeMap;
 
+/***
+ * Class used to load and generate weighted instances of encounters.
+ * Encounters loaded from JSON file.
+ */
 public class EncounterManager {
 
     private final NavigableMap<Double, Encounter> map = new TreeMap<>();
@@ -16,6 +20,7 @@ public class EncounterManager {
     public EncounterManager(){
         Json json = new Json();
 
+        //add encounter to weighted map
         Array<Encounter> encounters = json.fromJson(Array.class, Encounter.class, Gdx.files.internal("data/encounters.json"));
         encounters.forEach(encounter -> {
             weights+=encounter.getChance();
@@ -25,6 +30,10 @@ public class EncounterManager {
         Gdx.app.log("EncounterManager", "Loaded "+encounters.size +" encounters!");
     }
 
+    /***
+     * Generate random encounter based on weighted chance.
+     * @return random encounter instance.
+     */
     public Encounter generateEncounter() {
         Random random = new Random();
         double val = random.nextDouble() * weights;

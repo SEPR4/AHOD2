@@ -1,26 +1,28 @@
 package uk.ac.york.sepr4.ahod2.object.entity;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import lombok.Data;
 import lombok.Getter;
 import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.object.card.Card;
-
 import java.util.*;
 
+/***
+ * Class used to represent instance of ship.
+ * Instances of class are generated to create enemies but class also stored by player class as their own ship.
+ */
 @Data
 public class Ship {
 
     private String name;
     private boolean boss;
-    private Integer health, maxHealth = 4, mana = 1,maxMana = 1;
+    private Integer health, maxHealth = 4, mana = 1, maxMana = 1;
     private Texture image;
+    //current hand and full deck (non battle)
     private List<Card> hand = new ArrayList<>(), deck = new ArrayList<>();
-
+    //shuffled deck - used during battle
     private Deque<Card> playDeck = new ArrayDeque<>();
 
     @Getter
@@ -29,7 +31,9 @@ public class Ship {
     public Ship() {
         this.health = maxHealth;
 
+        //JUnit Test Compatibility
         try {
+            //Check if LibGdx assets can be loaded
             Class.forName("uk.ac.york.sepr4.ahod2.io.FileManager");
             image = FileManager.defaultShipTexture;
             image.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -38,14 +42,12 @@ public class Ship {
         } catch (Error error) {}
     }
 
-
     /***
      * Returns true if health drops to 0 or below
      * @param damage
      * @return
      */
-    private boolean damage(Integer damage, GameInstance gameInstance, Vector2 poi) {
-        gameInstance.getAnimationHUD().addDamageAnimation(poi, damage, 2f);
+    private boolean damage(Integer damage) {
         if(damage >= health){
             health = 0;
             return true;
@@ -56,26 +58,34 @@ public class Ship {
 
     }
 
-    private void heal(Integer val, GameInstance gameInstance, Vector2 poi) {
+    /***
+     * Increase health by specified value (cap at max health).
+     * @param val specified value
+     */
+    private void heal(Integer val) {
         if(health+val >= maxHealth) {
             health = maxHealth;
         } else {
             health+=val;
-            gameInstance.getAnimationHUD().addHealAnimation(poi, val, 2f);
         }
-
     }
 
+    /***
+     * Reset ship's battle variables and shuffles deck
+     * @param defaultCards
+     */
     public void battleStart(List<Card> defaultCards) {
         resetBattleParams();
         shuffleReset(defaultCards);
     }
 
+    //shuffle default cards and deck and add to playing deck.
     public void shuffleReset(List<Card> defaultCards) {
-        Collections.shuffle(defaultCards);
-        Collections.shuffle(deck);
-        defaultCards.forEach(card -> playDeck.add(card));
-        deck.forEach(card -> playDeck.add(card));
+        List<Card> list = new ArrayList<>(defaultCards);
+        list.addAll(deck);
+
+        Collections.shuffle(list);
+        list.forEach(card -> playDeck.add(card));
     }
 
     public void setMaxMana(Integer lMana) {
@@ -86,6 +96,9 @@ public class Ship {
         }
     }
 
+    /***
+     * Reset ship's battle variables.
+     */
     public void resetBattleParams() {
         hand = new ArrayList<>();
         playDeck = new ArrayDeque<>();
@@ -96,7 +109,7 @@ public class Ship {
 
     public boolean applyDelayedDamage(GameInstance gameInstance, Vector2 poi) {
         if(delayedDamage.size()>0) {
-            if(damage(delayedDamage.get(0), gameInstance, poi)) {
+            if(damage(delayedDamage.get(0))) {
                 return true;
             }
             delayedDamage.remove(0);
@@ -107,7 +120,7 @@ public class Ship {
 
     public void applyDelayedHeal(GameInstance gameInstance, Vector2 poi) {
         if(delayedHeal.size()>0) {
-            heal(delayedHeal.get(0), gameInstance, poi);
+            heal(delayedHeal.get(0));
             delayedHeal.remove(0);
         }
     }
@@ -130,14 +143,6 @@ public class Ship {
 
     public void deductMana(Integer val) {
         mana -= val;
-    }
-
-    public void incMana(Integer val) {
-        if(mana+val >= maxMana) {
-            mana = maxMana;
-        } else {
-            mana += val;
-        }
     }
 
     public void useCard(Card card) {

@@ -5,6 +5,10 @@ import lombok.Getter;
 
 import java.util.List;
 
+/***
+ * Card used to represent instance of encounter.
+ * Contains data used to populate EncounterScreen.
+ */
 @Getter
 public class Encounter {
 

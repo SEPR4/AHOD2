@@ -10,6 +10,10 @@ import uk.ac.york.sepr4.ahod2.object.entity.Ship;
 
 import java.util.*;
 
+/***
+ * Class used to load instances of cards from file and check their textures are present.
+ * Contains functions to generate random cards with specified power.
+ */
 public class CardManager {
 
     private List<Card> cards = new ArrayList<>();
@@ -22,13 +26,13 @@ public class CardManager {
         Json json = new Json();
         loadCards(json.fromJson(Array.class, Card.class, Gdx.files.internal("data/cards.json")));
 
+        //set default cards
         for(Card card: cards) {
             if(card.is_default()) {
-                defaultCards.add(card);
-                defaultCards.add(card);
-                defaultCards.add(card);
-                defaultCards.add(card);
-                defaultCards.add(card);
+                //add default card multiple times depending on json variable
+                for(int i = 0; i<card.getDefaultNo();i++) {
+                    defaultCards.add(card);
+                }
             }
         }
 
@@ -38,12 +42,9 @@ public class CardManager {
     private void loadCards(Array<Card> cards){
         for(Card card: cards) {
             FileHandle fileHandle = Gdx.files.internal("images/card/"+card.getTextureStr()+".png");
+            //check texture exists
             if(!fileHandle.exists()) {
                 Gdx.app.error("CardManager", "Texture not found for card: "+card.getId());
-                continue;
-            }
-            if(!card.is_default() && card.getShopCost() == null) {
-                Gdx.app.error("CardManager", "Not default but no shop cost for card: "+card.getId());
                 continue;
             }
             card.setTexture(new Texture(fileHandle));
@@ -52,21 +53,18 @@ public class CardManager {
     }
 
     /***
-     * Gets deck including default cards.
-     * @param ship
-     * @return
+     * Draw random card from specified ship's deck and add to it's hand.
+     * @param ship specified ship
+     * @return true if card drawn, false if cannot draw
      */
-    public List<Card> getFullDeck(Ship ship) {
-        List<Card> deck = new ArrayList<>(ship.getDeck());
-        deck.addAll(defaultCards);
-        return deck;
-    }
-
     public boolean drawRandomCard(Ship ship) {
+        //if deck size = 0
         if(ship.getPlayDeck().size() == 0) {
+            //if hand size = 0
             if(ship.getHand().size() == 0) {
                 ship.shuffleReset(defaultCards);
             } else {
+                //deck was empty but cards still in hand (can't shuffle)
                 return false;
             }
         }
@@ -77,7 +75,11 @@ public class CardManager {
         return true;
     }
 
-
+    /***
+     * Generate random card from all available with power no greater than specified.
+     * @param power maximum card power to generate
+     * @return optional of generated card
+     */
     public Optional<Card> randomCard(Integer power) {
         Random random = new Random();
         Integer attempts = 50;
@@ -92,15 +94,11 @@ public class CardManager {
         return Optional.empty();
     }
 
-    public Optional<Card> getCardByID(Integer id) {
-        for(Card card: cards) {
-            if(card.getId().equals(id)) {
-                return Optional.of(card);
-            }
-        }
-        return Optional.empty();
-    }
-
+    /***
+     * Generate random selection of cards with power no greater than specified
+     * @param power maximum card power to generate
+     * @return list of cards (size 1-4)
+     */
     public List<Card> getRandomSelection(Integer power) {
         Random random = new Random();
         List<Card> selectionCards = new ArrayList<>();
