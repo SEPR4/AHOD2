@@ -98,6 +98,9 @@ public class GameInstance {
         Optional<GameLevel> gameLevel = getLevelByID(currentLevelID+1);
         if(gameLevel.isPresent()) {
             player.setLevel(gameLevel.get());
+            player.setLocation(Optional.empty());
+            getMessageHUD().addStatusMessage("Select Starting Node!", 3f);
+            sailScreen.getOrthographicCamera().position.y = (Gdx.graphics.getHeight()/2);
             //clear last levels nodes
             sailScreen.getStage().clear();
             fadeSwitchScreen(sailScreen);

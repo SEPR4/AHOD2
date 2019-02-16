@@ -40,6 +40,18 @@ public class EncounterScreen extends AHODScreen {
 
     }
 
+    private String getEncounterResultText(EncounterOption encounterOption) {
+        if (encounterOption.isBattle()){
+            return "-> A Battle with difficulty " + encounterOption.getDifficulty() + "\n";
+        }
+        if (encounterOption.getGold() > 0){
+            return "-> +" + encounterOption.getGold() + " Gold\n";
+        } else if (encounterOption.getGold() < 0){
+            return "-> " + encounterOption.getGold() + " Gold\n";
+        }
+        return "";
+    }
+
     private void createEncounterInfo() {
         Table table1 = new Table();
         table1.setFillParent(true);
@@ -54,21 +66,7 @@ public class EncounterScreen extends AHODScreen {
         table2.setFillParent(true);
         table2.top();
         for (EncounterOption encounterOption : encounter.getOptions()) {
-            String text = encounterOption.getText() + "\n\n";
-            if (encounterOption.isBattle()){
-                text += "-> A Battle with difficulty " + encounterOption.getDifficulty() + "\n";
-            }
-            if (encounterOption.getGold() > 0){
-                text += "-> +" + encounterOption.getGold() + " Gold\n";
-            } else if (encounterOption.getGold() < 0){
-                text += "-> " + encounterOption.getGold() + " Gold\n";
-            }
-            if (encounterOption.getSupplies() > 0){
-                text += "-> +" + encounterOption.getSupplies() + " Supplies\n";
-            } else if (encounterOption.getSupplies() < 0){
-                text += "-> " + encounterOption.getSupplies() + " Supplies\n";
-            }
-
+            String text = encounterOption.getText() + "\n\n" + getEncounterResultText(encounterOption);
             TextButton tB = new TextButton(text,
                     StyleManager.generateTBStyle(30, Color.BLACK, Color.GRAY));
 

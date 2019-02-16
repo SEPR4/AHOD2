@@ -6,7 +6,7 @@ import lombok.Data;
 public class EncounterOption {
 
     private String text;
-    private Integer gold, supplies;
+    private Integer gold;
     private boolean battle = false;
     private Integer difficulty;
 
