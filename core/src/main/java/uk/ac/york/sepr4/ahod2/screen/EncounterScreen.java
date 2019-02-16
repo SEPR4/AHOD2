@@ -54,7 +54,22 @@ public class EncounterScreen extends AHODScreen {
         table2.setFillParent(true);
         table2.top();
         for (EncounterOption encounterOption : encounter.getOptions()) {
-            TextButton tB = new TextButton(encounterOption.getText(),
+            String text = encounterOption.getText() + "\n\n";
+            if (encounterOption.isBattle()){
+                text += "-> A Battle with difficulty " + encounterOption.getDifficulty() + "\n";
+            }
+            if (encounterOption.getGold() > 0){
+                text += "-> +" + encounterOption.getGold() + " Gold\n";
+            } else if (encounterOption.getGold() < 0){
+                text += "-> " + encounterOption.getGold() + " Gold\n";
+            }
+            if (encounterOption.getSupplies() > 0){
+                text += "-> +" + encounterOption.getSupplies() + " Supplies\n";
+            } else if (encounterOption.getSupplies() < 0){
+                text += "-> " + encounterOption.getSupplies() + " Supplies\n";
+            }
+
+            TextButton tB = new TextButton(text,
                     StyleManager.generateTBStyle(30, Color.BLACK, Color.GRAY));
 
             tB.addListener(new ClickListener() {
