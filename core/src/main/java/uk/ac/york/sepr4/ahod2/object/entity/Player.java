@@ -21,8 +21,8 @@ public class Player {
         ship = new Ship();
         this.level = gameLevel;
         //set higher than default ship health
-        ship.setMaxHealth(10);
-        ship.setHealth(10);
+        ship.setMaxHealth(20);
+        ship.setHealth(20);
     }
 
     //TODO: WIP

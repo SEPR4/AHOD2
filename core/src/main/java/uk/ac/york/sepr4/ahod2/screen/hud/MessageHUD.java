@@ -22,6 +22,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/***
+ * Class used to load and update on-screen elements related to messages (directing the player).
+ * This class also holds the button that allows the player to switch to the ShipView screen.
+ */
 public class MessageHUD {
 
     @Getter
@@ -31,7 +35,7 @@ public class MessageHUD {
 
     private Label messageLabel;
 
-    private HashMap<Label, Float> tempMessages = new HashMap<>();
+    private HashMap<Label, Float> goldMessages = new HashMap<>();
 
     private String currentMessage = "";
     private float currentMessageTime = 0;
@@ -50,19 +54,27 @@ public class MessageHUD {
         createTable();
     }
 
+    /***
+     * Add sliding message showing increase in gold of specified value.
+     * @param gold specified value of gold
+     */
     public void addGoldMessage(Integer gold) {
-        Label label = new Label("+ "+gold+" GOLD", StyleManager.generateLabelStyle(30, Color.GREEN));
-        tempMessages.put(label, 0f);
+        Label label = new Label("+ " + gold + " GOLD", StyleManager.generateLabelStyle(30, Color.GREEN));
+        goldMessages.put(label, 0f);
     }
 
+    /***
+     * Add temporary status message to inform player
+     * @param message message to display
+     * @param time time to display
+     */
     public void addStatusMessage(String message, float time) {
-            currentMessage = message;
-            currentMessageTime = time;
+        currentMessage = message;
+        currentMessageTime = time;
     }
-
 
     public void update(float delta) {
-        if(currentMessageTime != 0) {
+        if (currentMessageTime != 0) {
             //not a perm message
             currentMessageTime -= delta;
             if (currentMessageTime <= 0) {
@@ -72,24 +84,27 @@ public class MessageHUD {
         }
         messageLabel.setText(currentMessage.toUpperCase());
 
+        //slide gold message up the screen edge
         List<Label> toRemove = new ArrayList<>();
-        for(Label label : tempMessages.keySet()) {
-            Float time = (tempMessages.get(label));
-            if(time + delta > resourceMessageTime) {
+        for (Label label : goldMessages.keySet()) {
+            Float time = (goldMessages.get(label));
+            if (time + delta > resourceMessageTime) {
+                //add label to be removed
                 toRemove.add(label);
             } else {
-                tempMessages.replace(label, time+delta);
-                if(!hudStage.getActors().contains(label, false)){
+                goldMessages.replace(label, time + delta);
+                //add label to stage if not exists
+                if (!hudStage.getActors().contains(label, false)) {
                     hudStage.addActor(label);
                 }
-                label.setPosition(5, 5 + (Gdx.graphics.getHeight()/2)*(time/resourceMessageTime));
+                //slide label
+                label.setPosition(5, 5 + (Gdx.graphics.getHeight() / 2) * (time / resourceMessageTime));
 
             }
         }
-
-
-        for(Label remove : toRemove) {
-            tempMessages.remove(remove);
+        //remove message here (avoid ConcurrentModificationException)
+        for (Label remove : toRemove) {
+            goldMessages.remove(remove);
             hudStage.getActors().removeValue(remove, false);
         }
 
@@ -98,19 +113,25 @@ public class MessageHUD {
     }
 
 
-        private void createTable() {
+    /***
+     * Create table for (gold and status) messages and ShipView button
+     */
+    private void createTable() {
 
-            Table messageTable = new Table();
-            messageTable.setFillParent(true);
-            messageTable.bottom();
+        //create table and set position
+        Table messageTable = new Table();
+        messageTable.setFillParent(true);
+        messageTable.bottom();
 
+        //create status message label
         messageLabel = new Label("", StyleManager.generateLabelStyle(30, Color.PINK));
-        ImageButton imageButton = new ImageButton(new TextureRegionDrawable(FileManager.hudShipView));
 
+        //create ShipView button
+        ImageButton imageButton = new ImageButton(new TextureRegionDrawable(FileManager.hudShipView));
         imageButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent ev, float x, float y) {
-                if(gameInstance.getGame().getScreen() instanceof AHODScreen) {
+                if (gameInstance.getGame().getScreen() instanceof AHODScreen) {
                     gameInstance.getShipViewScreen().setPreviousScreen((AHODScreen) gameInstance.getGame().getScreen());
 
                 }
@@ -118,14 +139,12 @@ public class MessageHUD {
             }
         });
 
-        messageTable.add(messageLabel)
-                .expandX()
+        //put elements in table
+        messageTable.add(messageLabel).expandX()
                 .padBottom(Value.percentWidth(0.02f, messageTable))
                 .padLeft(Value.percentWidth(0.02f, messageTable))
                 .left();
-
-        messageTable.add(imageButton)
-                .expandX()
+        messageTable.add(imageButton).expandX()
                 .padBottom(Value.percentWidth(0.02f, messageTable))
                 .padRight(Value.percentWidth(0.02f, messageTable))
                 .right()

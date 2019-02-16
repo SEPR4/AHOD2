@@ -32,32 +32,33 @@ import java.util.*;
 public class BattleScreen extends AHODScreen {
 
     private GameInstance gameInstance;
-    private Integer gold;
-    private Integer difficulty;
+
     @Getter
     private Ship enemy;
-    private Vector2 enemycords = new Vector2(9*getStage().getWidth()/12, 9*getStage().getHeight()/16);
-
     @Getter
     private Player player;
-    private Vector2 playercords = new Vector2(3*getStage().getWidth()/12, 9*getStage().getHeight()/16);
 
+    //battle conditions
+    private Integer gold;
+    private Integer difficulty;
+
+    //display variables
     private Image playerShipImage, enemyShipImage;
     private Label playerHealthLabel, enemyHealthLabel, playerManaLabel, enemyManaLabel;
     private TextButton drawButton;
-
     private Table table;
 
+    //battle variables
     private BattleTurn turn;
-    private boolean animating = false;
-
+    private boolean animating = false, end = false;
     private Integer turnNo = 1;
 
+    //final variables
     @Getter
     private static final Integer handSize = 5;
 
     /***
-     * Used by generic battle encounters
+     * Used by generic battle encounters (through BattleNode) to initialize battle.
      * @param gameInstance
      */
     public BattleScreen(GameInstance gameInstance) {
@@ -68,10 +69,10 @@ public class BattleScreen extends AHODScreen {
     }
 
     /***
-     * Used when battle initiated through encounter (by choice)
+     * Used when battle initiated through EncounterScreen. Specified enemy and gold reward.
      * @param gameInstance
-     * @param enemy
-     * @param gold
+     * @param enemy specified enemy
+     * @param gold gold reward
      */
     public BattleScreen(GameInstance gameInstance, Ship enemy, Integer difficulty, Integer gold) {
         super(new Stage(new ScreenViewport(), new SpriteBatch()), FileManager.battleScreenBG);
@@ -82,41 +83,53 @@ public class BattleScreen extends AHODScreen {
 
         player = gameInstance.getPlayer();
 
+        //load battle visual elements
         loadBattleElements();
 
+        //set turn to player
         turn = BattleTurn.PLAYER;
 
+        //set message and animations hud to appear on this screen
         setMessageHUD(gameInstance);
         setAnimationsHUD(gameInstance);
 
+        //(re-)set battle variables for enemy and player ship
         enemy.battleStart(gameInstance.getCardManager().getDefaultCards());
         player.getShip().battleStart(gameInstance.getCardManager().getDefaultCards());
+    }
+
+    private Vector2 getRandomImagePos(Image image) {
+        Random random = new Random();
+
+        return new Vector2(image.getX()+(image.getImageWidth()*random.nextFloat()),
+                image.getY()+(image.getImageHeight()*random.nextFloat()));
     }
 
     @Override
     public void renderInner(float delta) {
         updateBattleElements();
-
+        if(end) {
+            return;
+        }
         if(animating) {
             //do animations
 
             //switch turns
             if(turn == BattleTurn.PLAYER) {
                 //Gdx.app.debug("BattleScreen", "Applying Enemy Damage!");
-                enemy.applyDelayedHeal(gameInstance, enemycords);
-                if(enemy.applyDelayedDamage(gameInstance, enemycords)) {
+                player.getShip().applyDelayedHeal(gameInstance, getRandomImagePos(playerShipImage));
+                if(enemy.applyDelayedDamage(gameInstance, getRandomImagePos(enemyShipImage))) {
                     //sink Animation
                     hasDied(enemy);
                 } else {
                     //damage Animation
                 }
 
-
                 turn = BattleTurn.ENEMY;
             } else if(turn == BattleTurn.ENEMY) {
                 //Gdx.app.debug("BattleScreen", "Applying Player Damage!");
-                player.getShip().applyDelayedHeal(gameInstance, playercords);
-                if(player.getShip().applyDelayedDamage(gameInstance, playercords)) {
+                enemy.applyDelayedHeal(gameInstance, getRandomImagePos(enemyShipImage));
+                if(player.getShip().applyDelayedDamage(gameInstance, getRandomImagePos(playerShipImage))) {
                     hasDied(player.getShip());
                 }
 
@@ -213,6 +226,7 @@ public class BattleScreen extends AHODScreen {
 
 
     private void hasDied(Ship ship) {
+        end = true;
         if(ship == enemy) {
             //player wins (reset mana and cards)
             player.addGold(gold);

@@ -23,11 +23,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/***
+ * Class used to load and update on-screen animation elements such as damage and heal splats.
+ */
 public class AnimationHUD {
     @Getter
     private Stage animationsStage;
     private GameInstance gameInstance;
-    private List<Animation> animations = new ArrayList<Animation>();
+    private List<Animation> animations = new ArrayList<>();
 
     public AnimationHUD(GameInstance gameInstance) {
         this.gameInstance = gameInstance;
@@ -40,38 +43,34 @@ public class AnimationHUD {
     }
 
     public void addDamageAnimation(Vector2 coords, Integer value, Float time){
-        this.animations.add(new Animation(Type.DAMAGE, coords, ""+value, time));
+        Label dmgLabel = new Label("-"+value, StyleManager.generateLabelStyle(45, Color.RED));
+        dmgLabel.setPosition(coords.x, coords.y);
+        animations.add(new Animation(dmgLabel, time));
     }
     public void addHealAnimation(Vector2 coords, Integer value, Float time){
-        this.animations.add(new Animation(Type.HEAL, coords, ""+value, time));
+        Label healLabel = new Label("+"+value, StyleManager.generateLabelStyle(45, Color.GREEN));
+        healLabel.setPosition(coords.x, coords.y);
+        animations.add(new Animation(healLabel, time));
     }
 
     public void update(float delta) {
-        List<Animation> animationsCopy = new ArrayList<Animation>();
 
-        for(int i = 0; i<this.animations.size(); i++){
-            this.animations.get(i).setTime(this.animations.get(i).getTime() - delta);
-            if (this.animations.get(i).getTime() >= 0){
-                animationsCopy.add(this.animations.get(i));
+        List<Animation> toRemove = new ArrayList<>();
+        for(Animation animation : animations) {
+            //if animation time is over, add to remove list
+            if(animation.getTime() <= delta) {
+                toRemove.add(animation);
+                animationsStage.getActors().removeValue(animation.getActor(), false);
+                continue;
             }
+            if(!animationsStage.getActors().contains(animation.getActor(), false)) {
+                animationsStage.addActor(animation.getActor());
+            }
+            animation.setTime(animation.getTime()-delta);
         }
 
-        this.animations = new ArrayList<Animation>();
-        animationsStage.getActors().clear();
-
-        if(animationsCopy.size() != 0) {
-            for (int i = 0; i < animationsCopy.size(); i++) {
-                if (animationsCopy.get(i).getAnimationType() == Type.DAMAGE){
-                    Label label = new Label(animationsCopy.get(i).getText(), StyleManager.generateLabelStyle(30, Color.RED));
-                    if(!animationsStage.getActors().contains(label, false)){
-                        animationsStage.addActor(label);
-                    }
-                    label.setPosition(animationsCopy.get(i).getCurrentPoint().x, animationsCopy.get(i).getCurrentPoint().y);
-                    animationsCopy.get(i).setCurrentPoint(animationsCopy.get(i).getCurrentPoint().add(new Vector2(0, 5)));//change
-                    this.animations.add(animationsCopy.get(i));
-                }
-            }
-        }
+        //remove finished animations
+        animations.removeAll(toRemove);
 
         animationsStage.act();
         animationsStage.draw();
