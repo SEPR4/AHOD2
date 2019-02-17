@@ -29,12 +29,9 @@ import java.util.List;
 public class AnimationHUD {
     @Getter
     private Stage animationsStage;
-    private GameInstance gameInstance;
     private List<Animation> animations = new ArrayList<>();
 
-    public AnimationHUD(GameInstance gameInstance) {
-        this.gameInstance = gameInstance;
-
+    public AnimationHUD() {
         // Local widths and heights.
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -42,19 +39,37 @@ public class AnimationHUD {
         animationsStage = new Stage(new FitViewport(w, h, new OrthographicCamera()));
     }
 
+    /***
+     * Create label animation for a damage splat of specified value and duration.
+     * @param coords location for animation
+     * @param value damage value to display
+     * @param time duration of animation
+     */
     public void addDamageAnimation(Vector2 coords, Integer value, Float time){
         Label dmgLabel = new Label("-"+value, StyleManager.generateLabelStyle(45, Color.RED));
         dmgLabel.setPosition(coords.x, coords.y);
         animations.add(new Animation(dmgLabel, time));
     }
+
+    /***
+     * Create label animation for a heal splat of specified value and duration.
+     * @param coords location for animation
+     * @param value heal value to display
+     * @param time duration of animation
+     */
     public void addHealAnimation(Vector2 coords, Integer value, Float time){
         Label healLabel = new Label("+"+value, StyleManager.generateLabelStyle(45, Color.GREEN));
         healLabel.setPosition(coords.x, coords.y);
         animations.add(new Animation(healLabel, time));
     }
 
+    /***
+     * Update animations.
+     * Remove animations if delta exceeds remaining time.
+     * Add new animations to stage.
+     * @param delta time since last update
+     */
     public void update(float delta) {
-
         List<Animation> toRemove = new ArrayList<>();
         for(Animation animation : animations) {
             //if animation time is over, add to remove list
@@ -64,12 +79,13 @@ public class AnimationHUD {
                 continue;
             }
             if(!animationsStage.getActors().contains(animation.getActor(), false)) {
+                //add animation actor to stage if not exists
                 animationsStage.addActor(animation.getActor());
             }
             animation.setTime(animation.getTime()-delta);
         }
 
-        //remove finished animations
+        //remove finished animations (avoid ConcurrentModificationException)
         animations.removeAll(toRemove);
 
         animationsStage.act();

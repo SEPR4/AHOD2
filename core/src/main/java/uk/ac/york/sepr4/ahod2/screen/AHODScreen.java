@@ -17,16 +17,18 @@ import uk.ac.york.sepr4.ahod2.GameInstance;
 @Data
 public abstract class AHODScreen implements Screen {
 
+    //variables for use by implementing classes.
     private Stage stage;
     private Texture background;
     private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
-    private ShapeRenderer shapeRenderer;
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
+    //HUD-related variables
     private boolean enableMessageHUD = false, enableStatsHUD = false, enableAnimationsHUD = false;
-
     private GameInstance gameInstance;
 
+    //transition variables
     private boolean fading = false;
     private float fade = 0;
 
@@ -34,28 +36,46 @@ public abstract class AHODScreen implements Screen {
         this.stage = stage;
         this.background = background;
 
-        shapeRenderer = new ShapeRenderer();
-
+        //set input multiplexer as processor (allows classes to add if required)
         inputMultiplexer.addProcessor(stage);
-
     }
 
+    /***
+     * Enable MessageHUD on this screen.
+     * @param gameInstance instance with which to get message data from.
+     */
     public void setMessageHUD(GameInstance gameInstance) {
         this.gameInstance = gameInstance;
         enableMessageHUD = true;
-        inputMultiplexer.addProcessor(GameInstance.INSTANCE.getMessageHUD().getHudStage());
+        inputMultiplexer.addProcessor(gameInstance.getMessageHUD().getHudStage());
     }
 
+    /***
+     * Enable StatsHUD on this screen.
+     * @param gameInstance instance with which to get stats data from.
+     */
     public void setStatsHUD(GameInstance gameInstance) {
         this.gameInstance = gameInstance;
         enableStatsHUD = true;
     }
 
+    /***
+     * Enable AnimationsHUD on this screen.
+     * @param gameInstance instance with which to get animation data from.
+     */
     public void setAnimationsHUD(GameInstance gameInstance){
         this.gameInstance = gameInstance;
         enableAnimationsHUD = true;
     }
 
+    /***
+     * Main screen render;
+     * Clear screen and draw background.
+     * Run renderInner (used by implementing classes).
+     * Apply fade overlay if fading.
+     * Update HUDs.
+     * @param delta time since last render
+     */
     @Override
     public void render(float delta) {
         // clear the screen ready for next set of images to be drawn
@@ -81,12 +101,20 @@ public abstract class AHODScreen implements Screen {
 
     public abstract void renderInner(float delta);
 
+    /***
+     * Get lower edge of camera.
+     * @return vector representing lower corner (bottom left) of camera pos
+     */
     public Vector2 getCameraLowerBound() {
         Vector2 pos = new Vector2(stage.getCamera().position.x, stage.getCamera().position.y);
         pos.add(-stage.getWidth() / 2, -stage.getHeight() / 2);
         return pos;
     }
 
+    /***
+     * Apply fade overlay.
+     * (Draw rectangle over screen)
+     */
     public void applyFadeOverlay() {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -99,6 +127,9 @@ public abstract class AHODScreen implements Screen {
 
     }
 
+    /***
+     * Draw screen's background.
+     */
     private void drawBackground() {
         //sets background texture
         getBatch().begin();

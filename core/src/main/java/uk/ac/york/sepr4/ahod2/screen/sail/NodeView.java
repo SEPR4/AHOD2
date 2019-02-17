@@ -1,20 +1,16 @@
 package uk.ac.york.sepr4.ahod2.screen.sail;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import lombok.Getter;
-import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.node.Node;
 import uk.ac.york.sepr4.ahod2.object.GameLevel;
 import uk.ac.york.sepr4.ahod2.object.entity.Player;
 import uk.ac.york.sepr4.ahod2.util.NodeUtil;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,23 +18,21 @@ import java.util.Optional;
 
 public class NodeView {
 
+    //nodeview innate variables
     private SailScreen sailScreen;
-
-    private static final Texture nodeIcon = FileManager.nodeIcon;
-    @Getter
-    private static final float vertSpacing = 200f, nodeSize = 150f;
-
-    private HashMap<Integer, ImageButton> nodeButtons = new HashMap<>();
-
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
-
     private GameLevel gameLevel;
-
     private List<Node> nodeMap;
 
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    //map of node id with respective imagebuttons
+    private HashMap<Integer, ImageButton> nodeButtons = new HashMap<>();
 
+    //location of highest node generated
     @Getter
     private float height = 0;
+    //spacing variables (for screen placement)
+    @Getter
+    private static final float vertSpacing = 200f, nodeSize = 150f;
 
     public NodeView(SailScreen sailScreen, GameLevel gameLevel) {
         this.sailScreen = sailScreen;
@@ -47,11 +41,17 @@ public class NodeView {
         createNodeMap();
     }
 
+    /***
+     * Draw location and node connections.
+     * Make sure node buttons are on stage.
+     */
     public void update() {
+        //set line width (for thicker ShapeRenderer objects)
         Gdx.gl.glLineWidth(3);
         shapeRenderer.setProjectionMatrix(sailScreen.getBatch().getProjectionMatrix());
+        //make sure nodebuttons are on stage.
         nodeButtons.values().forEach(btn -> {
-            if(! sailScreen.getStage().getActors().contains(btn, false)){
+            if(!sailScreen.getStage().getActors().contains(btn, false)){
                 sailScreen.getStage().addActor(btn);
             }
         });
@@ -59,7 +59,10 @@ public class NodeView {
         drawPlayerLocation();
     }
 
-    //adds actors to the stage - add once
+    /***
+     * Creates NodeMap for current level.
+     * Add node actors (imagebuttons) to stage with correct spacing.
+     */
     private void createNodeMap() {
         nodeMap = NodeUtil.generateRandomNodeMap(gameLevel);
         for(int i=0; i<nodeMap.size(); i++) {
@@ -87,10 +90,14 @@ public class NodeView {
 
     }
 
+    /***
+     * Draw circle around player's current node.
+     * (If player's location is set)
+     */
     private void drawPlayerLocation() {
-
         Player player = sailScreen.getGameInstance().getPlayer();
         Optional<Node> node = player.getLocation();
+        //if location is set (starting node selected)
         if(node.isPresent()) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             ImageButton imageButton = nodeButtons.get(node.get().getId());
@@ -100,7 +107,9 @@ public class NodeView {
         }
     }
 
-    //draw lines with shape renderer - must be done on render
+    /***
+     * Draw lines between connected nodes.
+     */
     private void drawConnections() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         nodeButtons.keySet().forEach(nodeId -> {
@@ -108,12 +117,18 @@ public class NodeView {
             node.getConnected().forEach(connection -> {
                 ImageButton source = nodeButtons.get(nodeId);
                 ImageButton target = nodeButtons.get(connection.getId());
+                //draw rectline so line is thicker
                 shapeRenderer.rectLine(getNodeButtonCenter(source), getNodeButtonCenter(target), 3);
             });
         });
         shapeRenderer.end();
     }
 
+    /***
+     * Get position of center of specified ImageButton.
+     * @param imageButton specified ImageButton
+     * @return vector represent position of center
+     */
     private Vector2 getNodeButtonCenter(ImageButton imageButton) {
         float x = imageButton.getX(), y = imageButton.getY();
         x+=imageButton.getWidth()/2;
@@ -121,8 +136,13 @@ public class NodeView {
         return new Vector2(x,y);
     }
 
-
     //TODO: Not efficient
+    /***
+     * Get nodes from list of nodes that are in specified row
+     * @param nodes list of nodes
+     * @param id specified row
+     * @return list of nodes in row
+     */
     private List<Node> getRow(List<Node> nodes, Integer id) {
         List<Node> row = new ArrayList<>();
         for(Node node:nodes){
@@ -133,6 +153,11 @@ public class NodeView {
         return row;
     }
 
+    /***
+     * Get spacing between nodes based on number of nodes in row
+     * @param no number of nodes in row
+     * @return spacing between nodes
+     */
     private float getNodeSpacings(Integer no) {
         float w = Gdx.graphics.getWidth();
         return (w-(no*nodeSize))/(no+1);

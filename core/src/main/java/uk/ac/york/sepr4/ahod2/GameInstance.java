@@ -57,7 +57,7 @@ public class GameInstance {
         //Initialize Screens and views
         statsHud = new StatsHUD(this);
         messageHUD = new MessageHUD(this);
-        AnimationHUD = new AnimationHUD(this);
+        AnimationHUD = new AnimationHUD();
         sailScreen = new SailScreen(this);
         shipViewScreen = new ShipViewScreen(this);
 

@@ -30,15 +30,12 @@ public class MessageHUD {
 
     @Getter
     private Stage hudStage;
-
     private GameInstance gameInstance;
 
     private Label messageLabel;
-
-    private HashMap<Label, Float> goldMessages = new HashMap<>();
-
     private String currentMessage = "";
     private float currentMessageTime = 0;
+    private HashMap<Label, Float> goldMessages = new HashMap<>();
 
     private final Float resourceMessageTime = 4f;
 
@@ -73,6 +70,12 @@ public class MessageHUD {
         currentMessageTime = time;
     }
 
+    /***
+     * Update visible messages.
+     * Remove status and gold message if delta exceeds remaining time.
+     * Add label actors to stage if not present.
+     * @param delta time since last update.
+     */
     public void update(float delta) {
         if (currentMessageTime != 0) {
             //not a perm message
