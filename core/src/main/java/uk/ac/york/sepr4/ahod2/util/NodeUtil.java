@@ -4,21 +4,24 @@ import com.badlogic.gdx.Gdx;
 import uk.ac.york.sepr4.ahod2.node.*;
 import uk.ac.york.sepr4.ahod2.object.GameLevel;
 import uk.ac.york.sepr4.ahod2.object.building.Department;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class NodeUtil {
 
+    //chance for each node generation action
     private static Integer triSplitChance = 5, splitChance = 40, singleChance = 25, mergeChance = 30;
+    //min/max number of nodes in row
     private static Integer maxRowWidth = 4, minRowWidth = 2;
+    //chance to replace node with BattleNode
     private static Double battleNodeChance = 0.4;
 
     /***
-     * Puts NodeTypes into generated NodeMap
-     * @param gameLevel
-     * @return
+     * Generates random node map and populates with department,
+     * college and battle nodes according to specified gameLevel.
+     * @param gameLevel specified game level
+     * @return random node map list
      */
     public static List<Node> generateRandomNodeMap(GameLevel gameLevel) {
         List<Node> nodes = generateNodeMap(gameLevel.getDepth());
@@ -63,7 +66,11 @@ public class NodeUtil {
     }
 
     //TODO: Add some other measures - minMergeDepth (dont merge on first or second level?)
-
+    /***
+     * Generate random node map with specified depth.
+     * @param depth specified depth
+     * @return random node map (of all basic Node)
+     */
     public static List<Node> generateNodeMap(Integer depth) {
         Random random = new Random();
         List<Node> nodes = new ArrayList();
@@ -80,12 +87,13 @@ public class NodeUtil {
             //generate between 3-5 encounters per row
             for (Node node : prevNodes) {
                 NodeRowAction action;
+                //choose row action
                 if (tempNodes.size() >= maxRowWidth) {
                     action = NodeRowAction.MERGE;
                 } else {
                     action = randomRowAction();
                 }
-
+                //do node action
                 switch (action) {
                     case TRISPLIT:
                         for (int j = 0; j < 3; j++) {
@@ -121,29 +129,37 @@ public class NodeUtil {
                     });
                 }
             }
+            //if number of nodes in this row is less than minimum
             if (tempNodes.size() < minRowWidth) {
-                //all tried to merge?
-                Node newNode =new Node(nodes.size() + tempNodes.size(), i, tempNodes.size());
+                //create a node in new row
+                //(all nodes tried to merge?)
+                Node newNode = new Node(nodes.size() + tempNodes.size(), i, tempNodes.size());
                 tempNodes.add(newNode);
                 prevNodes.forEach(node1 -> node1.addConnectedNode(newNode));
             }
+            //add row to map, next row
             nodes.addAll(tempNodes);
             prevNodes = tempNodes;
 
             //last iteration
             if(i == depth) {
+                //create final/boss/college node
                 Node finalNode = new Node(nodes.size(), i+1, 0);
                 nodes.add(finalNode);
                 prevNodes.forEach(node1 -> node1.addConnectedNode(finalNode));
             }
         }
         if(Gdx.app != null) {
-            //Unit test compat
+            //JUnit test compat
             Gdx.app.debug("NodeUtil", "Generated NodeMap with " + nodes.size() + " nodes!");
         }
         return nodes;
     }
 
+    /***
+     * Generate random NodeAction based on chances defined.
+     * @return random row action
+     */
     private static NodeRowAction randomRowAction() {
         List<NodeRowAction> nodeRowActions = new ArrayList<>();
         for(int i = 0; i < triSplitChance; i++) {
@@ -165,6 +181,7 @@ public class NodeUtil {
 
 }
 
+//possible action from each node
 enum NodeRowAction {
     SPLIT, TRISPLIT, SINGLE, MERGE
 }

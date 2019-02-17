@@ -30,18 +30,19 @@ public class GameInstance {
     private AHOD2 game;
     public static GameInstance INSTANCE;
 
+    //asset managers
     private CardManager cardManager;
     private BuildingManager buildingManager;
     private EncounterManager encounterManager;
-
+    //persistent screens
     private SailScreen sailScreen;
     private ShipViewScreen shipViewScreen;
+    //HUDs
     private StatsHUD statsHud;
     private MessageHUD messageHUD;
     private AnimationHUD AnimationHUD;
 
     private List<GameLevel> levels = new ArrayList<>();
-
     private Player player;
 
     public GameInstance(AHOD2 ahod2) {
@@ -53,7 +54,6 @@ public class GameInstance {
         buildingManager = new BuildingManager(this);
         encounterManager = new EncounterManager();
 
-
         //Initialize Screens and views
         statsHud = new StatsHUD(this);
         messageHUD = new MessageHUD(this);
@@ -61,8 +61,10 @@ public class GameInstance {
         sailScreen = new SailScreen(this);
         shipViewScreen = new ShipViewScreen(this);
 
+        //load levels
         loadLevels();
 
+        //get and set first level or abort
         Optional<GameLevel> firstLevel = getLevelByID(1);
         if(firstLevel.isPresent()) {
             player = new Player(firstLevel.get());
@@ -70,12 +72,10 @@ public class GameInstance {
             Gdx.app.error("GameInstance", "First Level could not be found! Exiting!");
             Gdx.app.exit();
         }
-
     }
 
     public void start() {
         Gdx.app.debug("GameInstance", "Starting Instance");
-
         switchScreen(sailScreen);
     }
 
@@ -93,6 +93,11 @@ public class GameInstance {
         return gameLevel;
     }
 
+    /***
+     * Advance level.
+     * If levels remain, move to next level and unset plakyer location.
+     * If no levels left, player wins - move to EndScreen!
+     */
     public void advanceLevel() {
         Integer currentLevelID = getCurrentLevel().getId();
         Optional<GameLevel> gameLevel = getLevelByID(currentLevelID+1);
@@ -111,18 +116,34 @@ public class GameInstance {
 
     }
 
+    /***
+     * Util method - for quick access.
+     * @param screen
+     */
     public void switchScreen(Screen screen) {
         game.setScreen(screen);
     }
 
+    /***
+     * Fade switch screen. Fade from current screen to target screen.
+     * @param fadeIn target screen
+     * @param dispose whether to dispose current screen
+     */
     public void fadeSwitchScreen(AHODScreen fadeIn, boolean dispose) {
         switchScreen(new TransitionScreen(this, (AHODScreen) game.getScreen(), fadeIn, dispose));
     }
 
+    /***
+     * Default fade switch screen - do not dispose.
+     * @param fadeIn target screen
+     */
     public void fadeSwitchScreen(AHODScreen fadeIn) {
         fadeSwitchScreen(fadeIn, false);
     }
 
+    /***
+     * Load GameLevels from JSON.
+     */
     private void loadLevels() {
         Json json = new Json();
         Array<GameLevel> tempLevels = json.fromJson(Array.class, GameLevel.class, Gdx.files.internal("data/levels.json"));
@@ -133,6 +154,10 @@ public class GameInstance {
         }
     }
 
+    /***
+     * Specified node clicked, perform node action.
+     * @param node specified node
+     */
     public void nodeAction(Node node) {
         //enter college/dept or get/enter encounter
         node.action(this);
