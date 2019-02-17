@@ -12,14 +12,16 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.object.card.Card;
-
 import java.util.List;
 
+/***
+ * Used to present player with cards to choose from after battle victory.
+ */
 public class CardSelectionScreen extends AHODScreen {
 
     private List<Card> selection;
     private GameInstance gameInstance;
-
+    //has card been chosen
     private boolean selected = false;
 
     public CardSelectionScreen(GameInstance gameInstance, List<Card> selection) {
@@ -33,12 +35,16 @@ public class CardSelectionScreen extends AHODScreen {
         createSelectionTable();
     }
 
+    /***
+     * Create selection table and populate with selection of cards.
+     */
     private void createSelectionTable() {
         Table selectionTable = new Table();
         selectionTable.setFillParent(true);
         selectionTable.top();
         selectionTable.debug();
 
+        //add selection cards to table
         for(Card card: selection) {
             Gdx.app.debug("CardSelScreen", card.getName());
             ImageButton imageButton = new ImageButton(new TextureRegionDrawable(card.getTexture()));
@@ -53,12 +59,15 @@ public class CardSelectionScreen extends AHODScreen {
             selectionTable.add(imageButton).expandX().expandY()
                     .align(Align.center);
         }
-
-
         getStage().addActor(selectionTable);
 
     }
 
+    /***
+     * Specified card has been selected.
+     * Add card to player's deck and switch to SailScreen.
+     * @param card specified card
+     */
     private void selectCard(Card card) {
         selected = true;
         gameInstance.getPlayer().getShip().addCard(card);
@@ -66,7 +75,5 @@ public class CardSelectionScreen extends AHODScreen {
     }
 
     @Override
-    public void renderInner(float delta) {
-
-    }
+    public void renderInner(float delta) {}
 }

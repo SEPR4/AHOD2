@@ -1,6 +1,5 @@
 package uk.ac.york.sepr4.ahod2.screen;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -31,15 +30,17 @@ public class EncounterScreen extends AHODScreen {
         this.encounter = encounter;
 
         createEncounterInfo();
-
     }
 
 
     @Override
-    public void renderInner(float delta) {
+    public void renderInner(float delta) {}
 
-    }
-
+    /***
+     * Get string representing result (+/- gold, enter battle?) of specified EncounterOption.
+     * @param encounterOption specified encounter option
+     * @return result of EncounterOption
+     */
     private String getEncounterResultText(EncounterOption encounterOption) {
         if (encounterOption.isBattle()){
             return "-> A Battle with difficulty " + encounterOption.getDifficulty() + "\n";
@@ -57,14 +58,15 @@ public class EncounterScreen extends AHODScreen {
         table1.setFillParent(true);
         table1.top();
 
+        //create label for base encounter
         Label encounterText = new Label(encounter.getText(), StyleManager.generateLabelStyle(60, Color.BLACK));
-
-
         table1.add(encounterText).expandX().padTop(Gdx.graphics.getHeight() / 4);
 
+        //create EncounterOption table
         Table table2 = new Table();
         table2.setFillParent(true);
         table2.top();
+        //add options to table
         for (EncounterOption encounterOption : encounter.getOptions()) {
             String text = encounterOption.getText() + "\n\n" + getEncounterResultText(encounterOption);
             TextButton tB = new TextButton(text,
@@ -80,23 +82,36 @@ public class EncounterScreen extends AHODScreen {
             table2.add(tB).expandX().padTop(Gdx.graphics.getHeight() / 2);
         }
 
+        //add tables to stage
         getStage().addActor(table1);
         getStage().addActor(table2);
 
     }
 
+    /***
+     * Button for specified EncounterOption has been clicked.
+     * Action encounter option.
+     * @param encounterOption specified encounter option.
+     */
     private void optionClick(EncounterOption encounterOption) {
-        Gdx.app.debug("EncounterScreen", "Option clicked!");
+        //Gdx.app.debug("EncounterScreen", "Option clicked!");
         if (encounterOption.isBattle()) {
+            //enter battle
             BattleScreen battleScreen = new BattleScreen(gameInstance,
                     ShipFactory.generateEnemyShip(encounterOption.getDifficulty()),
                     encounterOption.getDifficulty(),
                     encounterOption.getGold());
             gameInstance.fadeSwitchScreen(battleScreen);
         } else {
+            //action result
             Player player = gameInstance.getPlayer();
             player.setGold(player.getGold() + encounterOption.getGold());
-            gameInstance.fadeSwitchScreen(gameInstance.getSailScreen());
+            if(player.getGold() < 0) {
+                //gold less than 0, player loses
+                gameInstance.fadeSwitchScreen(new EndScreen(gameInstance,false));
+            } else {
+                gameInstance.fadeSwitchScreen(gameInstance.getSailScreen());
+            }
         }
     }
 }

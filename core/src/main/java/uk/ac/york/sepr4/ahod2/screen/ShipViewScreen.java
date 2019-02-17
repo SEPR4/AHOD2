@@ -16,19 +16,16 @@ import uk.ac.york.sepr4.ahod2.object.card.Card;
 public class ShipViewScreen extends AHODScreen {
 
     private GameInstance gameInstance;
-
     @Setter
     private AHODScreen previousScreen;
 
+    //display variables
     private Table table = new Table(), cardTable = new Table();
-
     private Label levelValueLabel;
-
     private final Integer cardsPerRow = 8;
 
     public ShipViewScreen(GameInstance gameInstance) {
         super(new Stage(new ScreenViewport()), FileManager.menuScreenBG);
-
         this.gameInstance = gameInstance;
 
         createTable();
@@ -36,16 +33,18 @@ public class ShipViewScreen extends AHODScreen {
 
 
     private void createTable() {
-
+        //create top table (level and exit button)
         table.top();
         table.setFillParent(true);
-
+        //create bottom table (deck view)
         cardTable.top();
         cardTable.setFillParent(true);
         cardTable.padTop(Value.percentHeight(0.05f, cardTable));
 
+        //level label
         levelValueLabel = new Label("Level: ", StyleManager.generateLabelStyle(30, Color.GREEN));
 
+        //exit button
         TextButton exitButton = new TextButton("Exit", StyleManager.generateTBStyle(30, Color.RED, Color.GRAY));
         exitButton.addListener(new ClickListener() {
             @Override
@@ -54,6 +53,7 @@ public class ShipViewScreen extends AHODScreen {
             }
         });
 
+        //add elements to table
         table.add(levelValueLabel)
                 .expandX()
                 .height(Value.percentHeight(0.05f, table));
@@ -61,16 +61,22 @@ public class ShipViewScreen extends AHODScreen {
                 .expandX()
                 .height(Value.percentHeight(0.05f, table));
 
+        //add tables to stage
         getStage().addActor(table);
         getStage().addActor(cardTable);
     }
 
+    /***
+     * Update on-screen elements (level label and deck view).
+     */
     private void update() {
+        //update level label
         levelValueLabel.setText("Level: "+gameInstance.getPlayer().getLevel().getId());
 
+        //update deck view
         cardTable.clear();
-
         Integer cardCount = 0;
+        //draw each card in full deck
         for(Card card: gameInstance.getCardManager().getFullDeck(gameInstance.getPlayer().getShip())) {
             cardCount++;
             Image image = new Image(card.getTexture());

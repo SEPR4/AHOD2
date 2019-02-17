@@ -44,20 +44,37 @@ public class DepartmentScreen extends AHODScreen {
         setMessageHUD(gameInstance);
     }
 
+    /***
+     * Generate health upgrade based on department power.
+     */
     private void generateRandomUpgrade() {
         Random random = new Random();
         addedHealth = 5*(random.nextInt(department.getMinigamePower())+1);
     }
 
+    /***
+     * Get cost of upgrade based on department power.
+     * @return upgrade cost (gold)
+     */
     private Integer getUpgradeCost() {
         return department.getMinigamePower()*50;
     }
 
+    /***
+     * Create department elements.
+     */
     private void setupTopTable() {
         topTable.setFillParent(true);
         topTable.top();
 
+        //welcome label
         Label label = new Label("Welcome to "+department.getName(), StyleManager.generateLabelStyle(50, Color.RED));
+        topTable.add(label)
+                .expandX()
+                .padTop(Value.percentHeight(0.02f, topTable))
+                .height(Value.percentHeight(0.1f, topTable));
+        topTable.row();
+        //repair button
         repairButton = new TextButton("Click to repair!\nCost: "+getRepairCost(),
                 StyleManager.generateTBStyle(40, Color.GREEN, Color.GRAY));
         repairButton.addListener(new ClickListener() {
@@ -66,6 +83,12 @@ public class DepartmentScreen extends AHODScreen {
                 repair();
             }
         });
+        topTable.add(repairButton)
+                .expandX()
+                .padTop(Value.percentHeight(0.02f, topTable))
+                .height(Value.percentHeight(0.1f, topTable));
+        topTable.row();
+        //upgrade button
         upgradeButton = new TextButton("Click to upgrade!\n (+" +addedHealth +" health)\nCost: "+getUpgradeCost(),
                 StyleManager.generateTBStyle(30, Color.PURPLE, Color.GRAY));
         upgradeButton.addListener(new ClickListener() {
@@ -74,7 +97,12 @@ public class DepartmentScreen extends AHODScreen {
                 purchaseUpgrade();
             }
         });
-
+        topTable.add(upgradeButton)
+                .expandX()
+                .padTop(Value.percentHeight(0.02f, topTable))
+                .height(Value.percentHeight(0.1f, topTable));
+        topTable.row();
+        //minigame (gamble) button
         TextButton gambleButton = new TextButton("Visit Tavern (Minigame)",
                 StyleManager.generateTBStyle(30, Color.GOLD, Color.GRAY));
         gambleButton.addListener(new ClickListener() {
@@ -83,6 +111,12 @@ public class DepartmentScreen extends AHODScreen {
                 switchMinigame();
             }
         });
+        topTable.add(gambleButton)
+                .expandX()
+                .padTop(Value.percentHeight(0.02f, topTable))
+                .height(Value.percentHeight(0.1f, topTable));
+        topTable.row();
+        //exit button
         TextButton exitButton = new TextButton("Exit Department",
                 StyleManager.generateTBStyle(30, Color.RED, Color.GRAY));
         exitButton.addListener(new ClickListener() {
@@ -91,35 +125,20 @@ public class DepartmentScreen extends AHODScreen {
                 exitScreen();
             }
         });
-
-        topTable.add(label)
-                .expandX()
-                .padTop(Value.percentHeight(0.02f, topTable))
-                .height(Value.percentHeight(0.1f, topTable));
-        topTable.row();
-        topTable.add(repairButton)
-                .expandX()
-                .padTop(Value.percentHeight(0.02f, topTable))
-                .height(Value.percentHeight(0.1f, topTable));
-        topTable.row();
-        topTable.add(upgradeButton)
-                .expandX()
-                .padTop(Value.percentHeight(0.02f, topTable))
-                .height(Value.percentHeight(0.1f, topTable));
-        topTable.row();
-        topTable.add(gambleButton)
-                .expandX()
-                .padTop(Value.percentHeight(0.02f, topTable))
-                .height(Value.percentHeight(0.1f, topTable));
-        topTable.row();
         topTable.add(exitButton)
                 .expandX()
                 .padTop(Value.percentHeight(0.02f, topTable))
                 .height(Value.percentHeight(0.1f, topTable));
 
+        //add table to screen
         getStage().addActor(topTable);
     }
 
+    /***
+     * Repair button clicked.
+     * Check if player has enough gold.
+     * If yes, repair ship and debit gold.
+     */
     private void repair() {
         Player player = gameInstance.getPlayer();
         if(getRepairCost() <= player.getGold()) {
@@ -130,6 +149,11 @@ public class DepartmentScreen extends AHODScreen {
         }
     }
 
+    /***
+     * Upgrade button clicked.
+     * Check if player has enough gold.
+     * If yes, apply upgrade (inc health and maxhealth) and debit gold.
+     */
     private void purchaseUpgrade() {
         Player player = gameInstance.getPlayer();
         if(!purchasedUpgrade) {
@@ -145,28 +169,44 @@ public class DepartmentScreen extends AHODScreen {
         }
     }
 
+    /***
+     * Used when minigame has been played (create new instance)
+     */
     public void resetMinigame() {
         this.minigameScreen = new MinigameScreen(gameInstance, this);
     }
 
+    /***
+     * Minigame button clicked.
+     * Switch to MinigameScreen.
+     */
     private void switchMinigame() {
         gameInstance.fadeSwitchScreen(minigameScreen);
     }
 
+    /***
+     * Exit button clicked.
+     * Switch back to SailScreen.
+     */
     private void exitScreen() {
         gameInstance.fadeSwitchScreen(gameInstance.getSailScreen());
     }
 
+    /***
+     * Get cost to repair ship (based on difference form full health and dept repair scale factor).
+     * @return cost of repair (gold)
+     */
     private Integer getRepairCost() {
         Player player = gameInstance.getPlayer();
         Integer toHeal = (player.getShip().getMaxHealth()-player.getShip().getHealth());
         return toHeal*department.getRepairCost();
     }
 
+    /***
+     * Update repair cost label.
+     */
     private void updateTables() {
         repairButton.setText("Click to repair!\nCost: "+getRepairCost());
-
-
     }
 
     @Override

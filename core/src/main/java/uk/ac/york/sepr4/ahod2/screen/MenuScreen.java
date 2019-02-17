@@ -26,6 +26,10 @@ public class MenuScreen extends AHODScreen {
         loadMenu();
     }
 
+    /***
+     * Create GameInstance if not exists.
+     * @return
+     */
     private GameInstance getOrCreateGameInstance() {
         if(gameInstance == null) {
             gameInstance = new GameInstance(game);
@@ -33,32 +37,33 @@ public class MenuScreen extends AHODScreen {
         return gameInstance;
     }
 
+    /***
+     * Set game instance to null (after game end).
+     */
     public void newGame() {
         this.gameInstance = null;
     }
 
     @Override
-    public void renderInner(float delta) {
+    public void renderInner(float delta) {}
 
-    }
-
+    /***
+     * Load menu items to screen.
+     */
     private void loadMenu() {
         Gdx.app.debug("MenuScreen", "Loading Menu!");
         Table table = new Table();
         table.setFillParent(true);
 
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = StyleManager.generatePirateFont(50, Color.RED);
-
         //create buttons
-        TextButton newGame = new TextButton("New Game", style);
-        TextButton preferences = new TextButton("Preferences", style);
-        TextButton exit = new TextButton("Exit", style);
+        TextButton newGame = new TextButton("New Game",
+                StyleManager.generateTBStyle(50, Color.PURPLE, Color.GRAY));
+        TextButton exit = new TextButton("Exit",
+                StyleManager.generateTBStyle(50, Color.RED, Color.GRAY));
 
         //add buttons to table
         table.add(newGame).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
-        //table.add(preferences).fillX().uniformX();
         table.row();
         table.add(exit).fillX().uniformX();
 
@@ -69,7 +74,6 @@ public class MenuScreen extends AHODScreen {
                 Gdx.app.exit();
             }
         });
-
         newGame.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -77,9 +81,6 @@ public class MenuScreen extends AHODScreen {
             }
         });
 
-        if(game.DEBUG) {
-            table.setDebug(true);
-        }
         getStage().addActor(table);
     }
 }
