@@ -4,9 +4,15 @@ import com.badlogic.gdx.Gdx;
 import uk.ac.york.sepr4.ahod2.node.*;
 import uk.ac.york.sepr4.ahod2.object.GameLevel;
 import uk.ac.york.sepr4.ahod2.object.building.Department;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+//possible action from each node
+enum NodeRowAction {
+    SPLIT, TRISPLIT, SINGLE, MERGE
+}
 
 public class NodeUtil {
 
@@ -30,17 +36,17 @@ public class NodeUtil {
         List<Node> finalNodes = new ArrayList<>();
         Random random = new Random();
 
-        for(Node node: nodes) {
+        for (Node node : nodes) {
             //if not first or last row
-            if(node.getRow() == 0){
+            if (node.getRow() == 0) {
                 //first row
                 finalNodes.add(new StartNode(node));
-            } else if(node.getRow() == gameLevel.getDepth()+1) {
+            } else if (node.getRow() == gameLevel.getDepth() + 1) {
                 //last row
                 finalNodes.add(new CollegeNode(node, gameLevel.getCollege()));
             } else {
                 //middle rows
-                if(random.nextDouble()<=battleNodeChance) {
+                if (random.nextDouble() <= battleNodeChance) {
                     //replace with battle node
                     finalNodes.add(new BattleNode(node));
                 } else {
@@ -49,9 +55,9 @@ public class NodeUtil {
             }
         }
         //insert departments retroactively
-        for(Department department : gameLevel.getDepartments()) {
+        for (Department department : gameLevel.getDepartments()) {
             boolean inserted = false;
-            while(!inserted) {
+            while (!inserted) {
                 Integer loc = random.nextInt(finalNodes.size() - 1);
                 Node node = finalNodes.get(loc);
                 if (!(node instanceof CollegeNode || node instanceof StartNode || node instanceof DepartmentNode)) {
@@ -66,6 +72,7 @@ public class NodeUtil {
     }
 
     //TODO: Add some other measures - minMergeDepth (dont merge on first or second level?)
+
     /***
      * Generate random node map with specified depth.
      * @param depth specified depth
@@ -121,7 +128,7 @@ public class NodeUtil {
                 if (tempNodes.size() > 0) {
                     //want to choose the most similar column number
                     mergeNodes.forEach(node1 -> {
-                        if (tempNodes.size()-1 < node1.getCol()) {
+                        if (tempNodes.size() - 1 < node1.getCol()) {
                             node1.addConnectedNode(tempNodes.get(tempNodes.size() - 1));
                         } else {
                             node1.addConnectedNode(tempNodes.get(node1.getCol()));
@@ -142,14 +149,14 @@ public class NodeUtil {
             prevNodes = tempNodes;
 
             //last iteration
-            if(i == depth) {
+            if (i == depth) {
                 //create final/boss/college node
-                Node finalNode = new Node(nodes.size(), i+1, 0);
+                Node finalNode = new Node(nodes.size(), i + 1, 0);
                 nodes.add(finalNode);
                 prevNodes.forEach(node1 -> node1.addConnectedNode(finalNode));
             }
         }
-        if(Gdx.app != null) {
+        if (Gdx.app != null) {
             //JUnit test compat
             Gdx.app.debug("NodeUtil", "Generated NodeMap with " + nodes.size() + " nodes!");
         }
@@ -162,26 +169,21 @@ public class NodeUtil {
      */
     private static NodeRowAction randomRowAction() {
         List<NodeRowAction> nodeRowActions = new ArrayList<>();
-        for(int i = 0; i < triSplitChance; i++) {
+        for (int i = 0; i < triSplitChance; i++) {
             nodeRowActions.add(NodeRowAction.TRISPLIT);
         }
-        for(int i = 0; i < mergeChance; i++) {
+        for (int i = 0; i < mergeChance; i++) {
             nodeRowActions.add(NodeRowAction.MERGE);
         }
-        for(int i = 0; i < singleChance; i++) {
+        for (int i = 0; i < singleChance; i++) {
             nodeRowActions.add(NodeRowAction.SINGLE);
         }
-        for(int i = 0; i < splitChance; i++) {
+        for (int i = 0; i < splitChance; i++) {
             nodeRowActions.add(NodeRowAction.SPLIT);
         }
         Random random = new Random();
 
-        return nodeRowActions.get(random.nextInt(nodeRowActions.size()-1));
+        return nodeRowActions.get(random.nextInt(nodeRowActions.size() - 1));
     }
 
-}
-
-//possible action from each node
-enum NodeRowAction {
-    SPLIT, TRISPLIT, SINGLE, MERGE
 }

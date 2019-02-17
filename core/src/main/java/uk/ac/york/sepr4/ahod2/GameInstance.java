@@ -27,9 +27,8 @@ import java.util.Optional;
 @Data
 public class GameInstance {
 
-    private AHOD2 game;
     public static GameInstance INSTANCE;
-
+    private AHOD2 game;
     //asset managers
     private CardManager cardManager;
     private BuildingManager buildingManager;
@@ -66,7 +65,7 @@ public class GameInstance {
 
         //get and set first level or abort
         Optional<GameLevel> firstLevel = getLevelByID(1);
-        if(firstLevel.isPresent()) {
+        if (firstLevel.isPresent()) {
             player = new Player(firstLevel.get());
         } else {
             Gdx.app.error("GameInstance", "First Level could not be found! Exiting!");
@@ -85,8 +84,8 @@ public class GameInstance {
 
     public Optional<GameLevel> getLevelByID(Integer id) {
         Optional<GameLevel> gameLevel = Optional.empty();
-        for(GameLevel gL : levels) {
-            if(gL.getId().equals(id)) {
+        for (GameLevel gL : levels) {
+            if (gL.getId().equals(id)) {
                 gameLevel = Optional.of(gL);
             }
         }
@@ -100,12 +99,12 @@ public class GameInstance {
      */
     public void advanceLevel() {
         Integer currentLevelID = getCurrentLevel().getId();
-        Optional<GameLevel> gameLevel = getLevelByID(currentLevelID+1);
-        if(gameLevel.isPresent()) {
+        Optional<GameLevel> gameLevel = getLevelByID(currentLevelID + 1);
+        if (gameLevel.isPresent()) {
             player.setLevel(gameLevel.get());
             player.setLocation(Optional.empty());
             getMessageHUD().addStatusMessage("Select Starting Node!", 3f);
-            sailScreen.getOrthographicCamera().position.y = (Gdx.graphics.getHeight()/2);
+            sailScreen.getOrthographicCamera().position.y = (Gdx.graphics.getHeight() / 2);
             //clear last levels nodes
             sailScreen.getStage().clear();
             fadeSwitchScreen(sailScreen);
@@ -147,8 +146,8 @@ public class GameInstance {
     private void loadLevels() {
         Json json = new Json();
         Array<GameLevel> tempLevels = json.fromJson(Array.class, GameLevel.class, Gdx.files.internal("data/levels.json"));
-        for(GameLevel level : tempLevels) {
-            if(level.load(this)) {
+        for (GameLevel level : tempLevels) {
+            if (level.load(this)) {
                 levels.add(level);
             }
         }

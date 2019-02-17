@@ -9,10 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import uk.ac.york.sepr4.ahod2.AHOD2;
 import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.io.StyleManager;
 import uk.ac.york.sepr4.ahod2.object.card.Card;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,20 +22,17 @@ import java.util.Random;
 
 public class MinigameScreen extends AHODScreen {
 
+    private final Integer minigamePower;
+    private final Integer attempts = 4;
     //inate variables
     private GameInstance gameInstance;
     private DepartmentScreen departmentScreen;
-    private final Integer minigamePower;
-
     //game variables
     private List<Integer> cardLocs = new ArrayList<>(), selectedLocs = new ArrayList<>();
     //card to be won
     private Card toWin;
-
     //game progress variables
     private boolean gameOver = false, exiting = false;
-    private final Integer attempts = 4;
-
     //display tables
     private Table introTable, playTable;
 
@@ -115,7 +114,7 @@ public class MinigameScreen extends AHODScreen {
         playTable = new Table();
         playTable.setFillParent(true);
         playTable.top();
-        if(gameInstance.getGame().DEBUG) {
+        if (AHOD2.DEBUG) {
             playTable.debug();
         }
 

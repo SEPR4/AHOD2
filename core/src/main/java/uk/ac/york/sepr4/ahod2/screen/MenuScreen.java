@@ -31,7 +31,7 @@ public class MenuScreen extends AHODScreen {
      * @return
      */
     private GameInstance getOrCreateGameInstance() {
-        if(gameInstance == null) {
+        if (gameInstance == null) {
             gameInstance = new GameInstance(game);
         }
         return gameInstance;
@@ -45,7 +45,8 @@ public class MenuScreen extends AHODScreen {
     }
 
     @Override
-    public void renderInner(float delta) {}
+    public void renderInner(float delta) {
+    }
 
     /***
      * Load menu items to screen.

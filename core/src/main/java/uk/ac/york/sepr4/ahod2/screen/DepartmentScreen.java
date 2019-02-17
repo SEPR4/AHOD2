@@ -49,7 +49,7 @@ public class DepartmentScreen extends AHODScreen {
      */
     private void generateRandomUpgrade() {
         Random random = new Random();
-        addedHealth = 5*(random.nextInt(department.getMinigamePower())+1);
+        addedHealth = 5 * (random.nextInt(department.getMinigamePower()) + 1);
     }
 
     /***
@@ -57,7 +57,7 @@ public class DepartmentScreen extends AHODScreen {
      * @return upgrade cost (gold)
      */
     private Integer getUpgradeCost() {
-        return department.getMinigamePower()*50;
+        return department.getMinigamePower() * 50;
     }
 
     /***
@@ -68,14 +68,14 @@ public class DepartmentScreen extends AHODScreen {
         topTable.top();
 
         //welcome label
-        Label label = new Label("Welcome to "+department.getName(), StyleManager.generateLabelStyle(50, Color.RED));
+        Label label = new Label("Welcome to " + department.getName(), StyleManager.generateLabelStyle(50, Color.RED));
         topTable.add(label)
                 .expandX()
                 .padTop(Value.percentHeight(0.02f, topTable))
                 .height(Value.percentHeight(0.1f, topTable));
         topTable.row();
         //repair button
-        repairButton = new TextButton("Click to repair!\nCost: "+getRepairCost(),
+        repairButton = new TextButton("Click to repair!\nCost: " + getRepairCost(),
                 StyleManager.generateTBStyle(40, Color.GREEN, Color.GRAY));
         repairButton.addListener(new ClickListener() {
             @Override
@@ -89,7 +89,7 @@ public class DepartmentScreen extends AHODScreen {
                 .height(Value.percentHeight(0.1f, topTable));
         topTable.row();
         //upgrade button
-        upgradeButton = new TextButton("Click to upgrade!\n (+" +addedHealth +" health)\nCost: "+getUpgradeCost(),
+        upgradeButton = new TextButton("Click to upgrade!\n (+" + addedHealth + " health)\nCost: " + getUpgradeCost(),
                 StyleManager.generateTBStyle(30, Color.PURPLE, Color.GRAY));
         upgradeButton.addListener(new ClickListener() {
             @Override
@@ -141,7 +141,7 @@ public class DepartmentScreen extends AHODScreen {
      */
     private void repair() {
         Player player = gameInstance.getPlayer();
-        if(getRepairCost() <= player.getGold()) {
+        if (getRepairCost() <= player.getGold()) {
             player.takeGold(getRepairCost());
             player.getShip().setHealth(player.getShip().getMaxHealth());
         } else {
@@ -156,7 +156,7 @@ public class DepartmentScreen extends AHODScreen {
      */
     private void purchaseUpgrade() {
         Player player = gameInstance.getPlayer();
-        if(!purchasedUpgrade) {
+        if (!purchasedUpgrade) {
             if (player.getGold() >= getUpgradeCost()) {
                 purchasedUpgrade = true;
                 player.takeGold(getUpgradeCost());
@@ -198,15 +198,15 @@ public class DepartmentScreen extends AHODScreen {
      */
     private Integer getRepairCost() {
         Player player = gameInstance.getPlayer();
-        Integer toHeal = (player.getShip().getMaxHealth()-player.getShip().getHealth());
-        return toHeal*department.getRepairCost();
+        Integer toHeal = (player.getShip().getMaxHealth() - player.getShip().getHealth());
+        return toHeal * department.getRepairCost();
     }
 
     /***
      * Update repair cost label.
      */
     private void updateTables() {
-        repairButton.setText("Click to repair!\nCost: "+getRepairCost());
+        repairButton.setText("Click to repair!\nCost: " + getRepairCost());
     }
 
     @Override

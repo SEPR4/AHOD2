@@ -26,7 +26,7 @@ public class StartNode extends Node {
     @Override
     public void action(GameInstance gameInstance) {
         Optional<Node> loc = gameInstance.getPlayer().getLocation();
-        if(!loc.isPresent()) {
+        if (!loc.isPresent()) {
             gameInstance.getPlayer().setLocation(Optional.of(this));
             gameInstance.getMessageHUD().addStatusMessage("Select Next Node!", 5f);
         }

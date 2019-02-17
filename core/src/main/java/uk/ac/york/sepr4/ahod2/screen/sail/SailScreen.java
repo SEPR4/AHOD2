@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import lombok.Getter;
+import uk.ac.york.sepr4.ahod2.AHOD2;
 import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.io.SailInputProcessor;
@@ -59,9 +60,9 @@ public class SailScreen extends AHODScreen {
         Player player = gameInstance.getPlayer();
         Optional<Node> loc = player.getLocation();
         //node action if player location is unset (starting) or node clicked is above current
-        if(loc.isPresent()) {
+        if (loc.isPresent()) {
             //if node is above (or in debug mode)
-            if(node.getRow() == loc.get().getRow()+1 || gameInstance.getGame().DEBUG) {
+            if (node.getRow() == loc.get().getRow() + 1 || AHOD2.DEBUG) {
                 gameInstance.nodeAction(node);
             } else {
                 Gdx.app.debug("SailScreen", "Lower or current position node clicked!");
@@ -71,6 +72,6 @@ public class SailScreen extends AHODScreen {
             gameInstance.nodeAction(node);
         }
 
-     }
+    }
 
 }

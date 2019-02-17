@@ -19,35 +19,34 @@ import java.util.Random;
  */
 public class CardManager {
 
+    private static final Integer maxSelectionSize = 4;
     private List<Card> cards = new ArrayList<>();
     @Getter
     private List<Card> defaultCards = new ArrayList<>();
-
-    private static final Integer maxSelectionSize = 4;
 
     public CardManager() {
         Json json = new Json();
         loadCards(json.fromJson(Array.class, Card.class, Gdx.files.internal("data/cards.json")));
 
         //set default cards
-        for(Card card: cards) {
-            if(card.is_default()) {
+        for (Card card : cards) {
+            if (card.is_default()) {
                 //add default card multiple times depending on json variable
-                for(int i = 0; i<card.getDefaultNo();i++) {
+                for (int i = 0; i < card.getDefaultNo(); i++) {
                     defaultCards.add(card);
                 }
             }
         }
 
-        Gdx.app.log("CardManager", "Loaded "+cards.size()+" cards!");
+        Gdx.app.log("CardManager", "Loaded " + cards.size() + " cards!");
     }
 
-    private void loadCards(Array<Card> cards){
-        for(Card card: cards) {
-            FileHandle fileHandle = Gdx.files.internal("images/card/"+card.getTextureStr()+".png");
+    private void loadCards(Array<Card> cards) {
+        for (Card card : cards) {
+            FileHandle fileHandle = Gdx.files.internal("images/card/" + card.getTextureStr() + ".png");
             //check texture exists
-            if(!fileHandle.exists()) {
-                Gdx.app.error("CardManager", "Texture not found for card: "+card.getId());
+            if (!fileHandle.exists()) {
+                Gdx.app.error("CardManager", "Texture not found for card: " + card.getId());
                 continue;
             }
             card.setTexture(new Texture(fileHandle));
@@ -62,9 +61,9 @@ public class CardManager {
      */
     public boolean drawRandomCard(Ship ship) {
         //if deck size = 0
-        if(ship.getPlayDeck().size() == 0) {
+        if (ship.getPlayDeck().size() == 0) {
             //if hand size = 0
-            if(ship.getHand().size() == 0) {
+            if (ship.getHand().size() == 0) {
                 ship.shuffleReset(defaultCards);
             } else {
                 //deck was empty but cards still in hand (can't shuffle)
@@ -73,7 +72,7 @@ public class CardManager {
         }
 
         Card card = ship.getPlayDeck().poll();
-        Gdx.app.debug("Card Manager", "Randomly Drawing:" +card.getName());
+        Gdx.app.debug("Card Manager", "Randomly Drawing:" + card.getName());
         ship.addCardToHand(card);
         return true;
     }
@@ -97,10 +96,10 @@ public class CardManager {
     public Optional<Card> randomCard(Integer power) {
         Random random = new Random();
         Integer attempts = 50;
-        while(attempts>0) {
-            Card card = cards.get(random.nextInt(cards.size()-1));
+        while (attempts > 0) {
+            Card card = cards.get(random.nextInt(cards.size() - 1));
             if (!card.is_default() && card.getPower() <= power) {
-                Gdx.app.debug("Card Manager", "Randomly Selected:" +card.getName());
+                Gdx.app.debug("Card Manager", "Randomly Selected:" + card.getName());
                 return Optional.of(card);
             }
             attempts--;
@@ -117,10 +116,10 @@ public class CardManager {
         Random random = new Random();
         List<Card> selectionCards = new ArrayList<>();
         //min of 1, max 4
-        Integer selectionSize = random.nextInt(maxSelectionSize)+1;
-        while(selectionCards.size() < selectionSize) {
+        Integer selectionSize = random.nextInt(maxSelectionSize) + 1;
+        while (selectionCards.size() < selectionSize) {
             Optional<Card> optionalCard = randomCard(power);
-            if(optionalCard.isPresent()) {
+            if (optionalCard.isPresent()) {
                 selectionCards.add(optionalCard.get());
             }
         }

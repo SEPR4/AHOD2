@@ -24,16 +24,16 @@ public class SailInputProcessor implements InputProcessor {
      */
     public void scrollCamera() {
         //set map top and bottom relative to camera's position and screen height.
-        float cameraYBottom = (sailScreen.getOrthographicCamera().position.y - Gdx.graphics.getHeight()/2);
-        float cameraYTop = (sailScreen.getOrthographicCamera().position.y + Gdx.graphics.getHeight()/2);
+        float cameraYBottom = (sailScreen.getOrthographicCamera().position.y - Gdx.graphics.getHeight() / 2);
+        float cameraYTop = (sailScreen.getOrthographicCamera().position.y + Gdx.graphics.getHeight() / 2);
 
-        if(up) {
-            if(cameraYTop + scrollAmount < sailScreen.getStage().getViewport().getWorldHeight()) {
+        if (up) {
+            if (cameraYTop + scrollAmount < sailScreen.getStage().getViewport().getWorldHeight()) {
                 sailScreen.getOrthographicCamera().translate(0, scrollAmount);
             }
         }
-        if(down) {
-            if(cameraYBottom - scrollAmount > 0) {
+        if (down) {
+            if (cameraYBottom - scrollAmount > 0) {
                 sailScreen.getOrthographicCamera().translate(0, -scrollAmount);
             }
         }
@@ -41,11 +41,11 @@ public class SailInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.DOWN) {
+        if (keycode == Input.Keys.DOWN) {
             up = false;
             down = true;
         }
-        if(keycode == Input.Keys.UP) {
+        if (keycode == Input.Keys.UP) {
             down = false;
             up = true;
         }
@@ -54,10 +54,10 @@ public class SailInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        if(keycode == Input.Keys.DOWN) {
+        if (keycode == Input.Keys.DOWN) {
             down = false;
         }
-        if(keycode == Input.Keys.UP) {
+        if (keycode == Input.Keys.UP) {
             up = false;
         }
         return true;

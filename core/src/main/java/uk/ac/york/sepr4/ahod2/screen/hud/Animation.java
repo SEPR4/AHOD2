@@ -9,9 +9,9 @@ public class Animation {
     private Actor actor;
     private Float time;
 
-     public Animation(Actor actor, Float time){
-         this.actor = actor;
-         this.time = time;
+    public Animation(Actor actor, Float time) {
+        this.actor = actor;
+        this.time = time;
     }
 
 }

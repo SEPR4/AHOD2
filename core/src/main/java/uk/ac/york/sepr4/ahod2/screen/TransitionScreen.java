@@ -31,29 +31,29 @@ public class TransitionScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        if(fading) {
+        if (fading) {
             //fading out
-            fadeTimer+=delta;
-            fadeOut.setFade(fadeTimer/fadeTime);
+            fadeTimer += delta;
+            fadeOut.setFade(fadeTimer / fadeTime);
             fadeOut.render(delta);
 
         } else {
             //fading in
-            fadeTimer-=delta;
-            fadeIn.setFade(fadeTimer/fadeTime);
+            fadeTimer -= delta;
+            fadeIn.setFade(fadeTimer / fadeTime);
             fadeIn.render(delta);
         }
 
         //finished fading in or out
-        if(fadeTimer>=fadeTime || fadeTimer < 0) {
-            if(fading) {
+        if (fadeTimer >= fadeTime || fadeTimer < 0) {
+            if (fading) {
                 fading = false;
             } else {
                 //switch to fadeIn screen
                 fadeOut.setFading(false);
                 fadeIn.setFading(false);
                 gameInstance.switchScreen(fadeIn);
-                if(dispose) {
+                if (dispose) {
                     //dispose of fadeOut screen
                     fadeOut.dispose();
                 }
@@ -66,16 +66,25 @@ public class TransitionScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(null);
     }
+
     @Override
-    public void resize(int width, int height) { }
+    public void resize(int width, int height) {
+    }
+
     @Override
-    public void pause() {}
+    public void pause() {
+    }
+
     @Override
-    public void resume() {}
+    public void resume() {
+    }
+
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
     }
+
     @Override
-    public void dispose() {}
+    public void dispose() {
+    }
 }

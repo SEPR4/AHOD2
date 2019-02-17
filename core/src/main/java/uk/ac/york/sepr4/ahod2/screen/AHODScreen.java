@@ -63,7 +63,7 @@ public abstract class AHODScreen implements Screen {
      * Enable AnimationsHUD on this screen.
      * @param gameInstance instance with which to get animation data from.
      */
-    public void setAnimationsHUD(GameInstance gameInstance){
+    public void setAnimationsHUD(GameInstance gameInstance) {
         this.gameInstance = gameInstance;
         enableAnimationsHUD = true;
     }
@@ -94,7 +94,7 @@ public abstract class AHODScreen implements Screen {
         if (enableStatsHUD) {
             gameInstance.getStatsHud().update();
         }
-        if (enableAnimationsHUD){
+        if (enableAnimationsHUD) {
             gameInstance.getAnimationHUD().update(delta);
         }
     }

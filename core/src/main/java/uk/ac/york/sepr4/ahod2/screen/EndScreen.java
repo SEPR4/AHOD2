@@ -37,7 +37,7 @@ public class EndScreen extends AHODScreen {
         table.setFillParent(true);
 
         //set win/lose label
-        if(win) {
+        if (win) {
             table.add(new Label("You Won!", StyleManager.generateLabelStyle(50, Color.GOLD)));
         } else {
             table.add(new Label("You Lost!", StyleManager.generateLabelStyle(50, Color.RED)));
@@ -46,7 +46,7 @@ public class EndScreen extends AHODScreen {
         table.row();
 
         //exit to menu button
-        TextButton textButton = new TextButton("Exit to Menu!",StyleManager.generateTBStyle(40, Color.RED, Color.GRAY));
+        TextButton textButton = new TextButton("Exit to Menu!", StyleManager.generateTBStyle(40, Color.RED, Color.GRAY));
         textButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent ev, float x, float y) {
@@ -60,5 +60,6 @@ public class EndScreen extends AHODScreen {
     }
 
     @Override
-    public void renderInner(float delta) {}
+    public void renderInner(float delta) {
+    }
 }

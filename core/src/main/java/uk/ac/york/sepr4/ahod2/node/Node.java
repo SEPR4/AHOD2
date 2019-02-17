@@ -40,14 +40,15 @@ public class Node {
             texture = new TextureRegionDrawable(new TextureRegion(FileManager.randEncounterIcon));
         } catch (Exception ex) {
             //either not found or initializer exception (no gdx - for tests)
-        } catch (Error error) {}
+        } catch (Error error) {
+        }
     }
 
     /***
      * Default node action. Generate random encounter and switch to encounter screen.
      * @param gameInstance
      */
-    public void action(GameInstance gameInstance){
+    public void action(GameInstance gameInstance) {
         Encounter encounter = gameInstance.getEncounterManager().generateEncounter();
         gameInstance.fadeSwitchScreen(new EncounterScreen(gameInstance, encounter));
     }

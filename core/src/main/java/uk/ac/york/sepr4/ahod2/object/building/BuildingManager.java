@@ -27,7 +27,7 @@ public class BuildingManager {
         loadColleges(json.fromJson(Array.class, College.class, Gdx.files.internal("data/colleges.json")));
         loadDepartments(json.fromJson(Array.class, Department.class, Gdx.files.internal("data/departments.json")));
 
-        Gdx.app.log("BuildingManager", "Loaded "+colleges.size+" colleges!");
+        Gdx.app.log("BuildingManager", "Loaded " + colleges.size + " colleges!");
     }
 
     /***
@@ -36,8 +36,8 @@ public class BuildingManager {
      * @return Optional of college if exists, else empty optional.
      */
     public Optional<College> getCollegeByID(Integer id) {
-        for(College college: colleges) {
-            if(college.getId()==id){
+        for (College college : colleges) {
+            if (college.getId() == id) {
                 return Optional.of(college);
             }
         }
@@ -50,8 +50,8 @@ public class BuildingManager {
      * @return Optional of department if exists, else empty optional.
      */
     public Optional<Department> getDepartmentByID(Integer id) {
-        for(Department department: departments) {
-            if(department.getId()==id){
+        for (Department department : departments) {
+            if (department.getId() == id) {
                 return Optional.of(department);
             }
         }
@@ -65,7 +65,6 @@ public class BuildingManager {
     private void loadDepartments(Array<Department> departments) {
         this.departments = departments;
     }
-
 
 
 }

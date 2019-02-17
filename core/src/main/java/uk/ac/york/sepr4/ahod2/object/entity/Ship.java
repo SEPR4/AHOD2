@@ -40,7 +40,8 @@ public class Ship {
             image.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         } catch (Exception ex) {
             //either not found or initializer exception (no gdx - for tests)
-        } catch (Error error) {}
+        } catch (Error error) {
+        }
     }
 
     /***
@@ -49,11 +50,11 @@ public class Ship {
      * @return
      */
     private boolean damage(Integer damage) {
-        if(damage >= health){
+        if (damage >= health) {
             health = 0;
             return true;
         } else {
-            health-=damage;
+            health -= damage;
             return false;
         }
 
@@ -64,10 +65,10 @@ public class Ship {
      * @param val specified value
      */
     private void heal(Integer val) {
-        if(health+val >= maxHealth) {
+        if (health + val >= maxHealth) {
             health = maxHealth;
         } else {
-            health+=val;
+            health += val;
         }
     }
 
@@ -90,7 +91,7 @@ public class Ship {
     }
 
     public void setMaxMana(Integer lMana) {
-        if(lMana > 10) {
+        if (lMana > 10) {
             maxMana = 10;
         } else {
             maxMana = lMana;
@@ -109,14 +110,14 @@ public class Ship {
     }
 
     public boolean applyDelayedDamage(GameInstance gameInstance, Vector2 poi) {
-        if(delayedDamage.size()>0) {
-            if(delayedDamage.get(0) > 0) {
+        if (delayedDamage.size() > 0) {
+            if (delayedDamage.get(0) > 0) {
                 //JUnit Test Compat
-                if(gameInstance != null && poi != null) {
+                if (gameInstance != null && poi != null) {
                     gameInstance.getAnimationHUD().addDamageAnimation(poi, delayedDamage.get(0), 3f);
                 }
             }
-            if(damage(delayedDamage.get(0))) {
+            if (damage(delayedDamage.get(0))) {
                 return true;
             }
             delayedDamage.remove(0);
@@ -126,10 +127,10 @@ public class Ship {
 
 
     public void applyDelayedHeal(GameInstance gameInstance, Vector2 poi) {
-        if(delayedHeal.size()>0) {
-            if(delayedHeal.get(0) > 0) {
+        if (delayedHeal.size() > 0) {
+            if (delayedHeal.get(0) > 0) {
                 //JUnit Test Compat
-                if(gameInstance != null && poi != null) {
+                if (gameInstance != null && poi != null) {
                     gameInstance.getAnimationHUD().addHealAnimation(poi, delayedHeal.get(0), 3f);
                 }
             }
@@ -139,7 +140,7 @@ public class Ship {
     }
 
     public void addHeal(Integer val, Integer turn) {
-        if(delayedHeal.size() > turn) {
+        if (delayedHeal.size() > turn) {
             delayedHeal.set(turn, delayedHeal.get(turn) + val);
         } else {
             delayedHeal.add(turn, val);
@@ -147,7 +148,7 @@ public class Ship {
     }
 
     public void addDamage(Integer val, Integer turn) {
-        if(delayedDamage.size() > turn) {
+        if (delayedDamage.size() > turn) {
             delayedDamage.set(turn, delayedDamage.get(turn) + val);
         } else {
             delayedDamage.add(turn, val);

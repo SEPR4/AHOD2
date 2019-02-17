@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.object.card.Card;
+
 import java.util.List;
 
 /***
@@ -45,13 +46,13 @@ public class CardSelectionScreen extends AHODScreen {
         selectionTable.debug();
 
         //add selection cards to table
-        for(Card card: selection) {
+        for (Card card : selection) {
             Gdx.app.debug("CardSelScreen", card.getName());
             ImageButton imageButton = new ImageButton(new TextureRegionDrawable(card.getTexture()));
             imageButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent ev, float x, float y) {
-                    if(!selected) {
+                    if (!selected) {
                         selectCard(card);
                     }
                 }
@@ -75,5 +76,6 @@ public class CardSelectionScreen extends AHODScreen {
     }
 
     @Override
-    public void renderInner(float delta) {}
+    public void renderInner(float delta) {
+    }
 }

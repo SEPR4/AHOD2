@@ -27,15 +27,16 @@ public class Player {
     }
 
     //TODO: WIP
-    public Integer getScore(){
+    public Integer getScore() {
         return 0;
     }
 
     public void takeGold(Integer gold) {
-        this.gold-=gold;
+        this.gold -= gold;
     }
+
     public void addGold(Integer gold) {
-        this.gold+=gold;
+        this.gold += gold;
     }
 
 }

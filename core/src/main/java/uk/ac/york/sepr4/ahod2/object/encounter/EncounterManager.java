@@ -17,17 +17,17 @@ public class EncounterManager {
     private final NavigableMap<Double, Encounter> map = new TreeMap<>();
     private double weights = 0;
 
-    public EncounterManager(){
+    public EncounterManager() {
         Json json = new Json();
 
         //add encounter to weighted map
         Array<Encounter> encounters = json.fromJson(Array.class, Encounter.class, Gdx.files.internal("data/encounters.json"));
         encounters.forEach(encounter -> {
-            weights+=encounter.getChance();
+            weights += encounter.getChance();
             map.put(weights, encounter);
         });
 
-        Gdx.app.log("EncounterManager", "Loaded "+encounters.size +" encounters!");
+        Gdx.app.log("EncounterManager", "Loaded " + encounters.size + " encounters!");
     }
 
     /***

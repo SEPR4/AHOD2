@@ -41,7 +41,7 @@ public class StatsHUD {
     public void update() {
         Player player = gameInstance.getPlayer();
         goldValueLabel.setText(player.getGold());
-        healthValueLabel.setText(player.getShip().getHealth()+"/"+player.getShip().getMaxHealth());
+        healthValueLabel.setText(player.getShip().getHealth() + "/" + player.getShip().getMaxHealth());
         scoreValueLabel.setText(player.getScore());
 
         hudStage.act();

@@ -16,6 +16,7 @@ public class ShipFactory {
     private static final Integer healthInterval = 3;
 
     //difficulty 1-10
+
     /***
      * Generate enemy ship with specified difficulty used to scale health and cards chosen.
      * @param difficulty
@@ -25,14 +26,14 @@ public class ShipFactory {
         Random random = new Random();
         Ship ship = new Ship();
 
-        Integer health = ship.getMaxHealth() + difficulty*random.nextInt(healthInterval+1);
+        Integer health = ship.getMaxHealth() + difficulty * random.nextInt(healthInterval + 1);
         ship.setMaxHealth(health);
         ship.setHealth(health);
 
         Integer noCards = random.nextInt(difficulty);
-        while(noCards > 0) {
+        while (noCards > 0) {
             Optional<Card> optional = GameInstance.INSTANCE.getCardManager().randomCard(difficulty);
-            if(optional.isPresent()) {
+            if (optional.isPresent()) {
                 ship.addCard(optional.get());
                 noCards--;
             } else {

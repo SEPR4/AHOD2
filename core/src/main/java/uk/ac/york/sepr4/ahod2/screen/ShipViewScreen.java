@@ -15,14 +15,13 @@ import uk.ac.york.sepr4.ahod2.object.card.Card;
 
 public class ShipViewScreen extends AHODScreen {
 
+    private final Integer cardsPerRow = 8;
     private GameInstance gameInstance;
     @Setter
     private AHODScreen previousScreen;
-
     //display variables
     private Table table = new Table(), cardTable = new Table();
     private Label levelValueLabel;
-    private final Integer cardsPerRow = 8;
 
     public ShipViewScreen(GameInstance gameInstance) {
         super(new Stage(new ScreenViewport()), FileManager.menuScreenBG);
@@ -71,20 +70,20 @@ public class ShipViewScreen extends AHODScreen {
      */
     private void update() {
         //update level label
-        levelValueLabel.setText("Level: "+gameInstance.getPlayer().getLevel().getId());
+        levelValueLabel.setText("Level: " + gameInstance.getPlayer().getLevel().getId());
 
         //update deck view
         cardTable.clear();
         Integer cardCount = 0;
         //draw each card in full deck
-        for(Card card: gameInstance.getCardManager().getFullDeck(gameInstance.getPlayer().getShip())) {
+        for (Card card : gameInstance.getCardManager().getFullDeck(gameInstance.getPlayer().getShip())) {
             cardCount++;
             Image image = new Image(card.getTexture());
             image.setScaling(Scaling.fit);
             cardTable.add(image)
                     .expandX()
-                    .width(Value.percentWidth(1f/cardsPerRow, cardTable));
-            if(cardCount == cardsPerRow) {
+                    .width(Value.percentWidth(1f / cardsPerRow, cardTable));
+            if (cardCount == cardsPerRow) {
                 cardTable.row();
                 cardCount = 0;
             }

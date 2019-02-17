@@ -8,22 +8,22 @@ import uk.ac.york.sepr4.ahod2.screen.MenuScreen;
 
 public class AHOD2 extends Game {
 
-	public static final boolean DEBUG = true;
+    public static final boolean DEBUG = true;
 
-	@Getter
-	private MenuScreen menuScreen;
+    @Getter
+    private MenuScreen menuScreen;
 
-	@Override
-	public void create() {
-		menuScreen = new MenuScreen(this);
+    @Override
+    public void create() {
+        menuScreen = new MenuScreen(this);
 
-		if(DEBUG) {
-			//if debug, enable lower logging level and launch into game
-			Gdx.app.setLogLevel(Application.LOG_DEBUG);
-			GameInstance gameInstance = new GameInstance(this);
-			gameInstance.start();
-		} else {
-			setScreen(menuScreen);
-		}
-	}
+        if (DEBUG) {
+            //if debug, enable lower logging level and launch into game
+            Gdx.app.setLogLevel(Application.LOG_DEBUG);
+            GameInstance gameInstance = new GameInstance(this);
+            gameInstance.start();
+        } else {
+            setScreen(menuScreen);
+        }
+    }
 }

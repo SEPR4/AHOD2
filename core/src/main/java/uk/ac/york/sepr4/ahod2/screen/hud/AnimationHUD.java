@@ -35,8 +35,8 @@ public class AnimationHUD {
      * @param value damage value to display
      * @param time duration of animation
      */
-    public void addDamageAnimation(Vector2 coords, Integer value, Float time){
-        Label dmgLabel = new Label("-"+value, StyleManager.generateLabelStyle(45, Color.RED));
+    public void addDamageAnimation(Vector2 coords, Integer value, Float time) {
+        Label dmgLabel = new Label("-" + value, StyleManager.generateLabelStyle(45, Color.RED));
         dmgLabel.setPosition(coords.x, coords.y);
         animations.add(new Animation(dmgLabel, time));
     }
@@ -47,8 +47,8 @@ public class AnimationHUD {
      * @param value heal value to display
      * @param time duration of animation
      */
-    public void addHealAnimation(Vector2 coords, Integer value, Float time){
-        Label healLabel = new Label("+"+value, StyleManager.generateLabelStyle(45, Color.GREEN));
+    public void addHealAnimation(Vector2 coords, Integer value, Float time) {
+        Label healLabel = new Label("+" + value, StyleManager.generateLabelStyle(45, Color.GREEN));
         healLabel.setPosition(coords.x, coords.y);
         animations.add(new Animation(healLabel, time));
     }
@@ -61,18 +61,18 @@ public class AnimationHUD {
      */
     public void update(float delta) {
         List<Animation> toRemove = new ArrayList<>();
-        for(Animation animation : animations) {
+        for (Animation animation : animations) {
             //if animation time is over, add to remove list
-            if(animation.getTime() <= delta) {
+            if (animation.getTime() <= delta) {
                 toRemove.add(animation);
                 animationsStage.getActors().removeValue(animation.getActor(), false);
                 continue;
             }
-            if(!animationsStage.getActors().contains(animation.getActor(), false)) {
+            if (!animationsStage.getActors().contains(animation.getActor(), false)) {
                 //add animation actor to stage if not exists
                 animationsStage.addActor(animation.getActor());
             }
-            animation.setTime(animation.getTime()-delta);
+            animation.setTime(animation.getTime() - delta);
         }
 
         //remove finished animations (avoid ConcurrentModificationException)

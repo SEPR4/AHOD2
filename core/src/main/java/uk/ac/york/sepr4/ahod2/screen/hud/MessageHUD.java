@@ -28,16 +28,14 @@ import java.util.List;
  */
 public class MessageHUD {
 
+    private final Float resourceMessageTime = 4f;
     @Getter
     private Stage hudStage;
     private GameInstance gameInstance;
-
     private Label messageLabel;
     private String currentMessage = "";
     private float currentMessageTime = 0;
     private HashMap<Label, Float> goldMessages = new HashMap<>();
-
-    private final Float resourceMessageTime = 4f;
 
     public MessageHUD(GameInstance gameInstance) {
         this.gameInstance = gameInstance;

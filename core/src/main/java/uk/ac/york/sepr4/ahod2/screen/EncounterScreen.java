@@ -34,7 +34,8 @@ public class EncounterScreen extends AHODScreen {
 
 
     @Override
-    public void renderInner(float delta) {}
+    public void renderInner(float delta) {
+    }
 
     /***
      * Get string representing result (+/- gold, enter battle?) of specified EncounterOption.
@@ -42,12 +43,12 @@ public class EncounterScreen extends AHODScreen {
      * @return result of EncounterOption
      */
     private String getEncounterResultText(EncounterOption encounterOption) {
-        if (encounterOption.isBattle()){
+        if (encounterOption.isBattle()) {
             return "-> A Battle with difficulty " + encounterOption.getDifficulty() + "\n";
         }
-        if (encounterOption.getGold() > 0){
+        if (encounterOption.getGold() > 0) {
             return "-> +" + encounterOption.getGold() + " Gold\n";
-        } else if (encounterOption.getGold() < 0){
+        } else if (encounterOption.getGold() < 0) {
             return "-> " + encounterOption.getGold() + " Gold\n";
         }
         return "";
@@ -106,9 +107,9 @@ public class EncounterScreen extends AHODScreen {
             //action result
             Player player = gameInstance.getPlayer();
             player.setGold(player.getGold() + encounterOption.getGold());
-            if(player.getGold() < 0) {
+            if (player.getGold() < 0) {
                 //gold less than 0, player loses
-                gameInstance.fadeSwitchScreen(new EndScreen(gameInstance,false));
+                gameInstance.fadeSwitchScreen(new EndScreen(gameInstance, false));
             } else {
                 gameInstance.fadeSwitchScreen(gameInstance.getSailScreen());
             }

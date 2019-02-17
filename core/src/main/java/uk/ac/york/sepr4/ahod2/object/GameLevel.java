@@ -41,28 +41,27 @@ public class GameLevel {
         BuildingManager buildingManager = gameInstance.getBuildingManager();
         //check if college with id specified exists
         Optional<College> optCollege = buildingManager.getCollegeByID(collegeId);
-        if(!optCollege.isPresent()) {
-            Gdx.app.error("GameLevel", "College with ID specified doesnt exist for GameLevel "+id);
+        if (!optCollege.isPresent()) {
+            Gdx.app.error("GameLevel", "College with ID specified doesnt exist for GameLevel " + id);
             return false;
         }
         college = optCollege.get();
         //check if departments with id specified exists
-        for(Integer departmentId : departmentIds) {
+        for (Integer departmentId : departmentIds) {
             Optional<Department> optDept = buildingManager.getDepartmentByID(departmentId);
-            if(!optDept.isPresent()) {
-                Gdx.app.error("GameLevel", "Dept with ID:"+departmentId+" specified doesnt exist for GameLevel "+id);
+            if (!optDept.isPresent()) {
+                Gdx.app.error("GameLevel", "Dept with ID:" + departmentId + " specified doesnt exist for GameLevel " + id);
                 return false;
             }
             departments.add(optDept.get());
         }
-        if(nodeView == null) {
+        if (nodeView == null) {
             //generate nodeview for this level
             nodeView = new NodeView(gameInstance.getSailScreen(), this);
         }
-        Gdx.app.debug("GameLevel", "Successfully loaded level "+id);
+        Gdx.app.debug("GameLevel", "Successfully loaded level " + id);
         return true;
     }
-
 
 
 }
