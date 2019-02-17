@@ -15,9 +15,9 @@ import uk.ac.york.sepr4.ahod2.screen.AHODScreen;
 import uk.ac.york.sepr4.ahod2.screen.EndScreen;
 import uk.ac.york.sepr4.ahod2.screen.ShipViewScreen;
 import uk.ac.york.sepr4.ahod2.screen.TransitionScreen;
+import uk.ac.york.sepr4.ahod2.screen.hud.AnimationHUD;
 import uk.ac.york.sepr4.ahod2.screen.hud.MessageHUD;
 import uk.ac.york.sepr4.ahod2.screen.hud.StatsHUD;
-import uk.ac.york.sepr4.ahod2.screen.hud.AnimationHUD;
 import uk.ac.york.sepr4.ahod2.screen.sail.SailScreen;
 
 import java.util.ArrayList;

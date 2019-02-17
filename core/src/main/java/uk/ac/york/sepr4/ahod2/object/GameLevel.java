@@ -7,6 +7,7 @@ import uk.ac.york.sepr4.ahod2.object.building.BuildingManager;
 import uk.ac.york.sepr4.ahod2.object.building.College;
 import uk.ac.york.sepr4.ahod2.object.building.Department;
 import uk.ac.york.sepr4.ahod2.screen.sail.NodeView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

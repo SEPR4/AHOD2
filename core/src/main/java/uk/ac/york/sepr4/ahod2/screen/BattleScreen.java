@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
@@ -26,8 +25,7 @@ import uk.ac.york.sepr4.ahod2.object.entity.Player;
 import uk.ac.york.sepr4.ahod2.object.entity.Ship;
 import uk.ac.york.sepr4.ahod2.util.BattleAI;
 
-import java.util.List;
-import java.util.*;
+import java.util.Random;
 
 public class BattleScreen extends AHODScreen {
 

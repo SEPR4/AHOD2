@@ -1,7 +1,6 @@
 package uk.ac.york.sepr4.ahod2.screen;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;

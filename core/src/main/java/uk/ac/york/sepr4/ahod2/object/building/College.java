@@ -1,7 +1,6 @@
 package uk.ac.york.sepr4.ahod2.object.building;
 
 import lombok.Data;
-import uk.ac.york.sepr4.ahod2.object.card.Card;
 
 /***
  * Class used to represent instance of college.

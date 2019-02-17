@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import lombok.Data;
 import uk.ac.york.sepr4.ahod2.GameInstance;
-import uk.ac.york.sepr4.ahod2.object.card.Card;
 
 import java.util.Optional;
 

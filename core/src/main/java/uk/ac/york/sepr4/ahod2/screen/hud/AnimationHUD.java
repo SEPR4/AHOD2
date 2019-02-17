@@ -1,26 +1,16 @@
 package uk.ac.york.sepr4.ahod2.screen.hud;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import lombok.Getter;
-import uk.ac.york.sepr4.ahod2.GameInstance;
-import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.io.StyleManager;
-import uk.ac.york.sepr4.ahod2.screen.AHODScreen;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /***
