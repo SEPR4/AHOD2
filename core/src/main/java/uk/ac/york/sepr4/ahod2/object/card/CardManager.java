@@ -76,6 +76,17 @@ public class CardManager {
     }
 
     /***
+     * Returns a list of specified ship's deck including default cards.
+     * @param ship specified ship
+     * @return list of cards from deck inc. default cards
+     */
+    public List<Card> getFullDeck(Ship ship) {
+        List<Card> deck = new ArrayList<>(ship.getDeck());
+        deck.addAll(defaultCards);
+        return deck;
+    }
+
+    /***
      * Generate random card from all available with power no greater than specified.
      * @param power maximum card power to generate
      * @return optional of generated card

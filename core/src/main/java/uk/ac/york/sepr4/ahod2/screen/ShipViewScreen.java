@@ -4,15 +4,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import lombok.Setter;
 import uk.ac.york.sepr4.ahod2.GameInstance;
 import uk.ac.york.sepr4.ahod2.io.FileManager;
 import uk.ac.york.sepr4.ahod2.io.StyleManager;
+import uk.ac.york.sepr4.ahod2.object.card.Card;
 
 public class ShipViewScreen extends AHODScreen {
 
@@ -21,9 +21,11 @@ public class ShipViewScreen extends AHODScreen {
     @Setter
     private AHODScreen previousScreen;
 
-    private Table table = new Table();
+    private Table table = new Table(), cardTable = new Table();
 
-    private Label manaValueLabel;
+    private Label levelValueLabel;
+
+    private final Integer cardsPerRow = 8;
 
     public ShipViewScreen(GameInstance gameInstance) {
         super(new Stage(new ScreenViewport()), FileManager.menuScreenBG);
@@ -39,7 +41,11 @@ public class ShipViewScreen extends AHODScreen {
         table.top();
         table.setFillParent(true);
 
-        manaValueLabel = new Label("Mana: ", StyleManager.generateLabelStyle(30, Color.CYAN));
+        cardTable.top();
+        cardTable.setFillParent(true);
+        cardTable.padTop(Value.percentHeight(0.05f, cardTable));
+
+        levelValueLabel = new Label("Level: ", StyleManager.generateLabelStyle(30, Color.GREEN));
 
         TextButton exitButton = new TextButton("Exit", StyleManager.generateTBStyle(30, Color.RED, Color.GRAY));
         exitButton.addListener(new ClickListener() {
@@ -49,16 +55,35 @@ public class ShipViewScreen extends AHODScreen {
             }
         });
 
-        table.add(manaValueLabel);
-        table.row();
-        table.add(exitButton);
-
+        table.add(levelValueLabel)
+                .expandX()
+                .height(Value.percentHeight(0.05f, table));
+        table.add(exitButton)
+                .expandX()
+                .height(Value.percentHeight(0.05f, table));
 
         getStage().addActor(table);
+        getStage().addActor(cardTable);
     }
 
     private void update() {
-        manaValueLabel.setText("Mana: "+gameInstance.getPlayer().getShip().getMaxMana());
+        levelValueLabel.setText("Level: "+gameInstance.getPlayer().getLevel().getId());
+
+        cardTable.clear();
+
+        Integer cardCount = 0;
+        for(Card card: gameInstance.getCardManager().getFullDeck(gameInstance.getPlayer().getShip())) {
+            cardCount++;
+            Image image = new Image(card.getTexture());
+            image.setScaling(Scaling.fit);
+            cardTable.add(image)
+                    .expandX()
+                    .width(Value.percentWidth(1f/cardsPerRow, cardTable));
+            if(cardCount == cardsPerRow) {
+                cardTable.row();
+                cardCount = 0;
+            }
+        }
     }
 
     @Override
