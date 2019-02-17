@@ -12,7 +12,7 @@ public class FileManager {
 
     public static Texture defaultShipTexture = new Texture(Gdx.files.internal("ships/default.png"));
 
-    public static Texture sailScreenBG = new Texture(Gdx.files.internal("images/screen/sail4.png"));
+    public static Texture sailScreenBG = new Texture(Gdx.files.internal("images/screen/sail5.png"));
     public static Texture menuScreenBG = new Texture(Gdx.files.internal("images/screen/menu.png"));
     public static Texture battleScreenBG = new Texture(Gdx.files.internal("images/screen/battle.png"));
 
