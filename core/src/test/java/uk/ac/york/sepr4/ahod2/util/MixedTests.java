@@ -13,36 +13,34 @@ public class MixedTests {
     public void testShipConstr() {
         Ship ship = new Ship();
 
-        Assert.assertSame(ship.getHealth(), 10);
-        Assert.assertSame(ship.getMaxHealth(), 10);
-        Assert.assertSame(ship.getMana(), 10);
-        Assert.assertSame(ship.getMaxMana(), 10);
+        Assert.assertSame(ship.getHealth(), 4);
+        Assert.assertSame(ship.getMaxHealth(), 4);
     }
 
     @Test
     public void testShipMana() {
         Ship ship = new Ship();
 
-        ship.deductMana(2);
-        Assert.assertSame(8, ship.getMana());
+        ship.deductMana(1);
+        Assert.assertSame(0, ship.getMana());
     }
 
     @Test
     public void testShipDamage() {
         Ship ship = new Ship();
-        ship.addDamage(5, 0);
-        Assert.assertSame(5, ship.getDelayedDamage().get(0));
+        ship.addDamage(1, 0);
+        Assert.assertSame(1, ship.getDelayedDamage().get(0));
 
         ship.addDamage(1, 0);
-        Assert.assertSame(6, ship.getDelayedDamage().get(0));
+        Assert.assertSame(2, ship.getDelayedDamage().get(0));
 
-        ship.addDamage(3, 1);
-        Assert.assertSame(3, ship.getDelayedDamage().get(1));
+        ship.addDamage(2, 1);
+        Assert.assertSame(2, ship.getDelayedDamage().get(1));
 
-        ship.applyDelayedDamage();
-        Assert.assertSame(4, ship.getHealth());
-        ship.applyDelayedDamage();
-        Assert.assertSame(1, ship.getHealth());
+        ship.applyDelayedDamage(null, null);
+        Assert.assertSame(2, ship.getHealth());
+        ship.applyDelayedDamage(null, null);
+        Assert.assertSame(0, ship.getHealth());
     }
 
     @Test
@@ -50,19 +48,19 @@ public class MixedTests {
         Ship ship = new Ship();
         ship.setHealth(1);
 
-        ship.addHeal(5, 0);
-        Assert.assertSame(5, ship.getDelayedHeal().get(0));
+        ship.addHeal(1, 0);
+        Assert.assertSame(1, ship.getDelayedHeal().get(0));
 
         ship.addHeal(1, 0);
-        Assert.assertSame(6, ship.getDelayedHeal().get(0));
+        Assert.assertSame(2, ship.getDelayedHeal().get(0));
 
-        ship.addHeal(3, 1);
-        Assert.assertSame(3, ship.getDelayedHeal().get(1));
+        ship.addHeal(2, 1);
+        Assert.assertSame(2, ship.getDelayedHeal().get(1));
 
-        ship.applyDelayedHeal();
-        Assert.assertSame(7, ship.getHealth());
-        ship.applyDelayedHeal();
-        Assert.assertSame(10, ship.getHealth());
+        ship.applyDelayedHeal(null, null);
+        Assert.assertSame(3, ship.getHealth());
+        ship.applyDelayedHeal(null, null);
+        Assert.assertSame(4, ship.getHealth());
     }
 
     @Test
