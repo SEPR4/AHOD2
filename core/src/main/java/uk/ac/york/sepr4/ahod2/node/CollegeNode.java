@@ -24,7 +24,7 @@ public class CollegeNode extends Node {
         super(node.getId(), node.getRow(), node.getCol());
         setConnected(node.getConnected());
         this.college = college;
-        this.setTexture(new TextureRegionDrawable(new TextureRegion(FileManager.nodeIcon)));
+        this.setTexture(new TextureRegionDrawable(new TextureRegion(FileManager.collegeNodeIcon)));
     }
 
     /***
