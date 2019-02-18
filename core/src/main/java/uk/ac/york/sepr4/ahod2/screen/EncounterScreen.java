@@ -44,7 +44,7 @@ public class EncounterScreen extends AHODScreen {
      */
     private String getEncounterResultText(EncounterOption encounterOption) {
         if (encounterOption.isBattle()) {
-            return "-> A Battle with difficulty " + encounterOption.getDifficulty() + "\n";
+            return "-> A battle with difficulty " + encounterOption.getDifficulty() + "\n";
         }
         if (encounterOption.getGold() > 0) {
             return "-> +" + encounterOption.getGold() + " Gold\n";
