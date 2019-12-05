@@ -2,7 +2,7 @@
   {
     "class": "uk.ac.york.sepr4.ahod2.object.building.College",
     "id": 1,
-    "name": "Alcuin"
+    "name": "Alcuin",
     "bossDifficulty": 2
   },
   {

@@ -321,7 +321,9 @@ public class BattleScreen extends AHODScreen {
         table = new Table();
         table.setFillParent(true);
         table.top();
-        table.debug();
+        if(gameInstance.getGame().DEBUG) {
+            table.debug();
+        }
 
         //top 2/3 (ship + stat display)
         table.add(playerShipImage).expandX()
